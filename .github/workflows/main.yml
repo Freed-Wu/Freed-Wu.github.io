@@ -1,0 +1,27 @@
+---
+"on":
+  push:
+  workflow_dispatch:
+
+env:
+  PAGES_REPO_NWO: ${{github.repository}}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      # don't use setup-ruby due to different versions of bundler of container
+      - uses: actions/cache@v3
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+          # https://github.com/jeffreytse/jekyll-deploy-action/issues/70
+          # yamllint disable-line rule:line-length
+      - uses: jeffreytse/jekyll-deploy-action@7cb0f20212b9e11a3a1da22548cfd514bb67122a
+        with:
+          token: ${{secrets.GH_TOKEN}}
