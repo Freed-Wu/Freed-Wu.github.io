@@ -1,0 +1,132 @@
+---
+# https://jekyllrb.com/docs/configuration/options
+# by default, open_url will open 127.0.0.1, which is disabled by fontawesome
+host: localhost
+# make same as `python -m http.server -d_site`
+port: 8000
+# will not rebuild
+# incremental: true
+livereload: true
+open_url: true
+sass:
+  style: compressed
+# .github/FUNDING.yml
+data_dir: .github
+page_excerpts: true
+future: true
+# https://kramdown.gettalong.org/options.html
+kramdown:
+  # https://github.com/gettalong/kramdown/issues/715
+  parse_block_html: true
+  remove_line_breaks_for_cjk: true
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      # jekyll-seo-tag
+      image: >-
+        https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg
+
+plugins:
+  - jekyll-archives
+  - jekyll-avatar
+  - jekyll-default-layout
+  - jekyll-feed
+  # https://github.com/jekyll/jekyll-gist/issues/96
+  - jekyll-gist
+  - jekyll-github-metadata
+  - jekyll-mentions
+  - jekyll-readme-index
+  - jekyll-relative-links
+  - jekyll-remote-theme
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  # https://github.com/jeffreytse/jekyll-spaceship/issues/85
+  - jekyll-spaceship
+
+readme_index:
+  remove_originals: true
+  with_frontmatter: true
+
+jekyll-archives:
+  enabled: all
+  layouts:
+    year: year
+    month: month
+    day: day
+    category: category
+    tag: tag
+
+feed:
+  excerpt_only: true
+  tags: true
+
+remote_theme: Freed-Wu/jekyll-theme-freed
+
+# jekyll-github-metadata adds metainfo needed by jekyll-feed, jekyll-seo-tag
+# jekyll-feed, jekyll-seo-tag need
+author:
+  name: Wu Zhenyu
+  url: https://Freed-Wu.github.io
+# jekyll-seo-tag need
+tagline: Record valuable and interesting things
+twitter:
+  username: FreedWu
+facebook:
+  app_id: 100057378480375
+  publisher: 100057378480375
+  admins: 100057378480375
+social:
+  links:
+    - https://www.facebook.com/profile.php?id=100057378480375
+    - https://app.codecov.io/gh/Freed-Wu
+    - https://aur.archlinux.org/account/Freed
+    - https://anaconda.org/freed-wu
+    - https://discourse.nixos.org/u/Freed-Wu
+    - https://openuserjs.org/users/Freed-Wu
+    - https://greasyfork.org/users/Freed-Wu
+    - https://pypi.org/user/Freed-Wu
+    - https://metacpan.org/author/FREED
+    - https://ctan.org/author/zhenyu
+    - https://www.vim.org/account/profile.php?user_id=76258
+    - https://github.com/Freed-Wu
+    - https://twitter.com/FreedWu
+    - https://hub.docker.com/u/freedwu
+    - https://wandb.ai/freed
+    - https://www.kaggle.com/FreedWu
+    - https://huggingface.co/Freed-Wu
+    - https://forum.xda-developers.com/m/freed-wu.11344913
+    - https://bbs.archlinux.org/profile.php?id=126120
+    - https://forums.gentoo.org/profile.php?mode=viewprofile&u=399232
+    - https://discuss.python.org/u/Freed-Wu
+    - https://discuss.pytorch.org/u/Freed-Wu
+    - https://www.zhihu.com/people/wu-zhen-yu-49-44
+    - https://weibo.com/u/5198670731
+    - https://www.linkedin.com/in/zhenyu-wu-5625971a7
+    - https://space.bilibili.com/49330423
+    - https://user.qzone.qq.com/1295652958
+locale: zh_CN
+
+# the following settings can be left blank to use default
+fontawesome: https://kit.fontawesome.com/556f02e0e5.js
+music: https://music.163.com/outchain/player?type=2&id=27646786&height=32
+nav:
+  - fontawesome: fa-solid fa-home
+    title: Home
+    href: /
+  - fontawesome: fa-solid fa-tags
+    title: Tag
+    href: /tag
+  - fontawesome: fa-solid fa-rss
+    title: RSS
+    href: /feed.xml
+  - fontawesome: fa-solid fa-comments
+    title: About Me
+    href: /Freed-Wu
+  - fontawesome: fa-solid fa-code
+    title: About the Website
+    href: /jekyll-theme-freed
+  - fontawesome: fa-solid fa-trophy
+    title: Honour
+    href: /2020/01/01/honour
