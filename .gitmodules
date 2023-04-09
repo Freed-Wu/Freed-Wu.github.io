@@ -1,0 +1,9 @@
+[submodule "_includes/jekyll-toc"]
+	path = _includes/jekyll-toc
+	url = https://github.com/allejo/jekyll-toc
+[submodule "jekyll-theme-freed"]
+	path = jekyll-theme-freed
+	url = https://github.com/Freed-Wu/jekyll-theme-freed
+[submodule "Freed-Wu"]
+	path = Freed-Wu
+	url = https://github.com/Freed-Wu/Freed-Wu

@@ -1,0 +1,88 @@
+---
+lsi: true
+# by default, open_url will open 127.0.0.1, which is disabled by fontawesome
+host: localhost
+# will not rebuild
+# incremental: true
+livereload: true
+open_url: true
+# .github/FUNDING.yml
+data_dir: .github
+page_excerpts: true
+sass:
+  style: compressed
+defaults:
+  - scope:
+      path: ""
+    values:
+      image: >-
+        https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg
+
+plugins:
+  - jekyll-archives
+  - jekyll-default-layout
+  - jekyll-feed
+  - jekyll-github-metadata
+  - jekyll-mentions
+  - jekyll-readme-index
+  - jekyll-remote-theme
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-spaceship
+
+readme_index:
+  remove_originals: true
+  with_frontmatter: true
+
+jekyll-archives:
+  enabled: all
+  layouts:
+    year: year
+    month: month
+    day: day
+    category: category
+    tag: tag
+
+feed:
+  excerpt_only: true
+  tags:
+    path: /tag/
+
+remote_theme: Freed-Wu/jekyll-theme-freed
+
+# jekyll-feed, jekyll-seo-tag
+author: Wu Zhenyu
+# jekyll-seo-tag
+tagline: Record valuable and interesting things
+twitter:
+  username: FreedWu
+facebook:
+logo: https://avatars2.githubusercontent.com/u/32936898
+social:
+  links:
+    - https://github.com/Freed-Wu
+    - https://twitter.com/FreedWu
+    - https://www.linkedin.com/in/zhenyu-wu-5625971a7
+locale: zh_CN
+
+fontawesome: https://kit.fontawesome.com/556f02e0e5.js
+music: https://music.163.com/outchain/player?type=2&id=27646786&auto=1&height=32
+nav:
+  - fontawesome: fa-solid fa-home
+    title: Home
+    href: /
+  - fontawesome: fa-solid fa-comments
+    title: About Me
+    href: Freed-Wu
+  - fontawesome: fa-solid fa-rss
+    title: RSS
+    href: feed.xml
+  - fontawesome: fa-solid fa-tags
+    title: Tag
+    href: tag
+  - fontawesome: fa-solid fa-trophy
+    title: Honour
+    href: 2020/01/01/honour
+  - fontawesome: fa-solid fa-code
+    title: Website Code
+    href: jekyll-theme-freed
