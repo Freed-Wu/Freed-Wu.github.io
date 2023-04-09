@@ -1,0 +1,25 @@
+---
+"on":
+  push:
+  workflow_dispatch:
+
+env:
+  PAGES_REPO_NWO: ${{github.repository}}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      # don't use setup-ruby due to different versions of bundler of container
+      - uses: actions/cache@v3
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - uses: jeffreytse/jekyll-deploy-action@v0.5.1
+        with:
+          token: ${{secrets.GH_TOKEN}}
