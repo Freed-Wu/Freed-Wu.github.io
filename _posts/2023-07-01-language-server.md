@@ -17,7 +17,7 @@ tags:
 与[编辑器圣战](https://en.wikipedia.org/wiki/Editor_war)（黑客文化和自由软件社区争论哪一种代码编辑器更好）相对的，
 编辑器和集成开发环境的选择也常常是争论的焦点。用户要么：
 
-- 为每一种语言安装一个集成了编辑器、编译器（或者解释器， [REPL](https://en.wikipedia.org/wiki/Read–eval–print_loop) ）、调试器、构建系统的集成开发环境
+- 为每一种语言安装一个集成了编辑器、编译器（或者解释器， [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop) ）、调试器、构建系统的集成开发环境
   - 开箱即用
   - 同时忍受多个集成开发环境带来的快捷键、交互界面不一致带来的用户体验问题
 - 为所有语言选择同一个编辑器
@@ -324,14 +324,13 @@ Vim 社区也有[讨论到底要不要支持 Vim Syn 以外的语法高亮方式
 Sublime 使用的一种描述语法高亮的 YAML ，语法与 tmLanguage 兼容。后被 [bat](https://github.com/sharkdp/bat) 采用。
 
 ```yaml
----
 name: Requirements.txt
 scope: source.requirements-txt
 contexts:
   main:
-    - match: '(?i)\d+[\da-z\-_\.\*]*'
+    - match: (?i)\d+[\da-z\-_\.\*]*
       scope: constant.other.version-control.requirements-txt
-    - match: '(?i)^[a-z\d_\-\.]*[a-z\d]'
+    - match: (?i)^[a-z\d_\-\.]*[a-z\d]
       scope: variable.parameter.package-name.requirements-txt
     # ...
 ```
