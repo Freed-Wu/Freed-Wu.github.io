@@ -72,7 +72,7 @@ repos:
         additional_dependencies:
           - markdown-it-texmath
   - repo: https://github.com/rubocop/rubocop
-    rev: v1.57.2
+    rev: v1.59.0
     hooks:
       - id: rubocop
 
