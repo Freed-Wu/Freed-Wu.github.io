@@ -22,6 +22,6 @@ jobs:
             ${{ runner.os }}-gems-
           # https://github.com/jeffreytse/jekyll-deploy-action/issues/70
           # yamllint disable-line rule:line-length
-      - uses: jeffreytse/jekyll-deploy-action@7cb0f20212b9e11a3a1da22548cfd514bb67122a
+      - uses: jeffreytse/jekyll-deploy-action@dd7b7d7d3b4fe5588d134ea90b1bc09f516a41a1
         with:
           token: ${{secrets.GH_TOKEN}}
