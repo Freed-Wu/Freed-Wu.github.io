@@ -48,8 +48,7 @@ def foo(x):
 `main.pyi`: （`...` 不是省略，就是正确的语法）
 
 ```python
-def foo(x: int) -> int:
-    ...
+def foo(x: int) -> int: ...
 ```
 
 [pyright](https://github.com/microsoft/pyright) 定义跳转会跳转到 `main.py` 的 `def foo(x)` ，声明跳转会跳转到 `main.pyi` 的 `def foo(x: int)` 。
