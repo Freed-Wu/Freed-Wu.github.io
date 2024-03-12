@@ -21,7 +21,7 @@ repos:
       - id: check-toml
       - id: check-json
   - repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.5.4
+    rev: v1.5.5
     hooks:
       - id: remove-crlf
   - repo: https://github.com/codespell-project/codespell
@@ -45,7 +45,7 @@ repos:
     hooks:
       - id: check-mailmap
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.6.26
+    rev: v1.6.27
     hooks:
       - id: actionlint
   - repo: https://github.com/adrienverge/yamllint
@@ -73,6 +73,6 @@ repos:
         additional_dependencies:
           - markdown-it-texmath
   - repo: https://github.com/rubocop/rubocop
-    rev: v1.60.1
+    rev: v1.62.1
     hooks:
       - id: rubocop

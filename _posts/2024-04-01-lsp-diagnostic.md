@@ -103,16 +103,16 @@ tags:
 
 ```javascript
 module.exports = grammar({
-  name: "zathurarc",
-  rules: {
-    file: ($) => repeat(seq(optional($._code), $._end)),
-    _code: (_) => /[^#]*/,
+    name: "zathurarc",
+    rules: {
+        file: ($) => repeat(seq(optional($._code), $._end)),
+        _code: (_) => /[^#]*/,
 
-    comment: (_) => /#[^\n]*/,
-    _eol: (_) => /\r?\n/,
-    _space: (_) => prec(-1, repeat1(/[ \t]/)),
-    _end: ($) => seq(optional($._space), optional($.comment), $._eol),
-  },
+        comment: (_) => /#[^\n]*/,
+        _eol: (_) => /\r?\n/,
+        _space: (_) => prec(-1, repeat1(/[ \t]/)),
+        _end: ($) => seq(optional($._space), optional($.comment), $._eol),
+    },
 });
 ```
 
@@ -148,35 +148,35 @@ unmap [normal] <Esc>
 
 ```javascript
     int: (_) => /\d+/,
-    float: ($) => choice(seq(optional($.int), ".", $.int), seq($.int, optional("."))),
-    string: ($) => choice($._quoted_string, $._word),
-    bool: (_) => choice("true", "false"),
+        float: ($) => choice(seq(optional($.int), ".", $.int), seq($.int, optional("."))),
+        string: ($) => choice($._quoted_string, $._word),
+        bool: (_) => choice("true", "false"),
 
-    _word: (_) => repeat1(/(\S|\\ )/),
-    _quoted_string: (_) =>
-      choice(
-        seq('"', field("content", repeat1(/[^"]|\\"/)), '"'),
-        seq("'", field("content", repeat1(/[^']|\\'/)), "'")
-      ),
+        _word: (_) => repeat1(/(\S|\\ )/),
+        _quoted_string: (_) =>
+        choice(
+            seq('"', field("content", repeat1(/[^"]|\\"/)), '"'),
+            seq("'", field("content", repeat1(/[^']|\\'/)), "'")
+        ),
 ```
 
 于是 `set` 就很简单了。因为其他 3 种指令还没实现，所以先注释了：
 
 ```javascript
     _code: ($) =>
-      choice(
-        $.set_directive,
-        // $.include_directive,
-        // $.map_directive,
-        // $.unmap_directive
-      ),
+        choice(
+            $.set_directive,
+            // $.include_directive,
+            // $.map_directive,
+            // $.unmap_directive
+        ),
 
-    set_directive: ($) =>
-      seq(
-        alias("set", $.command),
-        alias(repeat1(/[a-z-]/), $.option),
-        choice($.int, $.float, $.string, $.bool)
-      ),
+        set_directive: ($) =>
+        seq(
+            alias("set", $.command),
+            alias(repeat1(/[a-z-]/), $.option),
+            choice($.int, $.float, $.string, $.bool)
+        ),
 ```
 
 ```sh
@@ -201,20 +201,20 @@ Possible resolutions:
 
 ```javascript
     int: (_) => /\d+/,
-    float: ($) =>
-      prec(
-        2,
-        choice(seq(optional($.int), ".", $.int), seq($.int, optional(".")))
-      ),
-    string: ($) => choice($._quoted_string, $._word),
-    bool: (_) => choice("true", "false"),
+        float: ($) =>
+        prec(
+            2,
+            choice(seq(optional($.int), ".", $.int), seq($.int, optional(".")))
+        ),
+        string: ($) => choice($._quoted_string, $._word),
+        bool: (_) => choice("true", "false"),
 
-    _word: (_) => repeat1(/(\S|\\ )/),
-    _quoted_string: (_) =>
-      choice(
-        seq('"', field("content", repeat1(/[^"]|\\"/)), '"'),
-        seq("'", field("content", repeat1(/[^']|\\'/)), "'")
-      ),
+        _word: (_) => repeat1(/(\S|\\ )/),
+        _quoted_string: (_) =>
+        choice(
+            seq('"', field("content", repeat1(/[^"]|\\"/)), '"'),
+            seq("'", field("content", repeat1(/[^']|\\'/)), "'")
+        ),
 ```
 
 ```sh
@@ -241,29 +241,29 @@ tests/zathurarc 0 ms    (ERROR [1, 0] - [2, 26])
 
 ```javascript
     _code: ($) =>
-      choice(
-        $.set_directive,
-        $.include_directive,
-        $.map_directive,
-        $.unmap_directive
-      ),
+        choice(
+            $.set_directive,
+            $.include_directive,
+            $.map_directive,
+            $.unmap_directive
+        ),
 
-    // ...
+        // ...
 
-    include_directive: ($) =>
-      seq(alias("include", $.command), alias($._word, $.path)),
+        include_directive: ($) =>
+        seq(alias("include", $.command), alias($._word, $.path)),
 
-    unmap_directive: ($) =>
-      seq(alias("unmap", $.command), optional($.mode), $.key),
+        unmap_directive: ($) =>
+        seq(alias("unmap", $.command), optional($.mode), $.key),
 
-    map_directive: ($) =>
-      seq(
-        alias("map", $.command),
-        optional($.mode),
-        $.key,
-        alias(/[a-z_]+/, $.function),
-        optional(seq($._space, alias(/[a-z_]+/, $.argument)))
-      ),
+        map_directive: ($) =>
+        seq(
+            alias("map", $.command),
+            optional($.mode),
+            $.key,
+            alias(/[a-z_]+/, $.function),
+            optional(seq($._space, alias(/[a-z_]+/, $.argument)))
+        ),
 ```
 
 `tree-sitter generate` 提示存在冲突，并给出了提高优先级或声明 `conlicts` 的解决方法：
@@ -289,11 +289,13 @@ Possible resolutions:
 
 ```javascript
 module.exports = grammar({
-  name: "zathurarc",
+    name: "zathurarc",
 
-  conflicts: ($) => [[$.map_directive]],
+    conflicts: ($) => [
+        [$.map_directive]
+    ],
 
-  // ...
+    // ...
 })
 ```
 
@@ -449,15 +451,15 @@ error: Unable to load CSS: <data>:5:15Expected a string.
 
 ```javascript
     set_directive: ($) =>
-      seq(
-        alias("set", $.command),
-        choice(
-          seq(alias(choice("font", /*...*/), $.option), $.string),
-          seq(alias(choice(/*...*/), $.option), $.int),
-          seq(alias(choice(/*...*/), $.option), $.float),
-          seq(alias(choice(/*...*/), $.option), $.bool),
+        seq(
+            alias("set", $.command),
+            choice(
+                seq(alias(choice("font", /*...*/ ), $.option), $.string),
+                seq(alias(choice( /*...*/ ), $.option), $.int),
+                seq(alias(choice( /*...*/ ), $.option), $.float),
+                seq(alias(choice( /*...*/ ), $.option), $.bool),
+            ),
         ),
-      ),
 ```
 
 可以是可以。但：
