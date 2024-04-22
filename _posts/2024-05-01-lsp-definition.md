@@ -119,9 +119,7 @@ class MakeLanguageServer(LanguageServer):
         @self.feature(TEXT_DOCUMENT_DID_CHANGE)
         def did_change(params: DidChangeTextDocumentParams) -> None:
             document = self.workspace.get_document(params.text_document.uri)
-            self.trees[document.uri] = self.parser.parse(
-                document.source.encode()
-            )
+            self.trees[document.uri] = self.parser.parse(document.source.encode())
 ```
 
 ### 搜索
