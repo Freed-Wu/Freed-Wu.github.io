@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>终端及颜色 | wzy</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="终端及颜色">
+<meta name="author" content="Wu Zhenyu">
+<meta property="og:locale" content="zh_CN">
+<meta name="description" content="经常使用命令行的童鞋都知道：">
+<meta property="og:description" content="经常使用命令行的童鞋都知道：">
+<link rel="canonical" href="https://freed-wu.github.io/2024/09/01/color.html">
+<meta property="og:url" content="https://freed-wu.github.io/2024/09/01/color.html">
+<meta property="og:site_name" content="wzy">
+<meta property="og:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2024-09-01T00:00:00+00:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="twitter:title" content="终端及颜色">
+<meta name="twitter:site" content="@FreedWu">
+<meta name="twitter:creator" content="@Wu Zhenyu">
+<meta property="fb:admins" content="100057378480375">
+<meta property="article:publisher" content="100057378480375">
+<meta property="fb:app_id" content="100057378480375">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Wu Zhenyu","url":"https://Freed-Wu.github.io"},"dateModified":"2024-09-01T00:00:00+00:00","datePublished":"2024-09-01T00:00:00+00:00","description":"经常使用命令行的童鞋都知道：","headline":"终端及颜色","image":"https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://freed-wu.github.io/2024/09/01/color.html"},"url":"https://freed-wu.github.io/2024/09/01/color.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="icon" href="https://github.com/Freed-Wu.png">
+    <link rel="apple-touch-icon" href="https://github.com/Freed-Wu.png">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/poole.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/lanyon.min.css">
+    <link rel="stylesheet" href="//jekyllrb.com/css/screen.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/sindresorhus/github-markdown-css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <script async src="https://kit.fontawesome.com/556f02e0e5.js"></script>
+    <script async src="//cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget/autoload.min.js"></script>
+    <!-- https://github.com/christian-fei/Simple-Jekyll-Search -->
+    <script async src="//cdn.jsdelivr.net/npm/simple-jekyll-search/dest/simple-jekyll-search.min.js"></script>
+    <script async src="/assets/js/search.js"></script>
+  </head>
+  <!-- https://github.com/poole/lanyon -->
+  <body class="theme-base-08 layout-reverse sidebar-overlay">
+    <article class="container">
+      <header>
+        <h1>终端及颜色</h1>
+      </header>
+      <script src="/assets/js/qr.js"></script>
+<small class="post-date">
+  <i class="fa-solid fa-calendar-day"></i> 01 Sep 2024
+  <i class="fa-solid fa-file-word"></i> 1517 words
+  <i class="fa-solid fa-coffee"></i> 6 minutes
+  <span id="/2024/09/01/color.html" class="leancloud-visitors" data-flag-title="终端及颜色">
+    <i class="fa-regular fa-eye"></i>
+    <span class="leancloud-visitors-count"></span>
+  </span>
+  <a rel="license" href="//creativecommons.org/licenses/by-sa/4.0/deed.zh">
+    <i class="fa-brands fa-creative-commons"></i> BY-SA 4.0
+  </a>
+  <br>
+  <a href="/tag/develop"> <i class="fa-solid fa-tag"></i> develop </a>
+  <a href="/tag/cmd"> <i class="fa-solid fa-tag"></i> cmd </a>
+</small>
+<ul>
+<li>
+<a href="#%E6%A0%87%E5%87%86">标准</a><ul>
+<li>
+<a href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F-term">环境变量 <code class="language-plaintext highlighter-rouge">TERM</code></a><ul>
+<li><a href="#termdumb-%E5%93%91%E7%BB%88%E7%AB%AF"><code class="language-plaintext highlighter-rouge">TERM=dumb</code> 哑终端</a></li>
+<li><a href="#termvt100-%E6%88%96-termlinux"><code class="language-plaintext highlighter-rouge">TERM=vt100</code> 或 <code class="language-plaintext highlighter-rouge">TERM=linux</code></a></li>
+</ul>
+</li>
+<li><a href="#termxterm-%E6%88%96-termxterm-256color"><code class="language-plaintext highlighter-rouge">TERM=xterm</code> 或 <code class="language-plaintext highlighter-rouge">TERM=xterm-256color</code></a></li>
+<li><a href="#termkitty-%E6%98%BE%E7%A4%BA%E5%83%8F%E7%B4%A0"><code class="language-plaintext highlighter-rouge">TERM=kitty</code> 显示像素</a></li>
+<li>
+<a href="#term-%E4%BB%A5%E5%A4%96"><code class="language-plaintext highlighter-rouge">TERM</code> 以外</a><ul><li><a href="#--coloralwaysneverauto"><code class="language-plaintext highlighter-rouge">--color={always,never,auto}</code></a></li></ul>
+</li>
+<li><a href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F">环境变量</a></li>
+</ul>
+</li>
+<li><a href="#windows">Windows</a></li>
+</ul> <p>经常使用命令行的童鞋都知道：</p>
+
+<p>命令行软件的输出是可以有颜色的。</p>
+
+<p><img src="https://github.com/Freed-Wu/Freed-Wu.github.io/assets/32936898/200da095-8a65-46e7-911e-b0cc5d62481f" alt="ls"></p>
+
+<p>终端模拟器显示颜色的原理其实和 C 语言打印含有转义字符的字符串的原理一样，通过 <code class="language-plaintext highlighter-rouge">'\x1b'</code> 开头的 <a href="https://en.wikipedia.org/wiki/ANSI_escape_code">ANSI escape code</a> 显示不同的颜色。</p>
+
+<p><img src="https://github.com/Freed-Wu/Freed-Wu.github.io/assets/32936898/c442034e-99da-4f63-8edb-4c6a0c524113" alt="color"></p>
+
+<p><a href="https://bixense.com/clicolors/">代码来源</a></p>
+
+<h2 id="标准">标准</h2>
+
+<p>与颜色相关的标准有：</p>
+
+<h3 id="环境变量-term">环境变量 <code class="language-plaintext highlighter-rouge">TERM</code>
+</h3>
+
+<p><a href="https://man7.org/linux/man-pages/man7/term.7.html"><code class="language-plaintext highlighter-rouge">TERM</code></a> 规定了 ANSI escape code 和颜色的映射关系：</p>
+
+<h4 id="termdumb-哑终端">
+<code class="language-plaintext highlighter-rouge">TERM=dumb</code> 哑终端</h4>
+
+<p>不支持任何颜色。 除 <code class="language-plaintext highlighter-rouge">\x1b</code> 等不可见字符外的可见字符都会被打印。比如 <code class="language-plaintext highlighter-rouge">gvim</code> 的 <code class="language-plaintext highlighter-rouge">:shell</code>:</p>
+
+<p><img src="https://github.com/Freed-Wu/Freed-Wu.github.io/assets/32936898/cd2c5ec9-9500-4bff-aea6-75c0979364d4" alt="gvim"></p>
+
+<h4 id="termvt100-或-termlinux">
+<code class="language-plaintext highlighter-rouge">TERM=vt100</code> 或 <code class="language-plaintext highlighter-rouge">TERM=linux</code>
+</h4>
+
+<p>支持 8 种基本颜色。 vt100 是 DEC 公司生产的一款终端（键盘和显示器），是最早支持 ANSI escape code 标准的终端之一。</p>
+
+<p>最早的计算机是一台主机连接多台终端供多用户登录。由终端负责将命令行软件的含有 ANSI escape code 的原始输出翻译为有颜色的最终输出。
+vt100 只支持 8 种颜色。</p>
+
+<h3 id="termxterm-或-termxterm-256color">
+<code class="language-plaintext highlighter-rouge">TERM=xterm</code> 或 <code class="language-plaintext highlighter-rouge">TERM=xterm-256color</code>
+</h3>
+
+<p>支持 256 种颜色。 <code class="language-plaintext highlighter-rouge">xterm</code> 是 Unix 最早的终端模拟器之一。</p>
+
+<p>随着时代的进步， Unix 用户可以在电脑上使用图形化用户界面 (那时还只有性能很差的 X Window) 以像素而非字符的形式与程序交互了。
+为了能继续使用之前的命令行软件，用户需要先打开一个叫做终端模拟器的程序，在终端模拟器的窗口中继续以字符的形式与之前的命令行软件交互。
+这是，由终端模拟器负责将命令行软件的含有 ANSI escape code 的原始输出翻译为有颜色的最终输出。 xterm 只支持 256 种颜色。</p>
+
+<h3 id="termkitty-显示像素">
+<code class="language-plaintext highlighter-rouge">TERM=kitty</code> 显示像素</h3>
+
+<p>终端模拟器本质上是一个图形化用户界面的软件。不光能显示有颜色的字符，也可以用同样的形式（转义字符）显示像素。
+最早在这方面做出尝试的 2 个终端模拟器是 <a href="https://sw.kovidgoyal.net/kitty/">kitty</a> 和 <a href="https://iterm2.com/">iterm2</a> 。
+大概是因为没有事先交流过的缘故它们分别设计了 2 种不同的支持像素的转义字符的协议。另一种标准是 DEC 公司的 <a href="https://en.wikipedia.org/wiki/Sixel">sixel</a>
+后续的终端模拟器一般都会支持其中至少一种以显示图像(甚至包括 GIF )。</p>
+
+<p><img src="https://github.com/Freed-Wu/Freed-Wu.github.io/assets/32936898/536fa405-ee62-430a-8bab-96f6319abea7" alt="wezterm"></p>
+
+<p>尽管显示像素的这些标准出现的时间较迟，已经有一些命令行软件在利用这些标准来实现在终端模拟器浏览 pdf 、浏览网页的功能了。
+笔者对此的评价就是上图中楚云飞的台词。</p>
+
+<p>对于不支持以上 3 种协议任意一种的终端模拟器，我们依旧可以用字符去显示图像：</p>
+
+<p><img src="https://github.com/Freed-Wu/Freed-Wu.github.io/assets/32936898/13b895db-2671-4a08-960a-ad41313ef66c" alt="chafa"></p>
+
+<p>笔者关于 12 种不同的终端模拟器支持特性的<a href="https://freed-wu.github.io/2023/10/01/terminal-emulator.html">测试</a>。支持显示像素的终端模拟器目前还不多。</p>
+
+<h3 id="term-以外">
+<code class="language-plaintext highlighter-rouge">TERM</code> 以外</h3>
+
+<p><code class="language-plaintext highlighter-rouge">TERM</code> 告诉每一个命令行软件该软件所在的终端模拟器到底支持多少种颜色、是否支持显示像素等等，以好让它们不要使用当前终端模拟器不支持的颜色和功能。
+此环境变量由终端模拟器设置用户不应随意更改。</p>
+
+<p>那么用户如何强制该软件是否打印颜色呢？这样的需求是存在的。想象以下把某个命令行软件有颜色的输出保存到一个纯文本文件中。你显然希望 <code class="language-plaintext highlighter-rouge">\x1b</code> 这样的字符应该被提前过滤掉。有不少软件使用如下的标准：</p>
+
+<h4 id="--coloralwaysneverauto"><code class="language-plaintext highlighter-rouge">--color={always,never,auto}</code></h4>
+
+<p><code class="language-plaintext highlighter-rouge">always</code> 和 <code class="language-plaintext highlighter-rouge">never</code> 很好理解。 <code class="language-plaintext highlighter-rouge">auto</code> 作为默认值，只有当输出是标准终端而非重定向到一个文件时才显示颜色。</p>
+
+<h3 id="环境变量">环境变量</h3>
+
+<ul>
+  <li>
+<a href="https://no-color.org/"><code class="language-plaintext highlighter-rouge">NO_COLOR=1</code></a>: 不显示颜色。</li>
+  <li>
+<a href="https://bixense.com/clicolors/"><code class="language-plaintext highlighter-rouge">CLICOLOR_FORCE=1</code></a>: 强制显示颜色。注： <code class="language-plaintext highlighter-rouge">systemd</code> 的所有程序 <code class="language-plaintext highlighter-rouge">journalctl</code>, <code class="language-plaintext highlighter-rouge">systemctl</code> 等使用 <code class="language-plaintext highlighter-rouge">SYSTEMD_COLORS=1</code> 。</li>
+  <li>默认: 相当与 <code class="language-plaintext highlighter-rouge">--color=auto</code>
+</li>
+</ul>
+
+<p>即，一旦用户 <code class="language-plaintext highlighter-rouge">export NO_COLOR=1</code> ，之后的所有尊重此标准的命令行软件都不应显示颜色（输出 ANSI escape code）。</p>
+
+<h2 id="windows">Windows</h2>
+
+<p>Windows 的命令行软件使用 Win32 API 来绘制颜色。不过现在的 Windows Terminal 也开始支持 ANSI escape code 了。</p>
+
+<div class="reward">
+  <button id="rewardButton" disable="enable" onclick="toggle()">
+    如果这篇博客帮助到你，可以请我喝一杯奶茶~
+  </button>
+  <table id="rewardQRs">
+    <tr>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" alt="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" alt="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" alt="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" height="300pt"></td>
+    </tr>
+  </table>
+</div>
+<script src="/assets/js/valine.js"></script>
+
+    </article>
+    <input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+    <aside class="sidebar">
+      <div class="sidebar-item">
+        <div class="ih-item">
+          <a title="
+              Wu Zhenyu
+            ">
+            <img class="img" src="https://github.com/Freed-Wu.png" alt="img">
+            <div class="info">
+              <br>
+              <br>
+              A personal blog to record valuable and interesting things.
+            </div>
+          </a>
+        </div>
+        <iframe height="42" width="240" src="https://music.163.com/outchain/player?type=2&id=27646786&height=32"></iframe>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-nav-item" href="/">
+          <i class="fa-solid fa-home fa-fw"></i> Home
+        </a>
+        <a class="sidebar-nav-item" href="/tag">
+          <i class="fa-solid fa-tags fa-fw"></i> Tag
+        </a>
+        <a class="sidebar-nav-item" href="/feed.xml">
+          <i class="fa-solid fa-rss fa-fw"></i> RSS
+        </a>
+        <a class="sidebar-nav-item" href="/Freed-Wu">
+          <i class="fa-solid fa-comments fa-fw"></i> About Me
+        </a>
+        <a class="sidebar-nav-item" href="/jekyll-theme-freed">
+          <i class="fa-solid fa-code fa-fw"></i> About the Website
+        </a>
+        <a class="sidebar-nav-item" href="/2020/01/01/honour">
+          <i class="fa-solid fa-trophy fa-fw"></i> Honour
+        </a>
+      </nav>
+      <div class="sidebar-item">
+        <!-- https://github.com/christian-fei/Simple-Jekyll-Search#preparing-the-plugin -->
+        <input id="search-input" placeholder="Search posts">
+        <div id="results-container"></div>
+      </div>
+    </aside>
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+  </body>
+</html>

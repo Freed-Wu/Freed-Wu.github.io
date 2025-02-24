@@ -1,0 +1,19 @@
+%! TeX program = lualatex
+\documentclass[tikz]{standalone}
+\usetikzlibrary{arrows.meta, quotes, graphs, graphdrawing, shapes.geometric}
+\usegdlibrary{layered}
+\usepackage{hyperref}
+\title{build-system}
+\begin{document}
+\tikzset{io/.style={trapezium, trapezium left angle=60, trapezium right angle=120, rounded corners=false}}
+\begin{tikzpicture}[rounded corners, >=Stealth, auto]
+  \graph[layered layout, nodes={draw, align=center}]{%
+    make <- {autotools, premake, qmake, qbs, cmake};
+    ninja <- {blade, qmake, qbs, cmake};
+    msbuild <- {premake, qmake, qbs, cmake};
+    "Xcode build system" <- {premake, qmake, qbs, cmake};
+    Scons;
+    bazel;
+  };
+\end{tikzpicture}
+\end{document}

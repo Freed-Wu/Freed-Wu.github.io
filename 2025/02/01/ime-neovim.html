@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>输入法的奇妙冒险： neovim 之风 | wzy</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="输入法的奇妙冒险： neovim 之风">
+<meta name="author" content="Wu Zhenyu">
+<meta property="og:locale" content="zh_CN">
+<meta name="description" content="你最喜欢的输入法——现在在 neovim 中可以使用了！ rime.nvim">
+<meta property="og:description" content="你最喜欢的输入法——现在在 neovim 中可以使用了！ rime.nvim">
+<link rel="canonical" href="https://freed-wu.github.io/2025/02/01/ime-neovim.html">
+<meta property="og:url" content="https://freed-wu.github.io/2025/02/01/ime-neovim.html">
+<meta property="og:site_name" content="wzy">
+<meta property="og:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2025-02-01T00:00:00+00:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="twitter:title" content="输入法的奇妙冒险： neovim 之风">
+<meta name="twitter:site" content="@FreedWu">
+<meta name="twitter:creator" content="@Wu Zhenyu">
+<meta property="fb:admins" content="100057378480375">
+<meta property="article:publisher" content="100057378480375">
+<meta property="fb:app_id" content="100057378480375">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Wu Zhenyu","url":"https://Freed-Wu.github.io"},"dateModified":"2025-02-01T00:00:00+00:00","datePublished":"2025-02-01T00:00:00+00:00","description":"你最喜欢的输入法——现在在 neovim 中可以使用了！ rime.nvim","headline":"输入法的奇妙冒险： neovim 之风","image":"https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://freed-wu.github.io/2025/02/01/ime-neovim.html"},"url":"https://freed-wu.github.io/2025/02/01/ime-neovim.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="icon" href="https://github.com/Freed-Wu.png">
+    <link rel="apple-touch-icon" href="https://github.com/Freed-Wu.png">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/poole.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/lanyon.min.css">
+    <link rel="stylesheet" href="//jekyllrb.com/css/screen.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/sindresorhus/github-markdown-css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <script async src="https://kit.fontawesome.com/556f02e0e5.js"></script>
+    <script async src="//cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget/autoload.min.js"></script>
+    <!-- https://github.com/christian-fei/Simple-Jekyll-Search -->
+    <script async src="//cdn.jsdelivr.net/npm/simple-jekyll-search/dest/simple-jekyll-search.min.js"></script>
+    <script async src="/assets/js/search.js"></script>
+  </head>
+  <!-- https://github.com/poole/lanyon -->
+  <body class="theme-base-08 layout-reverse sidebar-overlay">
+    <article class="container">
+      <header>
+        <h1>输入法的奇妙冒险： neovim 之风</h1>
+      </header>
+      <script src="/assets/js/qr.js"></script>
+<small class="post-date">
+  <i class="fa-solid fa-calendar-day"></i> 01 Feb 2025
+  <i class="fa-solid fa-file-word"></i> 2398 words
+  <i class="fa-solid fa-coffee"></i> 8 minutes
+  <span id="/2025/02/01/ime-neovim.html" class="leancloud-visitors" data-flag-title="输入法的奇妙冒险： neovim 之风">
+    <i class="fa-regular fa-eye"></i>
+    <span class="leancloud-visitors-count"></span>
+  </span>
+  <a rel="license" href="//creativecommons.org/licenses/by-sa/4.0/deed.zh">
+    <i class="fa-brands fa-creative-commons"></i> BY-SA 4.0
+  </a>
+  <br>
+  <a href="/tag/develop"> <i class="fa-solid fa-tag"></i> develop </a>
+  <a href="/tag/ime"> <i class="fa-solid fa-tag"></i> ime </a>
+</small>
+<ul><li>
+<a href="#%E6%8F%92%E4%BB%B6%E5%BC%80%E5%8F%91">插件开发</a><ul>
+<li><a href="#rocksnvim">rocks.nvim</a></li>
+<li><a href="#%E5%9F%BA%E4%BA%8E-lua-%E7%9A%84-neovim-%E6%8F%92%E4%BB%B6%E5%BC%80%E5%8F%91">基于 lua 的 NeoVim 插件开发</a></li>
+<li><a href="#%E5%85%B6%E4%BB%96">其他</a></li>
+</ul>
+</li></ul> <p>你最喜欢的输入法——现在在 neovim 中可以使用了！ <a href="https://github.com/Freed-Wu/rime.nvim">rime.nvim</a></p>
+
+<p><img src="https://github.com/user-attachments/assets/e35e9848-ba5d-478c-be80-953830cd8a65" alt="IME inside Vim"></p>
+
+<h2 id="插件开发">插件开发</h2>
+
+<p>我们在上一篇文章中讨论了 NeoVim 插件开发的一些方案。大体上分类如下：</p>
+
+<ul>
+  <li>vim script: 很容易写出与 Vim 兼容的插件</li>
+  <li>vim script 9: 一个性能更快但语法不兼容 vim script 的语言。目前对 Neovim 的支持还是<a href="https://github.com/tjdevries/vim9jit">试验阶段</a>
+</li>
+  <li>lua 但走 <a href="https://neovim.io/doc/user/lua.html#lua-vimscript">lua-vimscript 桥</a>：大多数 Neovim 插件</li>
+  <li>lua/python/ruby/perl/js 走 <a href="https://neovim.io/doc/user/api.html#RPC">msgpack-rpc 协议</a>：利好一些依赖某些库的插件。比如将 VS Code 插件移植到 Vim 上需要的 coc.nvim 就要求用 nodejs 开发 Vim 插件</li>
+  <li>转译流： teal/fennel 翻译成 lua, ts/coffee script 翻译成 js</li>
+  <li>C/C++/Rust: 走 FFI ，略过了 msgpack 的开销，性能更好（甚至都没必要这么好？），但开发难度就……</li>
+</ul>
+
+<p>用 vim script 开发插件简单入门。但随着需求的变化很多问题暴露出来：</p>
+
+<ul>
+  <li>很多语言支持用 C 开发模块。比如 <code class="language-plaintext highlighter-rouge">#include &lt;emacs-module.h&gt;</code> 就可以用 C 开发
+Emacs Lisp 模块等等。但 vim script 没有。</li>
+  <li>vim script 到现在都没有标准化的依赖声明方法。想一想你用 <code class="language-plaintext highlighter-rouge">pip install
+matplotlib</code> 时， <code class="language-plaintext highlighter-rouge">pip</code> 会自动发现 <code class="language-plaintext highlighter-rouge">numpy</code> 是一个依赖并将其提前安装好。而 Vim 社区的开发者不得不在 README 中要求用户手动安装缺失的依赖。</li>
+  <li>一个统一的插件发布平台，就像 PYPI 之于 python, npm 之于 nodejs 。</li>
+</ul>
+
+<p>在引入其他编程语言开发 Vim 插件前，社区也进行了一些有限但貌似徒劳的尝试：</p>
+
+<ul>
+  <li>用 C 语言开发一个动态链接库，然后在 vim script 中 <code class="language-plaintext highlighter-rouge">dlopen()</code> 它。例子： <a href="https://github.com/mattn/vimtweak">vimtweak</a>, <a href="https://github.com/lyokha/vim-xkbswitch">vim-xkbswitch</a> 。或者用 C 语言开发一个可执行文件，然后在 vim script 中 <code class="language-plaintext highlighter-rouge">system()</code> 它。</li>
+  <li>
+<a href="https://packspec.org/"><code class="language-plaintext highlighter-rouge">pkg.json</code></a>: 语法是 npm 的 <code class="language-plaintext highlighter-rouge">package.json</code> 的子集。由
+lazy.nvim 引入。未被 Vim 社区广泛采纳。</li>
+  <li>vim.org: 该网站已近乎被废弃。社区中大多数开发者在 github 等代码托管网站上发布插件。</li>
+</ul>
+
+<p>在引入其他编程语言后，一个非常棒的例子是 coc.nvim:</p>
+
+<ul>
+  <li>用 nodejs 开发 Vim 插件。 <code class="language-plaintext highlighter-rouge">#include &lt;node_api.h&gt;</code>, 轻轻松松 C 语言走起。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">package.json</code> 声明依赖，然后 <code class="language-plaintext highlighter-rouge">npm install</code>。</li>
+  <li>使用 npm 托管 Vim 插件</li>
+</ul>
+
+<p>在 Neovim 社区， lua 很快成了官方强推的插件开发语言：</p>
+
+<ul>
+  <li>neovim 自带一个 luajit 解释器： <code class="language-plaintext highlighter-rouge">nvim -l</code>
+</li>
+  <li>neovim 为 lua 提供了一个运行时 <code class="language-plaintext highlighter-rouge">vim</code> 。你可以使用 <code class="language-plaintext highlighter-rouge">vim.XXX</code> 调用自带的函数，而不仅仅是 lua 的 <code class="language-plaintext highlighter-rouge">os</code>, <code class="language-plaintext highlighter-rouge">table</code>, <code class="language-plaintext highlighter-rouge">package</code>, …</li>
+  <li>neovim 除了 RPC 通讯的 <code class="language-plaintext highlighter-rouge">vim.api.nvim_*</code> 函数，更提供了 lua-vimscript 桥，允许直接在 lua 中操作 vim script 环境</li>
+</ul>
+
+<p>那么，一个类似 coc.nvim 但使用 lua 来解决上述难题的方案已经呼之欲出：</p>
+
+<h3 id="rocksnvim">rocks.nvim</h3>
+
+<p><a href="https://github.com/nvim-neorocks/rocks.nvim">rocks.nvim</a> 完成了：</p>
+
+<ul>
+  <li>用 lua 开发 Vim 插件。现在是 <code class="language-plaintext highlighter-rouge">#include &lt;lauxlib.h&gt;</code>!</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">*.rockspec</code> 声明依赖，然后 <code class="language-plaintext highlighter-rouge">luarocks install</code>
+</li>
+  <li>使用 luarocks.org 托管 Vim 插件</li>
+</ul>
+
+<p>除此外， rocks.nvim 还引入了 <code class="language-plaintext highlighter-rouge">rocks.toml</code> 让用户用 <code class="language-plaintext highlighter-rouge">Cargo.toml</code> 的语法声明需要安装的 Vim 插件。</p>
+
+<p>作为一个尝试， rocks.nvim 面临和 coc.nvim 一样的问题：</p>
+
+<p>生态。很多 Vim 插件并未被发布到 luarocks.org 上。所以该作者发起 <a href="https://github.com/nvim-neorocks/nurr">nurr</a> 来将一些 Vim 插件发布到 luarocks.org 上。</p>
+
+<p>打个比喻：先有充电桩还是先有电动汽车呢？如果我们担忧 luarocks.org 上没有足够多的
+Vim 插件而拒绝将 luarocks 带入到 Vim 插件开发社区，那么我们永远也不会享受到 luarocks 带来的好处～</p>
+
+<h3 id="基于-lua-的-neovim-插件开发">基于 lua 的 NeoVim 插件开发</h3>
+
+<p>Vim 插件的常见目录：</p>
+
+<ul>
+  <li>plugin/: 必定会被加载的代码</li>
+  <li>ftplugin/: 当某一特定类型文件被打开时会被加载的代码</li>
+  <li>ftdetect/: 根据文件名和文件内容确定文件类型的代码</li>
+  <li>lua/: lua 模块</li>
+  <li>autoload/: Vim 模块</li>
+  <li>doc/: 文档</li>
+  <li>after/: 与当前目录相同的目录结构，例如 after/plugin ，但加载会被延迟以确保不会被覆盖。</li>
+</ul>
+
+<p>作为一个输入法插件，我们只需要在 lua/ 中放置一个 lua 模块。然后让用户在配置中导入即可：</p>
+
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vim</span><span class="p">.</span><span class="n">keymap</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="s1">'i'</span><span class="p">,</span> <span class="s1">'&lt;C-^&gt;'</span><span class="p">,</span> <span class="nb">require</span><span class="p">(</span><span class="s1">'rime.nvim'</span><span class="p">).</span><span class="n">toggle</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">rime.nvim</code> 实际上是 <code class="language-plaintext highlighter-rouge">lua/rime/nvim/init.lua</code> ……所有与 vim 运行时有关的代码都放在 <code class="language-plaintext highlighter-rouge">lua/rime/nvim/</code> 下了 QAQ</p>
+
+<p>当用户按下 Ctrl + 6 时，输入法会被切换到 rime 模式。</p>
+
+<p>Neovim 提供了一些 API <code class="language-plaintext highlighter-rouge">vim.api.nvim_open_win()</code> 创建一个浮动窗口。我们在浮动窗口内绘制输入法的菜单界面。</p>
+
+<p>然后是和前面相同的算法逻辑。</p>
+
+<h3 id="其他">其他</h3>
+
+<ul>
+  <li>luaspec 的单元测试文件默认是 <code class="language-plaintext highlighter-rouge">spec/*_spec.lua</code> 。</li>
+  <li>目前并没有从 lua 代码注释生成 vim 文档的方法。但从 vim script 代码注释生成 vim 文档的方法有一个： <a href="https://github.com/google/vimdoc">vimdoc</a>
+</li>
+  <li>CI/CD 有 <a href="https://github.com/nvim-neorocks/luarocks-tag-release">luarocks-tag-release</a>
+</li>
+  <li>ldoc 可以从 lua 代码注释和 README 生成网站代码用于建设官网</li>
+</ul>
+
+<p>一些奇特的地方：</p>
+
+<p>用 C 语言开发 lua 的模块： lua 的栈设计太奇特了。这个恐怕只有体验过的开发者才能
+get 到其中含义 ^_^</p>
+
+<p>以上。我们成功地为 rime 增加了一堆命令行的前端。因为大多数算法逻辑是完全一样的，所以从第二篇文章开始后面就省略了这部分，侧重于每个平台移植的不同难点。</p>
+
+<p>最后，贴上佛振本人的评价：</p>
+
+<p><img src="https://github.com/user-attachments/assets/a1ee2f5d-5dbf-45f5-96d5-e34fad904e7e" alt="interesting"></p>
+
+<div class="reward">
+  <button id="rewardButton" disable="enable" onclick="toggle()">
+    如果这篇博客帮助到你，可以请我喝一杯奶茶~
+  </button>
+  <table id="rewardQRs">
+    <tr>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" alt="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" alt="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" alt="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" height="300pt"></td>
+    </tr>
+  </table>
+</div>
+<script src="/assets/js/valine.js"></script>
+
+    </article>
+    <input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+    <aside class="sidebar">
+      <div class="sidebar-item">
+        <div class="ih-item">
+          <a title="
+              Wu Zhenyu
+            ">
+            <img class="img" src="https://github.com/Freed-Wu.png" alt="img">
+            <div class="info">
+              <br>
+              <br>
+              A personal blog to record valuable and interesting things.
+            </div>
+          </a>
+        </div>
+        <iframe height="42" width="240" src="https://music.163.com/outchain/player?type=2&id=27646786&height=32"></iframe>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-nav-item" href="/">
+          <i class="fa-solid fa-home fa-fw"></i> Home
+        </a>
+        <a class="sidebar-nav-item" href="/tag">
+          <i class="fa-solid fa-tags fa-fw"></i> Tag
+        </a>
+        <a class="sidebar-nav-item" href="/feed.xml">
+          <i class="fa-solid fa-rss fa-fw"></i> RSS
+        </a>
+        <a class="sidebar-nav-item" href="/Freed-Wu">
+          <i class="fa-solid fa-comments fa-fw"></i> About Me
+        </a>
+        <a class="sidebar-nav-item" href="/jekyll-theme-freed">
+          <i class="fa-solid fa-code fa-fw"></i> About the Website
+        </a>
+        <a class="sidebar-nav-item" href="/2020/01/01/honour">
+          <i class="fa-solid fa-trophy fa-fw"></i> Honour
+        </a>
+      </nav>
+      <div class="sidebar-item">
+        <!-- https://github.com/christian-fei/Simple-Jekyll-Search#preparing-the-plugin -->
+        <input id="search-input" placeholder="Search posts">
+        <div id="results-container"></div>
+      </div>
+    </aside>
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+  </body>
+</html>
