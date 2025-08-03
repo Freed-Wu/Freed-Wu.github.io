@@ -19,7 +19,11 @@ else
   url="https://zhuanlan.zhihu.com/api/articles/$id/draft"
 fi
 
-curl -s -X "$method" "$url" -H "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36" -H "Content-Type: application/json" -H "Cookie: d_c0=$d_c0; z_c0=$z_c0" -H "x-requested-with: fetch" -d "$(scripts/draft.jq --arg title "$title" "$html")" |
+curl "$url" -X "$method" -d "$(scripts/draft.jq --arg title "$title" "$html")" \
+  -H "Cookie: d_c0=$d_c0; z_c0=$z_c0" \
+  -H "x-requested-with: fetch" \
+  -H "Content-Type: application/json" \
+  -H "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36" |
   jq -r .url |
   xargs -I{} xdg-open {}/edit
 if [ -n "$id" ]; then
