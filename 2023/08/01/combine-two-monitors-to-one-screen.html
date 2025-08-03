@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>将两块显示器组合成一块超大的屏幕 | wzy</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="将两块显示器组合成一块超大的屏幕">
+<meta name="author" content="Wu Zhenyu">
+<meta property="og:locale" content="zh_CN">
+<meta name="description" content="程序员永远不会停止对显示器、键盘、处理器、内存、存储等设备的追求 – 醉卧沙场">
+<meta property="og:description" content="程序员永远不会停止对显示器、键盘、处理器、内存、存储等设备的追求 – 醉卧沙场">
+<link rel="canonical" href="https://freed-wu.github.io/2023/08/01/combine-two-monitors-to-one-screen.html">
+<meta property="og:url" content="https://freed-wu.github.io/2023/08/01/combine-two-monitors-to-one-screen.html">
+<meta property="og:site_name" content="wzy">
+<meta property="og:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2023-08-01T00:00:00+00:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="twitter:title" content="将两块显示器组合成一块超大的屏幕">
+<meta name="twitter:site" content="@FreedWu">
+<meta name="twitter:creator" content="@Wu Zhenyu">
+<meta property="fb:admins" content="100057378480375">
+<meta property="article:publisher" content="100057378480375">
+<meta property="fb:app_id" content="100057378480375">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Wu Zhenyu","url":"https://Freed-Wu.github.io"},"dateModified":"2023-08-01T00:00:00+00:00","datePublished":"2023-08-01T00:00:00+00:00","description":"程序员永远不会停止对显示器、键盘、处理器、内存、存储等设备的追求 – 醉卧沙场","headline":"将两块显示器组合成一块超大的屏幕","image":"https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://freed-wu.github.io/2023/08/01/combine-two-monitors-to-one-screen.html"},"url":"https://freed-wu.github.io/2023/08/01/combine-two-monitors-to-one-screen.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="icon" href="https://github.com/Freed-Wu.png">
+    <link rel="apple-touch-icon" href="https://github.com/Freed-Wu.png">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/poole.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/lanyon.min.css">
+    <link rel="stylesheet" href="//jekyllrb.com/css/screen.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/sindresorhus/github-markdown-css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <script async src="https://kit.fontawesome.com/556f02e0e5.js"></script>
+    <script async src="//cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget/autoload.min.js"></script>
+    <!-- https://github.com/christian-fei/Simple-Jekyll-Search -->
+    <script async src="//cdn.jsdelivr.net/npm/simple-jekyll-search/dest/simple-jekyll-search.min.js"></script>
+    <script async src="/assets/js/search.js"></script>
+  </head>
+  <!-- https://github.com/poole/lanyon -->
+  <body class="theme-base-08 layout-reverse sidebar-overlay">
+    <article class="container">
+      <header>
+        <h1>将两块显示器组合成一块超大的屏幕</h1>
+      </header>
+      <script src="/assets/js/qr.js"></script>
+<small class="post-date">
+  <i class="fa-solid fa-calendar-day"></i> 01 Aug 2023
+  <i class="fa-solid fa-file-word"></i> 5277 words
+  <i class="fa-solid fa-coffee"></i> 18 minutes
+  <span id="/2023/08/01/combine-two-monitors-to-one-screen.html" class="leancloud-visitors" data-flag-title="将两块显示器组合成一块超大的屏幕">
+    <i class="fa-regular fa-eye"></i>
+    <span class="leancloud-visitors-count"></span>
+  </span>
+  <a rel="license" href="//creativecommons.org/licenses/by-sa/4.0/deed.zh">
+    <i class="fa-brands fa-creative-commons"></i> BY-SA 4.0
+  </a>
+  <br>
+  <a href="/tag/develop"> <i class="fa-solid fa-tag"></i> develop </a>
+</small>
+<ul>
+<li>
+<a href="#%E5%8A%A8%E6%9C%BA">动机</a><ul>
+<li><a href="#video">Video</a></li>
+<li><a href="#coding">Coding</a></li>
+<li><a href="#reading">Reading</a></li>
+</ul>
+</li>
+<li>
+<a href="#%E8%83%8C%E6%99%AF">背景</a><ul>
+<li><a href="#%E4%BA%A4%E4%BA%92%E6%96%B9%E5%BC%8F%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2">交互方式/用户界面</a></li>
+<li><a href="#%E5%9B%BE%E5%BD%A2%E5%8C%96%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2">图形化用户界面</a></li>
+<li><a href="#%E6%A1%8C%E9%9D%A2%E7%8E%AF%E5%A2%83">桌面环境</a></li>
+</ul>
+</li>
+<li>
+<a href="#%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88">技术方案</a><ul>
+<li><a href="#%E7%AA%97%E5%8F%A3%E7%AE%A1%E7%90%86%E5%99%A8">窗口管理器</a></li>
+<li><a href="#%E7%99%BB%E5%BD%95%E7%AE%A1%E7%90%86%E5%99%A8">登录管理器</a></li>
+<li><a href="#%E5%B1%8F%E5%B9%95%E4%BF%9D%E6%8A%A4%E7%A8%8B%E5%BA%8F">屏幕保护程序</a></li>
+<li><a href="#%E9%97%AE%E9%A2%98">问题</a></li>
+</ul>
+</li>
+</ul> <blockquote>
+  <p>程序员永远不会停止对显示器、键盘、处理器、内存、存储等设备的追求</p>
+
+  <p>– <a href="https://www.zhihu.com/question/377137694/answer/2317443703">醉卧沙场</a></p>
+</blockquote>
+
+<h2 id="动机">动机</h2>
+
+<p>导师为每个学生配备了一台主机和两台 2560x1440 的显示器。本着物尽其用的原则，现将两台 2560x1440 的显示器拼接为一个 2880x2560 的大显示屏。</p>
+
+<p>展示效果：</p>
+
+<h3 id="video">Video</h3>
+
+<p>无论是顶部弹幕和底部弹幕都不会遮挡 16:9 的视频。</p>
+
+<p><a href="https://github.com/Freed-Wu/Freed-Wu/assets/32936898/872b01a8-257a-40fb-84b7-fde2eb0acbec"><img src="https://github.com/Freed-Wu/Freed-Wu/assets/32936898/b5d75eac-9b0e-4aa0-93d8-fc480c3938f1" alt="video"></a></p>
+
+<h3 id="coding">Coding</h3>
+
+<p>分割屏幕的空间变大了。</p>
+
+<p><a href="https://github.com/Freed-Wu/Freed-Wu/assets/32936898/b0d50018-a2e3-4ad4-8be6-f4a6a1a01854"><img src="https://github.com/Freed-Wu/Freed-Wu/assets/32936898/44ffb5fc-a967-4619-8ec2-35f0134e0edf" alt="coding"></a></p>
+
+<h3 id="reading">Reading</h3>
+
+<p>主流的双栏论文刚好被两块显示器的顶部边框一分为二。 nice!</p>
+
+<p><a href="https://user-images.githubusercontent.com/32936898/203045646-d485b86d-e3dc-46b5-8ebc-13aa0b25294f.jpg"><img src="https://github.com/Freed-Wu/Freed-Wu/assets/32936898/9e853ea1-70af-48e9-adc5-f93b5b25e6d0" alt="reading"></a></p>
+
+<h2 id="背景">背景</h2>
+
+<h3 id="交互方式用户界面">交互方式/用户界面</h3>
+
+<p>用户界面通常分为文本用户界面 (TUI) 和 图形化用户界面 (GUI) 。
+除此之外还有无用户界面的命令行 (CLI) 交互方式。</p>
+
+<p>并非只有操作系统才能显示图形化用户界面。例如可以利用
+<a href="https://en.wikipedia.org/wiki/Framebuffer">framebuffer</a>:</p>
+
+<ul>
+  <li>UEFI/BIOS</li>
+  <li>boot loader: grub 让用户选择到底要进入哪一个操作系统。</li>
+</ul>
+
+<p><a href="https://github.com/shvchk/fallout-grub-theme"><img src="https://camo.githubusercontent.com/09da64b6fe7adbd45f30689f805d956c5a242de0e47c09a325114861b527954c/68747470733a2f2f692e696d6775722e636f6d2f374c555977546e2e676966" alt="fallout-grub-theme"></a></p>
+
+<h3 id="图形化用户界面">图形化用户界面</h3>
+
+<p>排除一些软件直接利用 framebuffer 而非 X11/Wayland 去显示图像或 pdf 。
+Linux 的图形化用户界面主要分为 X11 和 Wayland 2 个方案。</p>
+
+<ul>
+  <li>X11: X window system 的 第 11 个版本，很有可能会是最后一个版本
+    <ul>
+      <li>历史悠久： 1984 年 X window system 的第一版就已问世。</li>
+      <li>兼容性好（bug 少，或者说笔者压根没遇到过）</li>
+      <li>跨平台：已被移植到（笔者用过的）：
+        <ul>
+          <li>Windows: <a href="https://x.cygwin.com">Cygwin/X</a>
+</li>
+          <li>Android: <a href="https://wiki.termux.com/wiki/Graphical_Environment">Termux/X</a>
+</li>
+          <li>X 被移植到这些平台的主要用途还是丰富这些平台的软件生态。
+不少依赖 POSIX 和 FHS 标准的 Linux 独有的图形化用户界面软件只能靠这种方式才能被移植过去。
+但注意 X11 性能并不好。如果能找到这些平台的不依赖 X 的替代软件建议更换。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Wayland
+    <ul>
+      <li>新： 2008 年 Wayland 项目正式启动</li>
+      <li>被寄予厚望：基本就是作为 X11 的接班人被培养的。 gdm 等登录管理器甚至默认使用 wayland （或者说想让用户多汇报 bug ）</li>
+      <li>实时帧率远高于 X11 ，这对于 Steam OS 等用于游戏机的 Linux 发行版是极其重要的</li>
+      <li>触屏体验个人认为比 X11 好，但你得买台触屏电脑才能体验到</li>
+      <li>兼容性不如 X11 。例如：</li>
+    </ul>
+  </li>
+</ul>
+
+<p>早期在 nvidia 显卡下被报道过有屏幕撕裂的 bug 。不过此 bug 已被某些用户报告消失（可能是 nvidia 驱动开源的缘故？）。</p>
+
+<blockquote>
+  <p>整体动画和特效很惊艳，没有了 X11 那种山寨的感觉，纯 wayland 环境下完全没有屏幕撕裂，实时帧率远高于 X11 环境</p>
+
+  <p>– <a href="https://zhuanlan.zhihu.com/p/531205278">2022 年,用 Wayland 开启 linux</a></p>
+</blockquote>
+
+<p>某些视频会议的软件无法投屏，得额外用 X11 启动。</p>
+
+<blockquote>
+  <p>原生 Wayland 下无法使用摄像头，无法直接进行屏幕共享。如有上述需求请使用 wemeet-x11 启动。</p>
+
+  <p>– <a href="https://aur.archlinux.org/packages/wemeet-bin">腾讯会议</a></p>
+</blockquote>
+
+<p>某些支持背景透明的软件（例如终端模拟器）无法支持。</p>
+
+<blockquote>
+  <p><a href="https://github.com/wez/wezterm/issues/3766">window_background_opacity cannot work on wayland</a></p>
+</blockquote>
+
+<h3 id="桌面环境">桌面环境</h3>
+
+<!-- markdownlint-disable MD033 -->
+
+<table>
+  <thead>
+    <tr>
+      <th>Linux 桌面环境（DE）九宫格</th>
+      <th>用户善良<br>功能多才是好桌面环境</th>
+      <th>用户中立<br>功能够用才是好桌面环境</th>
+      <th>用户邪恶<br>桌面环境是什么？能吃吗？</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>语言保守<br>C 才是 Linux 软件开发的正统</td>
+      <td>
+<img src="https://github.com/Freed-Wu/Freed-Wu.github.io/assets/32936898/a39b103d-6171-42b7-bc85-796b5186175a" alt="Gnome"><br><a href="https://www.gnome.org/">Gnome</a><br><a href="https://ubuntu.com/">Ubuntu</a> 默认桌面<br>我占用率大我先说话</td>
+      <td>
+<img src="https://github.com/Freed-Wu/Freed-Wu.github.io/assets/32936898/17bf0061-7e09-49ff-a08c-a1dd37bf6d55" alt="Xfce"><br><a href="https://www.xfce.org/">Xfce</a><br><a href="https://github.com/peng-zhihui/">稚晖君</a>代言<br>比什么功能，我们比内存占用</td>
+      <td>
+<img src="https://github.com/Freed-Wu/Freed-Wu.github.io/assets/32936898/14ef9c8c-1a28-4899-a87a-1bc91b2d971a" alt="i3"><br><a href="https://i3wm.org/">i3</a><br>i3 大法好<br>退 DE 保全家</td>
+    </tr>
+    <tr>
+      <td>语言中立<br>OOP 才是桌面环境开发的王道</td>
+      <td>
+<img src="https://github.com/Freed-Wu/Freed-Wu.github.io/assets/32936898/b38919ef-4936-448c-b188-7fdd0a66a031" alt="KDE"><br><a href="https://kde.org/">KDE</a><br><a href="https://tysontan.com/">钛山</a>认证，<a href="https://archlinux.org/">ArchLinux</a> <a href="https://pkgstats.archlinux.de/fun/">投票榜</a>第一<br>是我，是我先，明明都是我先来的</td>
+      <td>
+<img src="https://github.com/Freed-Wu/Freed-Wu.github.io/assets/32936898/28835666-7bb4-43f8-90d6-f75c236a25e5" alt="LXQt"><br><a href="https://lxqt-project.org/">LXQt</a><br>不<a href="https://github.com/PCMan/">会写桌面环境的内科医生</a><br>不是好的软件工程师</td>
+      <td>
+<img src="https://github.com/Freed-Wu/Freed-Wu.github.io/assets/32936898/54cc93c1-d5d3-4874-8eb8-eebba7058948" alt="awesome"><br><a href="https://awesomewm.org/">awesome</a><br>如果我拿出 <a href="https://www.lua.org/">lua</a><br>阁下又该如何应对呢</td>
+    </tr>
+    <tr>
+      <td>语言混乱<br>邪教</td>
+      <td>
+<img src="https://github.com/Freed-Wu/Freed-Wu.github.io/assets/32936898/5d5c9664-4446-4cf4-9dc4-a449f530b006" alt="WSL2"><br><a href="https://learn.microsoft.com/en-us/windows/wsl/about">WSL2</a><br>WSL2 也是 GNU/Linux ~的虚拟机~<br>Windows 才是最好的桌面环境</td>
+      <td>
+<img src="https://github.com/Freed-Wu/Freed-Wu.github.io/assets/32936898/939b115a-f468-4d4e-8771-9379c9696eec" alt="Android"><br><a href="https://www.android.com/">Android</a><br>Android 也是 Android/Linux<br>Android 才是最好的桌面环境</td>
+      <td>
+<img src="https://github.com/Freed-Wu/Freed-Wu.github.io/assets/32936898/9848a414-0b1e-41da-aa5e-dc86e90a4ed5" alt="OpenWrt"><br><a href="https://openwrt.org/">OpenWrt</a><br>OpenWrt 也是 <a href="https://www.musl-libc.org/">musl</a>/Linux<br>都有命令行了还要什么自行车？</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-enable MD033 -->
+
+<p>桌面环境通常包含：</p>
+
+<ul>
+  <li>窗口管理器。现在的窗口管理器基本已经定型，通常都是：
+    <ul>
+      <li>在窗口的上方增加一个标题栏</li>
+      <li>标题栏左侧或右侧放置最小化、最大化/还原、关闭、始终最上、隐藏窗口仅保留标题栏等若干个按钮。</li>
+      <li>右键标题栏弹出菜单。注意早期的窗口管理器并非如此——那是鼠标还只有一个键，类似 twm 的窗口管理器要用先长按再拖动的方式选中菜单。</li>
+    </ul>
+  </li>
+  <li>登录管理器。输入用户名和密码的第一个界面。</li>
+  <li>会话管理器。解除锁屏后的会话恢复。</li>
+  <li>文件管理器</li>
+  <li>终端模拟器</li>
+  <li>控制中心（设置）</li>
+  <li>桌面壁纸、任务栏、状态栏、开始菜单等若干远不如前几个重要但能大大提升桌面颜值的部件。有的桌面所谓最美桌面就靠颜值来吸引用户。</li>
+</ul>
+
+<p>目前用户占有量最大的四大桌面：</p>
+
+<ul>
+  <li>Gnome: 用 C (gtk) 开发的重量级桌面</li>
+  <li>KDE: 用 C++ (qt) 开发的重量级桌面</li>
+  <li>xfce: 用 C (gtk) 开发的轻量级桌面</li>
+  <li>lxqt: 用 C++ (qt) 开发的轻量级桌面</li>
+</ul>
+
+<p>重量级桌面通常功能多但耦合严重（例如 gnome 的登录管理器基本不能换成 gdm 以外的登录管理器），
+轻量级桌面则倾向于所有部件都可更换。但功能少，例如：</p>
+
+<ul>
+  <li>不支持用 javascript 编写插件</li>
+  <li><a href="https://discourse.nixos.org/t/different-behaviour-about-hidpi-set-scale-to-2x-in-different-desktop-environment/28381">不支持 HiDPI</a></li>
+</ul>
+
+<p>四大桌面的历史有些颇有意思。例如内科医生写代码呀， qt 改许可证呀，在此不作赘述。</p>
+
+<h2 id="技术方案">技术方案</h2>
+
+<blockquote>
+  <p>TwinView 是一种操作模式，其中两个显示设备 （数字平板、CRT 和电视）可以显示任意配置中的单个 X 屏幕。
+这种使用显示器的方法与其他技术相比，具有几个明显的优势：
+…</p>
+
+  <p>– <a href="https://download.nvidia.com/XFree86/Linux-x86/275.28/README/configtwinview.html">英伟达加速 Linux 图形驱动程序自述文件和安装指导</a></p>
+</blockquote>
+
+<p>搜索手册不难发现解决问题的方法之一是 TwinView.</p>
+
+<h3 id="窗口管理器">窗口管理器</h3>
+
+<p>进一步以 TwinView 为关键词搜索可以发现：</p>
+
+<blockquote>
+  <p>某些桌面环境尚不支持此功能。 Openbox 已经过测试并且可以使用此功能。</p>
+
+  <p>– <a href="https://wiki.archlinux.org/title/Multihead#Combine_screens_into_virtual_display">多显示器</a></p>
+</blockquote>
+
+<p>笔者<a href="https://bbs.archlinux.org/viewtopic.php?pid=2064528">测试了四大桌面的结果</a>也是如此。</p>
+
+<p>lxqt 默认使用 openbox 作为窗口管理器，并在设置里提供了配置方法：</p>
+
+<p><img src="https://user-images.githubusercontent.com/32936898/203046539-15272426-f8ec-48b2-ad71-22afab7eb373.jpg" alt="Monitor Settings"></p>
+
+<p><a href="https://user-images.githubusercontent.com/32936898/203045565-56fde3d9-4c53-465f-8606-1d098b38632a.jpg"><img src="https://github.com/Freed-Wu/Freed-Wu/assets/32936898/cca052c3-d748-4a79-853c-71bc5abb4a7f" alt="DE"></a></p>
+
+<h3 id="登录管理器">登录管理器</h3>
+
+<p>lxqt 默认使用的登录管理器是不支持 TwinView 的。需要更换 xdm 。 xdm 没有图形化用户界面的配置方法。</p>
+
+<p>此主机共有 4 个媒体接口。 2 台显示器被分别连接到了 DP-0 和 HDMI-1 。假设我们不知道 2 台显示器被连接到了哪里，我们可以通过以下方法查看：</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>xrandr
+Screen 0: minimum 8 x 8, current 2880 x 2560, maximum 32767 x 32767
+DVI-D-0 disconnected <span class="o">(</span>normal left inverted right x axis y axis<span class="o">)</span>
+HDMI-0 disconnected <span class="o">(</span>normal left inverted right x axis y axis<span class="o">)</span>
+DP-0 connected primary 1440x2560+0+0 left <span class="o">(</span>normal left inverted right x axis y axis<span class="o">)</span> 597mm x 336mm
+2560x1440     59.95<span class="k">*</span>+  74.97
+1920x1080     74.97    60.00    59.94    50.00
+1680x1050     59.95
+1440x900      59.89
+1280x1024     75.02    60.02
+1280x960      60.00
+1280x720      60.00    59.94    50.00
+1024x768      75.03    70.07    60.00
+800x600       75.00    72.19    60.32    56.25
+720x576       50.00
+720x480       59.94
+640x480       75.00    72.81    59.94    59.93
+DP-1 disconnected <span class="o">(</span>normal left inverted right x axis y axis<span class="o">)</span>
+HDMI-1 connected 1440x2560+1440+0 right <span class="o">(</span>normal left inverted right x axis y axis<span class="o">)</span> 597mm x 336mm
+2560x1440     59.95<span class="k">*</span>+  74.97
+1920x1080     74.97    60.00    59.94    50.00
+1680x1050     59.95
+1440x900      59.89
+1280x1024     75.02    60.02
+1280x960      60.00
+1280x720      60.00    59.94    50.00
+1024x768      75.03    70.07    60.00
+800x600       75.00    72.19    60.32    56.25
+720x576       50.00
+720x480       59.94
+640x480       75.00    72.81    59.94    59.93
+</code></pre></div></div>
+
+<p>修改 <code class="language-plaintext highlighter-rouge">/etc/X11/xorg.conf.d/10-monitor.conf</code> 去告诉 xdm 桌面的设置：</p>
+
+<pre><code class="language-xf86conf">Section "Monitor"
+    Identifier "DP-0"
+    Option "Rotate" "left"
+EndSection
+
+Section "Monitor"
+    Identifier "HDMI-1"
+    Option "Rotate" "right"
+    Option "RightOf" "DP-0"
+EndSection
+</code></pre>
+
+<p>使能 TwinView ：</p>
+
+<pre><code class="language-xf86conf">Section "Device"
+    Identifier     "Device0"
+    Driver         "nvidia"
+    VendorName     "NVIDIA Corporation"
+    Option "NoTwinViewXineramaInfo" "1"
+EndSection
+</code></pre>
+
+<p><a href="https://user-images.githubusercontent.com/32936898/203045505-86867194-4c5a-474a-9227-7aedb88b5dc8.jpg"><img src="https://github.com/Freed-Wu/Freed-Wu/assets/32936898/c861ea2d-f7ff-41c7-ae93-9dcea31dd072" alt="xdm"></a></p>
+
+<h3 id="屏幕保护程序">屏幕保护程序</h3>
+
+<p>目前没有任何屏幕保护程序支持 TwinView 。它们将分别对待两台显示器。以下是 lxqt 默认的屏幕保护程序 <code class="language-plaintext highlighter-rouge">xscreensaver</code> 显示的结果：</p>
+
+<p><a href="https://user-images.githubusercontent.com/32936898/203047977-1cbfabe7-e5d3-4251-a2a2-467129d56f22.jpg"><img src="https://github.com/Freed-Wu/Freed-Wu/assets/32936898/7398b05c-766e-4b43-adf6-57948695f063" alt="xscreensaver"></a></p>
+
+<h3 id="问题">问题</h3>
+
+<p>不能扫描位于屏幕中间的二维码：</p>
+
+<p><img src="https://github.com/Freed-Wu/fit-the-screen-consisting-of-two-monitors/assets/32936898/86aeb75e-db4e-4175-8a1e-590d813506b4" alt="qr"></p>
+
+<p>呃，笔者目前只能写了个<a href="https://github.com/Freed-Wu/fit-the-screen-consisting-of-two-monitors">用户脚本</a>对每个网页符合某些条件的元素进行微调来尽可能让某些主要元素避开中间的分隔线：</p>
+
+<p><img src="https://github.com/Freed-Wu/fit-the-screen-consisting-of-two-monitors/assets/32936898/2e8eb4f9-9b76-4eb6-a036-e9fc3f574428" alt="qr-after"></p>
+
+<p>关于如何判断哪些元素是符合某些条件的要微调的元素充满了经验主义，如果有读者想到了更好的办法可以分享给笔者。 TIA!</p>
+
+<div class="reward">
+  <button id="rewardButton" disable="enable" onclick="toggle()">
+    如果这篇博客帮助到你，可以请我喝一杯奶茶~
+  </button>
+  <table id="rewardQRs">
+    <tr>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" alt="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" alt="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" alt="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" height="300pt"></td>
+    </tr>
+  </table>
+</div>
+<script src="/assets/js/valine.js"></script>
+
+    </article>
+    <input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+    <aside class="sidebar">
+      <div class="sidebar-item">
+        <div class="ih-item">
+          <a title="
+              Wu Zhenyu
+            ">
+            <img class="img" src="https://github.com/Freed-Wu.png" alt="img">
+            <div class="info">
+              <br>
+              <br>
+              A personal blog to record valuable and interesting things.
+            </div>
+          </a>
+        </div>
+        <iframe height="42" width="240" src="https://music.163.com/outchain/player?type=2&id=27646786&height=32"></iframe>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-nav-item" href="/">
+          <i class="fa-solid fa-home fa-fw"></i> Home
+        </a>
+        <a class="sidebar-nav-item" href="/tag">
+          <i class="fa-solid fa-tags fa-fw"></i> Tag
+        </a>
+        <a class="sidebar-nav-item" href="/feed.xml">
+          <i class="fa-solid fa-rss fa-fw"></i> RSS
+        </a>
+        <a class="sidebar-nav-item" href="/Freed-Wu">
+          <i class="fa-solid fa-comments fa-fw"></i> About Me
+        </a>
+        <a class="sidebar-nav-item" href="/jekyll-theme-freed">
+          <i class="fa-solid fa-code fa-fw"></i> About the Website
+        </a>
+        <a class="sidebar-nav-item" href="/2020/01/01/honour">
+          <i class="fa-solid fa-trophy fa-fw"></i> Honour
+        </a>
+      </nav>
+      <div class="sidebar-item">
+        <!-- https://github.com/christian-fei/Simple-Jekyll-Search#preparing-the-plugin -->
+        <input id="search-input" placeholder="Search posts">
+        <div id="results-container"></div>
+      </div>
+    </aside>
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+  </body>
+</html>
