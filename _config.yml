@@ -30,6 +30,7 @@ exclude:
   - pyproject.toml
   - shell.nix
   - LICENSE
+  - scripts/
 
 defaults:
   - scope:
