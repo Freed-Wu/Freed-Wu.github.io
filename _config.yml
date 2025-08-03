@@ -19,6 +19,17 @@ kramdown:
   # https://github.com/gettalong/kramdown/issues/715
   parse_block_html: true
   remove_line_breaks_for_cjk: true
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - pyproject.toml
+  - shell.nix
+  - LICENSE
 
 defaults:
   - scope:
