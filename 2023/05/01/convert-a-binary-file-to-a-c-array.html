@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>将二进制文件转换为 C 语言数组的 100 种方法 | wzy</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="将二进制文件转换为 C 语言数组的 100 种方法">
+<meta name="author" content="Wu Zhenyu">
+<meta property="og:locale" content="zh_CN">
+<meta name="description" content="How can I convert a binary file to the text declaring a C/C++ array with that content?">
+<meta property="og:description" content="How can I convert a binary file to the text declaring a C/C++ array with that content?">
+<link rel="canonical" href="https://freed-wu.github.io/2023/05/01/convert-a-binary-file-to-a-c-array.html">
+<meta property="og:url" content="https://freed-wu.github.io/2023/05/01/convert-a-binary-file-to-a-c-array.html">
+<meta property="og:site_name" content="wzy">
+<meta property="og:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2023-05-01T00:00:00+00:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="twitter:title" content="将二进制文件转换为 C 语言数组的 100 种方法">
+<meta name="twitter:site" content="@FreedWu">
+<meta name="twitter:creator" content="@Wu Zhenyu">
+<meta property="fb:admins" content="100057378480375">
+<meta property="article:publisher" content="100057378480375">
+<meta property="fb:app_id" content="100057378480375">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Wu Zhenyu","url":"https://Freed-Wu.github.io"},"dateModified":"2023-05-01T00:00:00+00:00","datePublished":"2023-05-01T00:00:00+00:00","description":"How can I convert a binary file to the text declaring a C/C++ array with that content?","headline":"将二进制文件转换为 C 语言数组的 100 种方法","image":"https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://freed-wu.github.io/2023/05/01/convert-a-binary-file-to-a-c-array.html"},"url":"https://freed-wu.github.io/2023/05/01/convert-a-binary-file-to-a-c-array.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="icon" href="https://github.com/Freed-Wu.png">
+    <link rel="apple-touch-icon" href="https://github.com/Freed-Wu.png">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/poole.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/lanyon.min.css">
+    <link rel="stylesheet" href="//jekyllrb.com/css/screen.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/sindresorhus/github-markdown-css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <script async src="https://kit.fontawesome.com/556f02e0e5.js"></script>
+    <script async src="//cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget/autoload.min.js"></script>
+    <!-- https://github.com/christian-fei/Simple-Jekyll-Search -->
+    <script async src="//cdn.jsdelivr.net/npm/simple-jekyll-search/dest/simple-jekyll-search.min.js"></script>
+    <script async src="/assets/js/search.js"></script>
+  </head>
+  <!-- https://github.com/poole/lanyon -->
+  <body class="theme-base-08 layout-reverse sidebar-overlay">
+    <article class="container">
+      <header>
+        <h1>将二进制文件转换为 C 语言数组的 100 种方法</h1>
+      </header>
+      <script src="/assets/js/qr.js"></script>
+<small class="post-date">
+  <i class="fa-solid fa-calendar-day"></i> 01 May 2023
+  <i class="fa-solid fa-file-word"></i> 3067 words
+  <i class="fa-solid fa-coffee"></i> 11 minutes
+  <span id="/2023/05/01/convert-a-binary-file-to-a-c-array.html" class="leancloud-visitors" data-flag-title="将二进制文件转换为 C 语言数组的 100 种方法">
+    <i class="fa-regular fa-eye"></i>
+    <span class="leancloud-visitors-count"></span>
+  </span>
+  <a rel="license" href="//creativecommons.org/licenses/by-sa/4.0/deed.zh">
+    <i class="fa-brands fa-creative-commons"></i> BY-SA 4.0
+  </a>
+  <br>
+  <a href="/tag/develop"> <i class="fa-solid fa-tag"></i> develop </a>
+  <a href="/tag/c"> <i class="fa-solid fa-tag"></i> c </a>
+</small>
+<ul>
+<li><a href="#%E8%83%8C%E6%99%AF">背景</a></li>
+<li>
+<a href="#%E6%96%B9%E6%A1%88">方案</a><ul>
+<li><a href="#shell">shell</a></li>
+<li><a href="#perl">perl</a></li>
+<li><a href="#c">C</a></li>
+<li><a href="#ld">ld</a></li>
+</ul>
+</li>
+<li><a href="#%E6%80%BB%E7%BB%93">总结</a></li>
+</ul> <p>How can I convert a binary file to the text declaring a C/C++ array with that content?</p>
+
+<h2 id="背景">背景</h2>
+
+<blockquote>
+  <p>标题党（英语：clickbait，又称钓鱼式标题、诱饵式标题），指网络中故意用较为夸张、耸动的文章标题以及缩略图以吸引网友点击观看文章、视频或帖子的人。</p>
+
+  <p>– <a href="https://zh.wikipedia.org/zh-cn/%E6%A0%87%E9%A2%98%E5%85%9A">维基百科</a></p>
+</blockquote>
+
+<p>有一个很大的 yuv 文件，如果直接 <code class="language-plaintext highlighter-rouge">fread()</code> 需要花费大量时间，特别是文件读写速度很慢的场景
+（例如交叉编译时调试代码从一块开发板上读取电脑端的文件）。</p>
+
+<p>以下内容绝对不与
+<a href="https://stackoverflow.com/questions/8707183/how-can-i-convert-a-binary-file-to-the-text-declaring-a-c-c-array-with-that-co">Stackoverflow 同名问题</a>
+重复。</p>
+
+<p>可以通过以下代码获取测试用的 yuv 文件：</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg <span class="nt">-f</span> rawvideo <span class="nt">-pix_fmt</span> yuv420p <span class="nt">-s</span> 1080x720 <span class="nt">-i</span> /dev/urandom <span class="nt">-vframes</span> 10 <span class="nt">-f</span> rawvideo 1080x720.yuv
+</code></pre></div></div>
+
+<p>可以通过以下代码检测生成的 yuv 文件和原始的 yuv 文件是否一致：</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sha256sum </span>out.yuv | <span class="nb">cut</span> <span class="nt">-d</span><span class="s1">' '</span> <span class="nt">-f1</span> | diff &lt;<span class="o">(</span><span class="nb">sha256sum </span>1280x720.yuv | <span class="nb">cut</span> <span class="nt">-d</span><span class="s1">' '</span> <span class="nt">-f1</span><span class="o">)</span> -
+</code></pre></div></div>
+
+<h2 id="方案">方案</h2>
+
+<h3 id="shell">shell</h3>
+
+<blockquote>
+  <p>Sharp shell programmers should take note of the following…</p>
+
+  <p>– Larry Wall <a href="https://perldoc.perl.org/perltrap#Shell-Traps">Perl</a></p>
+</blockquote>
+
+<p>需要安装一个软件把二进制文件转换为 8/10/16 进制编码。可以选择的选项包括：</p>
+
+<ul>
+  <li>od: 这是 POSIX 系统预装的软件之一，由以下软件包提供：
+    <ul>
+      <li>GNU/Linux 的 <a href="https://www.gnu.org/software/coreutils">coreutils</a>
+</li>
+      <li>BSD 的 <a href="https://github.com/DiegoMagdaleno/BSDCoreUtils">coreutils</a>
+</li>
+      <li>musl/Linux 的 <a href="https://busybox.net">busybox</a>
+</li>
+      <li>Android/Linux
+的 <a href="https://android.googlesource.com/platform/external/toybox">toybox</a>
+</li>
+    </ul>
+  </li>
+  <li>xxd: 由 <a href="https://github.com/vim/vim">vim</a> 提供</li>
+  <li>hexdump: 由 <a href="https://github.com/util-linux/util-linux">util-linux</a> 提供</li>
+  <li>
+<a href="https://github.com/sharkdp/hexyl">hexyl</a>: 这是
+<a href="https://github.com/ansuz/RIIR">RIIR</a> 派的软件之一，推荐日常使用</li>
+</ul>
+
+<p>以下用 <code class="language-plaintext highlighter-rouge">od</code> 和 16 进制编码作示范。</p>
+
+<p><code class="language-plaintext highlighter-rouge">scripts/generate-yuv.h.sh</code>:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/env sh</span>
+<span class="c"># dump yuv file to a C array to fasten fread()</span>
+<span class="nb">echo</span> <span class="s2">"// Don't edit this file!
+// generated by </span><span class="nv">$0</span><span class="s2">
+#include &lt;stdlib.h&gt;
+char yuv[] = {"</span>
+<span class="nb">od</span> <span class="nt">-vAn</span> <span class="nt">-tx1</span> <span class="k">${</span><span class="nv">1</span><span class="k">:-</span><span class="nv">1280x720</span><span class="p">.yuv</span><span class="k">}</span> | <span class="nb">sed</span> <span class="s1">'s/ /, 0x/g'</span> | <span class="nb">sed</span> <span class="s1">'s/$/,/g'</span> | <span class="nb">cut</span> <span class="nt">-c3-</span>
+<span class="nb">echo</span> <span class="s1">'};
+const size_t yuv_len = sizeof(yuv);
+'</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">scripts/yuv.c</code>:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#if 0
+gcc "$0" -o a &amp;&amp; exec a "$@"
+#endif
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">"yuv.h"</span><span class="cp">
+</span><span class="cm">/**
+ * compare hashes of output and original yuv to check if yuv.h is correct
+ */</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+        <span class="n">fwrite</span><span class="p">(</span><span class="n">yuv</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">yuv</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">yuv_len</span><span class="p">,</span> <span class="n">stdout</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">EXIT_SUCCESS</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">chmod</span> +x scripts/generate-yuv.h.sh scripts/yuv.c
+scripts/generate-yuv.h.sh 1280x720.yuv <span class="o">&gt;</span> yuv.h
+scripts/yuv.c <span class="o">&gt;</span> out.yuv
+</code></pre></div></div>
+
+<p>点评：超级简单的方案，绝大部分 Linux 开发者在几分钟之内就能一边看着 <code class="language-plaintext highlighter-rouge">od</code>
+的输出一边写出代码。不过 shell 脚本里的 4 次进程分叉使得性能差强人意。</p>
+
+<h3 id="perl">perl</h3>
+
+<blockquote>
+  <p>Practicing Perl Programmers should take note of the following…</p>
+
+  <p>– Larry Wall <a href="https://perldoc.perl.org/perltrap#Perl-Traps">Perl</a></p>
+</blockquote>
+
+<p>完全可以用专门的数据驱动编程语言把文本处理的进程分叉去掉。</p>
+
+<p><code class="language-plaintext highlighter-rouge">scripts/generate-yuv.h.pl</code>:</p>
+
+<div class="language-perl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env perl</span>
+<span class="nb">exit</span> <span class="k">if</span> <span class="nv">$#ARGV</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">;</span>
+<span class="vg">$_</span> <span class="o">=</span> <span class="p">`</span><span class="sb">od -vAn -tx1 </span><span class="si">$ARGV</span><span class="sb">[0]</span><span class="p">`;</span>
+<span class="nb">exit</span> <span class="mi">1</span> <span class="k">if</span> <span class="vg">$?</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="nb">chomp</span><span class="p">;</span>
+<span class="sr">s/ /, 0x/g</span><span class="p">;</span>
+<span class="sr">s/$/,/gm</span><span class="p">;</span>
+<span class="sr">s/^, /\t/gm</span><span class="p">;</span>
+<span class="nv">$template</span> <span class="o">=</span> <span class="s">&lt;&lt;"EOF";
+/**
+ * Don't edit this file!
+ * generated by $0
+ */
+#include &lt;stdlib.h&gt;
+char yuv[] = {
+$_
+};
+const size_t yuv_len = sizeof(yuv);
+EOF
+</span><span class="k">print</span> <span class="nv">$template</span><span class="p">;</span>
+
+<span class="cp">__END__
+
+=head1 NAME
+
+generate-yuv.h.pl - dump yuv file to a C array to fasten fread()
+</span></code></pre></div></div>
+
+<p>点评：也是很简单的方案，做过数据驱动编程的开发者对这样的需求已经见怪不怪了。
+同样几分钟就可以写好代码。性能瓶颈在 <code class="language-plaintext highlighter-rouge">od</code> 上。</p>
+
+<h3 id="c">C</h3>
+
+<blockquote>
+  <p>Cerebral C and C++ programmers should take note of the following…</p>
+
+  <p>– Larry Wall <a href="https://perldoc.perl.org/perltrap#C/C++-Traps">Perl</a></p>
+</blockquote>
+
+<p>这里直接推荐 Adobe 公司的 <a href="https://github.com/adobe/bin2c">bin2c</a>：</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>bin2c yuv &lt; /the/path/of/352x288.yuv <span class="o">&gt;</span> yuv.h
+<span class="nv">$ </span><span class="nb">cat </span>yuv.h
+<span class="c">#include &lt;stdlib.h&gt;</span>
+const char yuv[] <span class="o">=</span> <span class="s2">"</span><span class="se">\</span><span class="s2">
+...
+"</span><span class="p">;</span>
+const size_t yuv_len <span class="o">=</span> sizeof<span class="o">(</span>yuv<span class="o">)</span> - 1<span class="p">;</span>
+</code></pre></div></div>
+
+<p>官方给出了速度比较：</p>
+
+<blockquote>
+  <p>xxd 13.9045 Mb/s</p>
+
+  <p>bin2c 547.613 Mb/s</p>
+</blockquote>
+
+<p>类似的实现网上还有好几个。不一一点评了。</p>
+
+<h3 id="ld">ld</h3>
+
+<blockquote>
+  <p>As a result, you have many choices to control its behavior.</p>
+
+  <p>– <a href="https://sourceware.org/binutils/docs-2.40/ld.html#Invocation">ld</a></p>
+</blockquote>
+
+<p>要是只有以上几个普通方案，笔者倒真不至于浪费时间写这篇博文—— <a href="https://github.com/harieamjari" class="user-mention">@harieamjari</a> 在
+<a href="https://github.com/termux/termux-packages/issues/16429#issuecomment-1541466535">一个帖子</a>
+里给了一个令笔者高呼 awesome 的回答：</p>
+
+<p><code class="language-plaintext highlighter-rouge">scripts/yuv.c</code></p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#if 0
+gcc "$0" yuv.o -o a &amp;&amp; exec a "$@"
+#endif
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span><span class="k">extern</span> <span class="kt">char</span> <span class="n">_binary_out_yuv_start</span><span class="p">[];</span>
+<span class="k">extern</span> <span class="kt">char</span> <span class="n">_binary_out_yuv_end</span><span class="p">[];</span>
+
+<span class="cm">/**
+ * compare hashes of output and original yuv to check if yuv.h is correct
+ */</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+        <span class="kt">char</span> <span class="o">*</span><span class="n">s</span> <span class="o">=</span> <span class="n">_binary_out_yuv_start</span><span class="p">,</span> <span class="o">*</span><span class="n">e</span> <span class="o">=</span><span class="n">_binary_out_yuv_end</span><span class="p">;</span>
+        <span class="n">fwrite</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="p">(</span><span class="kt">size_t</span><span class="p">)(</span><span class="n">e</span> <span class="o">-</span> <span class="n">s</span><span class="p">),</span> <span class="n">stdout</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">EXIT_SUCCESS</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">chmod</span> +x scripts/yuv.c
+<span class="nv">$ </span>ld <span class="nt">-r</span> <span class="nt">-bbinary</span> 1280x720.yuv <span class="nt">-oyuv</span>.o
+<span class="nv">$ </span>nm yuv.o
+XXXXXXXXXXXXXXXX D _binary_yuv_end
+XXXXXXXXXXXXXXXX A _binary_yuv_size
+0000000000000000 D _binary_yuv_start
+<span class="nv">$ </span>scripts/yuv.c <span class="o">&gt;</span> out.yuv
+</code></pre></div></div>
+
+<h2 id="总结">总结</h2>
+
+<blockquote>
+  <p>不止一种方法去做一件事。</p>
+
+  <p>– Larry Wall <a href="https://perldoc.perl.org/perlfaq1#Is-Perl-difficult-to-learn%3F">Perl</a></p>
+</blockquote>
+
+<p>如果你愿意你真的可以找到 100 种方法——把 <code class="language-plaintext highlighter-rouge">od</code> 换成其它工具，使用 其他进制而非 16
+进制，使用别的语言来实现这一功能。
+当然这样的方法就算数量再多也远不如最后一种给笔者带来的震撼。
+对开发工具的熟练掌握永远不是一件坏事。感谢阅读。</p>
+
+<div class="reward">
+  <button id="rewardButton" disable="enable" onclick="toggle()">
+    如果这篇博客帮助到你，可以请我喝一杯奶茶~
+  </button>
+  <table id="rewardQRs">
+    <tr>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" alt="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" alt="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" alt="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" height="300pt"></td>
+    </tr>
+  </table>
+</div>
+<script src="/assets/js/valine.js"></script>
+
+    </article>
+    <input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+    <aside class="sidebar">
+      <div class="sidebar-item">
+        <div class="ih-item">
+          <a title="
+              Wu Zhenyu
+            ">
+            <img class="img" src="https://github.com/Freed-Wu.png" alt="img">
+            <div class="info">
+              <br>
+              <br>
+              A personal blog to record valuable and interesting things.
+            </div>
+          </a>
+        </div>
+        <iframe height="42" width="240" src="https://music.163.com/outchain/player?type=2&id=27646786&height=32"></iframe>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-nav-item" href="/">
+          <i class="fa-solid fa-home fa-fw"></i> Home
+        </a>
+        <a class="sidebar-nav-item" href="/tag">
+          <i class="fa-solid fa-tags fa-fw"></i> Tag
+        </a>
+        <a class="sidebar-nav-item" href="/feed.xml">
+          <i class="fa-solid fa-rss fa-fw"></i> RSS
+        </a>
+        <a class="sidebar-nav-item" href="/Freed-Wu">
+          <i class="fa-solid fa-comments fa-fw"></i> About Me
+        </a>
+        <a class="sidebar-nav-item" href="/jekyll-theme-freed">
+          <i class="fa-solid fa-code fa-fw"></i> About the Website
+        </a>
+        <a class="sidebar-nav-item" href="/2020/01/01/honour">
+          <i class="fa-solid fa-trophy fa-fw"></i> Honour
+        </a>
+      </nav>
+      <div class="sidebar-item">
+        <!-- https://github.com/christian-fei/Simple-Jekyll-Search#preparing-the-plugin -->
+        <input id="search-input" placeholder="Search posts">
+        <div id="results-container"></div>
+      </div>
+    </aside>
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+  </body>
+</html>

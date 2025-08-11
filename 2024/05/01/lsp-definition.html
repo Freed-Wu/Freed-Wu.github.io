@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Re: 从零开始的语言服务器开发冒险：定义跳转 &amp; 引用跳转 | wzy</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="Re: 从零开始的语言服务器开发冒险：定义跳转 &amp; 引用跳转">
+<meta name="author" content="Wu Zhenyu">
+<meta property="og:locale" content="zh_CN">
+<meta name="description" content="Hello, I’m trying to use this in emacs, but I’m getting an error saying that the server does not support the method textDocument/definition. I feel like this is the main feature needed by a language server for XXX, to avoid constantly needing to use ag/grep to find package definitions. – 使用我写的语言服务器的某网友">
+<meta property="og:description" content="Hello, I’m trying to use this in emacs, but I’m getting an error saying that the server does not support the method textDocument/definition. I feel like this is the main feature needed by a language server for XXX, to avoid constantly needing to use ag/grep to find package definitions. – 使用我写的语言服务器的某网友">
+<link rel="canonical" href="https://freed-wu.github.io/2024/05/01/lsp-definition.html">
+<meta property="og:url" content="https://freed-wu.github.io/2024/05/01/lsp-definition.html">
+<meta property="og:site_name" content="wzy">
+<meta property="og:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2024-05-01T00:00:00+00:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="twitter:title" content="Re: 从零开始的语言服务器开发冒险：定义跳转 &amp; 引用跳转">
+<meta name="twitter:site" content="@FreedWu">
+<meta name="twitter:creator" content="@Wu Zhenyu">
+<meta property="fb:admins" content="100057378480375">
+<meta property="article:publisher" content="100057378480375">
+<meta property="fb:app_id" content="100057378480375">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Wu Zhenyu","url":"https://Freed-Wu.github.io"},"dateModified":"2024-05-01T00:00:00+00:00","datePublished":"2024-05-01T00:00:00+00:00","description":"Hello, I’m trying to use this in emacs, but I’m getting an error saying that the server does not support the method textDocument/definition. I feel like this is the main feature needed by a language server for XXX, to avoid constantly needing to use ag/grep to find package definitions. – 使用我写的语言服务器的某网友","headline":"Re: 从零开始的语言服务器开发冒险：定义跳转 &amp; 引用跳转","image":"https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://freed-wu.github.io/2024/05/01/lsp-definition.html"},"url":"https://freed-wu.github.io/2024/05/01/lsp-definition.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="icon" href="https://github.com/Freed-Wu.png">
+    <link rel="apple-touch-icon" href="https://github.com/Freed-Wu.png">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/poole.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/lanyon.min.css">
+    <link rel="stylesheet" href="//jekyllrb.com/css/screen.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/sindresorhus/github-markdown-css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <script async src="https://kit.fontawesome.com/556f02e0e5.js"></script>
+    <script async src="//cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget/autoload.min.js"></script>
+    <!-- https://github.com/christian-fei/Simple-Jekyll-Search -->
+    <script async src="//cdn.jsdelivr.net/npm/simple-jekyll-search/dest/simple-jekyll-search.min.js"></script>
+    <script async src="/assets/js/search.js"></script>
+  </head>
+  <!-- https://github.com/poole/lanyon -->
+  <body class="theme-base-08 layout-reverse sidebar-overlay">
+    <article class="container">
+      <header>
+        <h1>Re: 从零开始的语言服务器开发冒险：定义跳转 &amp; 引用跳转</h1>
+      </header>
+      <script src="/assets/js/qr.js"></script>
+<small class="post-date">
+  <i class="fa-solid fa-calendar-day"></i> 01 May 2024
+  <i class="fa-solid fa-file-word"></i> 6699 words
+  <i class="fa-solid fa-coffee"></i> 23 minutes
+  <span id="/2024/05/01/lsp-definition.html" class="leancloud-visitors" data-flag-title="Re: 从零开始的语言服务器开发冒险：定义跳转 &amp; 引用跳转">
+    <i class="fa-regular fa-eye"></i>
+    <span class="leancloud-visitors-count"></span>
+  </span>
+  <a rel="license" href="//creativecommons.org/licenses/by-sa/4.0/deed.zh">
+    <i class="fa-brands fa-creative-commons"></i> BY-SA 4.0
+  </a>
+  <br>
+  <a href="/tag/develop"> <i class="fa-solid fa-tag"></i> develop </a>
+  <a href="/tag/lsp"> <i class="fa-solid fa-tag"></i> lsp </a>
+</small>
+<ul>
+<li><a href="#%E6%9C%AF%E8%AF%AD">术语</a></li>
+<li>
+<a href="#%E5%AE%9E%E7%8E%B0">实现</a><ul>
+<li><a href="#%E6%8A%BD%E8%B1%A1%E8%AF%AD%E6%B3%95%E6%A0%91">抽象语法树</a></li>
+<li><a href="#%E6%90%9C%E7%B4%A2">搜索</a></li>
+<li><a href="#%E5%AE%9A%E4%B9%89%E8%B7%B3%E8%BD%AC">定义跳转</a></li>
+<li><a href="#%E5%BC%95%E7%94%A8%E8%B7%B3%E8%BD%AC">引用跳转</a></li>
+</ul>
+</li>
+</ul> <blockquote>
+  <p>Hello, I’m trying to use this in emacs, but I’m getting an error saying that the server does not support the method textDocument/definition. I feel like this is the main feature needed by a language server for XXX, to avoid constantly needing to use ag/grep to find package definitions.</p>
+
+  <p>– <a href="https://github.com/Freed-Wu/bitbake-language-server/issues/3">使用我写的语言服务器的某网友</a></p>
+</blockquote>
+
+<p>系列文章第三篇。今天展示如何实现一个语言服务器在 <code class="language-plaintext highlighter-rouge">Makefile</code> 中实现定义跳转和引用跳转的功能。本文代码开源于 <a href="https://github.com/Freed-Wu/autotools-language-server">autotools-language-server</a> 。</p>
+
+<h2 id="术语">术语</h2>
+
+<p><strong>跳转</strong>指根据光标下的 token 信息移动光标到另一个位置。 LSP 定义了以下 5 类可跳转的 feature ：</p>
+
+<ul>
+  <li>定义</li>
+  <li>声明</li>
+  <li>类型声明</li>
+  <li>实现</li>
+  <li>引用</li>
+</ul>
+
+<p>但 LSP 的标准文档根本就没定义什么是定义，声明什么是声明。 <code class="language-plaintext highlighter-rouge">:(</code>
+而且如果我们将定义、声明等划分得太细，比如将以下设定为两种不同的跳转：</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">typedef</span> <span class="kt">int</span> <span class="n">number_t</span>
+</code></pre></div></div>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define number_t int
+</span></code></pre></div></div>
+
+<p>指望用户在按快捷键之前预判 <code class="language-plaintext highlighter-rouge">number_t</code> 需要哪一种跳转再决定按哪个快捷键好像也不太符合正常逻辑，是也不是？</p>
+
+<p>所以笔者观察到的经验法则是：大多数语言服务器都只实现了定义跳转, 引用跳转可看成其逆操作，即如果先定义跳转，再引用跳转就会回到原先定义所在的位置。</p>
+
+<p>某些情况下声明跳转也会被实现。例如：</p>
+
+<p><code class="language-plaintext highlighter-rouge">main.py</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">main.pyi</code>: （<code class="language-plaintext highlighter-rouge">...</code> 不是省略，就是正确的语法）</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span> <span class="bp">...</span>
+</code></pre></div></div>
+
+<p><a href="https://github.com/microsoft/pyright">pyright</a> 定义跳转会跳转到 <code class="language-plaintext highlighter-rouge">main.py</code> 的 <code class="language-plaintext highlighter-rouge">def foo(x)</code> ，声明跳转会跳转到 <code class="language-plaintext highlighter-rouge">main.pyi</code> 的 <code class="language-plaintext highlighter-rouge">def foo(x: int)</code> 。
+但 python 3.6+ 已经支持在 <code class="language-plaintext highlighter-rouge">main.py</code> 中：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">x</span>
+</code></pre></div></div>
+
+<p>所以也只有少部分应用极其广泛到必须兼容低版本 python 的开源项目才会额外有<em>声明</em>。正常浏览代码大可不必弄清各种跳转。</p>
+
+<p>如果读者翻过 LSP 的标准文档，就会发现所有的跳转用的都是复数。为什么是复数？就算某些语言支持重复定义函数，也只有最后一次定义不会被覆盖，即真正的定义，是有意义的，为何不直接设定为跳转到最后一次定义（单数）呢？</p>
+
+<p>考虑以下特例：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">random</span>
+
+<span class="k">if</span> <span class="n">random</span><span class="p">.</span><span class="nf">randrange</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span>
+
+<span class="k">else</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+
+<span class="nf">foo</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>又有哪个拉普拉斯的魔女能预测出真正的定义是哪一个呢？所以当可能的跳转结果不止一个时，语言客户端会弹出一个选择框允许用户预览和选择最终的跳转位置。</p>
+
+<p><img src="https://github.com/Freed-Wu/Freed-Wu.github.io/assets/32936898/50cafbd5-3a2c-4f93-a07c-eb84088ae9ca" alt="list"></p>
+
+<h2 id="实现">实现</h2>
+
+<p>我们需要在抽象语法树中实现一个搜索算法，搜索到定义、引用所在的节点。</p>
+
+<h3 id="抽象语法树">抽象语法树</h3>
+
+<p>抽象语法树的解析器，我们将选用 <a href="https://github.com/grantjenks/py-tree-sitter-languages">py-tree-sitter-languages</a> 封装好的现成的解析器：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">lsprotocol.types</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="n">pygls.server</span> <span class="kn">import</span> <span class="n">LanguageServer</span>
+<span class="kn">from</span> <span class="n">tree_sitter_languages</span> <span class="kn">import</span> <span class="n">get_parser</span>
+
+
+<span class="k">class</span> <span class="nc">MakeLanguageServer</span><span class="p">(</span><span class="n">LanguageServer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">parser</span> <span class="o">=</span> <span class="nf">get_parser</span><span class="p">(</span><span class="sh">"</span><span class="s">make</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>只有当文件发生变化时，我们才重新生成抽象语法树：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MakeLanguageServer</span><span class="p">(</span><span class="n">LanguageServer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">trees</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">parser</span> <span class="o">=</span> <span class="nf">get_parser</span><span class="p">(</span><span class="sh">"</span><span class="s">make</span><span class="sh">"</span><span class="p">)</span>
+
+        <span class="nd">@self.feature</span><span class="p">(</span><span class="n">TEXT_DOCUMENT_DID_OPEN</span><span class="p">)</span>
+        <span class="nd">@self.feature</span><span class="p">(</span><span class="n">TEXT_DOCUMENT_DID_CHANGE</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">did_change</span><span class="p">(</span><span class="n">params</span><span class="p">:</span> <span class="n">DidChangeTextDocumentParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">document</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">workspace</span><span class="p">.</span><span class="nf">get_document</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="n">text_document</span><span class="p">.</span><span class="n">uri</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">trees</span><span class="p">[</span><span class="n">document</span><span class="p">.</span><span class="n">uri</span><span class="p">]</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">parser</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span>
+                <span class="n">document</span><span class="p">.</span><span class="n">source</span><span class="p">.</span><span class="nf">encode</span><span class="p">()</span>
+            <span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="搜索">搜索</h3>
+
+<p>在节点搜索方面， <a href="https://github.com/tree-sitter/tree-sitter">tree-sitter</a> 提供了一种内置的 DSL <a href="https://tree-sitter.github.io/tree-sitter/using-parsers#query-syntax">tree-sitter-query</a> ，在上一篇文章中我们已经展示过如何使用 tree-sitter-query 来搜索所有错误的节点了。虽然内置的 DSL 好处多多，但我们注意到：</p>
+
+<ol>
+  <li>tree-sitter-query 只能搜索当前抽象语法树的所有节点。但当我们明确知道搜索结果至多只有一个时，一旦搜到就可以立即返回节省时间。</li>
+  <li>tree-sitter-query 没有办法递归搜索其他文件的抽象语法树。在本例中，如果 <code class="language-plaintext highlighter-rouge">Makefile</code> 中有 <code class="language-plaintext highlighter-rouge">include XXX.mk</code> ，我们需要解析 <code class="language-plaintext highlighter-rouge">XXX.mk</code> 中是否有我们的搜索目标。</li>
+</ol>
+
+<p>所以我们需要自己实现一个更加灵活的搜索函数。它的搜索返回结果不仅仅是 tree-sitter-query 返回的节点，而是一个文件 URI 和该文件解析后的抽象语法树上的某个节点，我们不妨称其为 UNI （统一节点定位符）叭。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+
+<span class="kn">from</span> <span class="n">tree_sitter</span> <span class="kn">import</span> <span class="n">Node</span>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">UNI</span><span class="p">:</span>
+    <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">node</span><span class="p">:</span> <span class="n">Node</span>
+</code></pre></div></div>
+
+<p>注意到 <code class="language-plaintext highlighter-rouge">Makefile</code> 的函数调用是在规则内的，所以函数定义的位置和调用函数的规则的位置可以颠倒先后顺序，例如：</p>
+
+<p><code class="language-plaintext highlighter-rouge">Makefile</code>:</p>
+
+<!-- markdownlint-disable MD010 -->
+
+<div class="language-make highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">all</span>
+<span class="nl">all</span><span class="o">:</span>
+	<span class="p">$(</span>call f,hello<span class="p">)</span>
+
+<span class="k">define</span> <span class="nv">f</span>
+	<span class="err">@echo</span> <span class="err">$(1)</span>
+<span class="k">endef</span>
+</code></pre></div></div>
+
+<!-- markdownlint-enable MD010 -->
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>make all
+hello
+</code></pre></div></div>
+
+<p>关于什么深度优先、广度优先就不必浪费大家时间去介绍了。这里贴出一个示范的伪代码：</p>
+
+<ol>
+  <li>初始化一个列表存储搜索到的 UNI 。</li>
+  <li>输入一个 <code class="language-plaintext highlighter-rouge">Makefile</code> 的 URI: <code class="language-plaintext highlighter-rouge">file:///the/path/of/Makefile</code>
+</li>
+  <li>解析该文件得到抽象语法树，将根节点设置为起始节点</li>
+  <li>如果当前节点是 <code class="language-plaintext highlighter-rouge">include XXX.mk</code> 且搜索层数没有超过最大搜索层数，则搜索层数加 1，确定新的 URI： <code class="language-plaintext highlighter-rouge">file:///the/path/of/XXX.mk</code> ，回到第 2 步</li>
+  <li>如果当前节点符合<strong>搜索条件</strong>，则将其 UNI 加入到第 1 步的列表中。</li>
+  <li>如果明确得知搜索结果至多只有一个，返回第 1 步的列表</li>
+  <li>如果当前节点有子节点，移动到当前节点的第一个子节点。回到第 4 步</li>
+  <li>否则如果当前节点有下一个兄弟节点，移动到当前节点的下一个兄弟节点。回到第 4 步</li>
+  <li>如果当前节点没有父节点，返回第 1 步的列表，搜索层数减 1</li>
+  <li>移动到父节点，回到第 8 步</li>
+</ol>
+
+<p>我们把所有搜索函数都封装成一个 <code class="language-plaintext highlighter-rouge">Finder</code> 类以复用一部分代码。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># maximum of recursive search
+</span><span class="n">LEVEL</span> <span class="o">=</span> <span class="mi">5</span>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Finder</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">uni</span><span class="p">:</span> <span class="n">UNI</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sh">"""</span><span class="s">Search condition.</span><span class="sh">"""</span>
+        <span class="k">return</span> <span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">is_include_node</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">Node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">level</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">unis</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span>
+        <span class="n">self</span><span class="p">,</span> <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tree</span><span class="p">:</span> <span class="n">Tree</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">reset</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UNI</span> <span class="o">|</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="c1"># ...
+</span>
+    <span class="k">def</span> <span class="nf">find_all</span><span class="p">(</span>
+        <span class="n">self</span><span class="p">,</span> <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tree</span><span class="p">:</span> <span class="n">Tree</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">reset</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">UNI</span><span class="p">]:</span>
+        <span class="c1"># ...
+</span></code></pre></div></div>
+
+<p>本部分代码开源于 <a href="https://github.com/neomutt/lsp-tree-sitter">lsp-tree-sitter</a> 。</p>
+
+<h3 id="定义跳转">定义跳转</h3>
+
+<p>想要实现定义跳转，我们需要 2 次搜索：</p>
+
+<ol>
+  <li>
+<code class="language-plaintext highlighter-rouge">PositionFinder</code>: 搜索光标下的位置对应的节点</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">DefinitionFinder</code>: 如果该节点是函数名，则搜索该函数的定义</li>
+</ol>
+
+<p><code class="language-plaintext highlighter-rouge">PositionFinder</code> 的<strong>搜索条件</strong>是光标的位置和位于节点的起始位置和终止位置之间：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@dataclass</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">PositionFinder</span><span class="p">(</span><span class="n">Finder</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="n">self</span><span class="p">,</span>
+        <span class="n">position</span><span class="p">:</span> <span class="n">Position</span><span class="p">,</span>
+        <span class="n">left_equal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="n">right_equal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">left_equal</span> <span class="o">=</span> <span class="n">left_equal</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">right_equal</span> <span class="o">=</span> <span class="n">right_equal</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">belong</span><span class="p">(</span>
+        <span class="n">position</span><span class="p">:</span> <span class="n">Position</span><span class="p">,</span>
+        <span class="n">node</span><span class="p">:</span> <span class="n">Node</span><span class="p">,</span>
+        <span class="n">left_equal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="n">right_equal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">left_equal</span><span class="p">:</span>
+            <span class="n">left_flag</span> <span class="o">=</span> <span class="nc">Position</span><span class="p">(</span><span class="o">*</span><span class="n">node</span><span class="p">.</span><span class="n">start_point</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">position</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">left_flag</span> <span class="o">=</span> <span class="nc">Position</span><span class="p">(</span><span class="o">*</span><span class="n">node</span><span class="p">.</span><span class="n">start_point</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">position</span>
+        <span class="k">if</span> <span class="n">right_equal</span><span class="p">:</span>
+            <span class="n">right_flag</span> <span class="o">=</span> <span class="n">position</span> <span class="o">&lt;=</span> <span class="nc">Position</span><span class="p">(</span><span class="o">*</span><span class="n">node</span><span class="p">.</span><span class="n">end_point</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">right_flag</span> <span class="o">=</span> <span class="n">position</span> <span class="o">&lt;</span> <span class="nc">Position</span><span class="p">(</span><span class="o">*</span><span class="n">node</span><span class="p">.</span><span class="n">end_point</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">left_flag</span> <span class="ow">and</span> <span class="n">right_flag</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">uni</span><span class="p">:</span> <span class="n">UNI</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">uni</span><span class="p">.</span><span class="n">node</span>
+        <span class="k">return</span> <span class="n">node</span><span class="p">.</span><span class="n">child_count</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">self</span><span class="p">.</span><span class="nf">belong</span><span class="p">(</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">position</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">left_equal</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">right_equal</span>
+        <span class="p">)</span>
+</code></pre></div></div>
+
+<p>检查抽象语法树我们发现函数定义的节点类型是 <code class="language-plaintext highlighter-rouge">define_directive</code> 。<code class="language-plaintext highlighter-rouge">$(call f,hello)</code> 中的函数名所在的节点是 <code class="language-plaintext highlighter-rouge">f,hello</code> ，不是 更小的 <code class="language-plaintext highlighter-rouge">f</code> 。这是上游的 <a href="https://github.com/alemuller/tree-sitter-make/issues/8#issuecomment-1770869682">bug</a> 。笔者在这里简单用 <code class="language-plaintext highlighter-rouge">.split(",")[0]</code> 来获取函数名 <code class="language-plaintext highlighter-rouge">f</code> 。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@dataclass</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">DefinitionFinder</span><span class="p">(</span><span class="n">Finder</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">Node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">()</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">parent</span>
+        <span class="k">if</span> <span class="n">parent</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">parent</span><span class="p">.</span><span class="nb">type</span> <span class="o">==</span> <span class="sh">"</span><span class="s">arguments</span><span class="sh">"</span><span class="p">:</span>
+            <span class="c1"># https://github.com/alemuller/tree-sitter-make/issues/8
+</span>            <span class="n">self</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">text</span><span class="p">.</span><span class="nf">decode</span><span class="p">().</span><span class="nf">split</span><span class="p">(</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">is_include_node</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">Node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sh">"""</span><span class="s">``include a.mk b.mk``</span><span class="sh">"""</span>
+        <span class="k">if</span> <span class="n">parent</span> <span class="p">:</span><span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">parent</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pp</span> <span class="p">:</span><span class="o">=</span> <span class="n">parent</span><span class="p">.</span><span class="n">parent</span><span class="p">:</span>
+                <span class="nf">return </span><span class="p">(</span>
+                    <span class="n">node</span><span class="p">.</span><span class="nb">type</span> <span class="o">==</span> <span class="sh">"</span><span class="s">word</span><span class="sh">"</span>
+                    <span class="ow">and</span> <span class="n">parent</span><span class="p">.</span><span class="nb">type</span> <span class="o">==</span> <span class="sh">"</span><span class="s">list</span><span class="sh">"</span>
+                    <span class="ow">and</span> <span class="n">pp</span><span class="p">.</span><span class="n">children</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">text</span> <span class="o">==</span> <span class="sa">b</span><span class="sh">"</span><span class="s">include</span><span class="sh">"</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">uni</span><span class="p">:</span> <span class="n">UNI</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">uni</span><span class="p">.</span><span class="n">node</span>
+        <span class="k">if</span> <span class="n">parent</span> <span class="p">:</span><span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">parent</span><span class="p">:</span>
+            <span class="nf">return </span><span class="p">(</span>
+                <span class="n">parent</span><span class="p">.</span><span class="nb">type</span> <span class="o">==</span> <span class="sh">"</span><span class="s">define_directive</span><span class="sh">"</span>
+                <span class="ow">and</span> <span class="n">uni</span><span class="p">.</span><span class="nf">get_text</span><span class="p">()</span> <span class="o">==</span> <span class="n">self</span><span class="p">.</span><span class="n">name</span>
+                <span class="ow">and</span> <span class="n">node</span> <span class="o">==</span> <span class="n">parent</span><span class="p">.</span><span class="n">children</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">False</span>
+</code></pre></div></div>
+
+<p>因为 <code class="language-plaintext highlighter-rouge">Finder().find_all()</code> 返回的结果是 <code class="language-plaintext highlighter-rouge">list[UNI]</code> ，而定义跳转返回的结果类型是 <code class="language-plaintext highlighter-rouge">list[Location]</code> ，所以我们在 <code class="language-plaintext highlighter-rouge">UNI</code> 封装一个 <code class="language-plaintext highlighter-rouge">get_location()</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">UNI</span><span class="p">:</span>
+    <span class="c1"># ...
+</span>    <span class="k">def</span> <span class="nf">get_location</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Location</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nc">Location</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">uri</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="nf">get_range</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">get_range</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Range</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nf">node2range</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">node</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">node2range</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">Node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Range</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nc">Range</span><span class="p">(</span><span class="nc">Position</span><span class="p">(</span><span class="o">*</span><span class="n">node</span><span class="p">.</span><span class="n">start_point</span><span class="p">),</span> <span class="nc">Position</span><span class="p">(</span><span class="o">*</span><span class="n">node</span><span class="p">.</span><span class="n">end_point</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>最终我们得到了：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">tree_sitter_lsp.finders</span> <span class="kn">import</span> <span class="n">PositionFinder</span>
+
+
+<span class="k">class</span> <span class="nc">MakeLanguageServer</span><span class="p">(</span><span class="n">LanguageServer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="c1"># ...
+</span>        <span class="nd">@self.feature</span><span class="p">(</span><span class="n">TEXT_DOCUMENT_DEFINITION</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">definition</span><span class="p">(</span><span class="n">params</span><span class="p">:</span> <span class="n">TextDocumentPositionParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Location</span><span class="p">]:</span>
+            <span class="n">document</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">workspace</span><span class="p">.</span><span class="nf">get_document</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="n">text_document</span><span class="p">.</span><span class="n">uri</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">uni</span> <span class="p">:</span><span class="o">=</span> <span class="nc">PositionFinder</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="n">position</span><span class="p">).</span><span class="nf">find</span><span class="p">(</span>
+                <span class="n">document</span><span class="p">.</span><span class="n">uri</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">trees</span><span class="p">[</span><span class="n">document</span><span class="p">.</span><span class="n">uri</span><span class="p">]</span>
+            <span class="p">):</span>
+                <span class="k">return</span> <span class="p">[</span>
+                    <span class="n">uni</span><span class="p">.</span><span class="nf">get_location</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">uni</span> <span class="ow">in</span> <span class="nc">DefinitionFinder</span><span class="p">(</span><span class="n">uni</span><span class="p">.</span><span class="n">node</span><span class="p">).</span><span class="nf">find_all</span><span class="p">(</span>
+                        <span class="n">document</span><span class="p">.</span><span class="n">uri</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">trees</span><span class="p">[</span><span class="n">document</span><span class="p">.</span><span class="n">uri</span><span class="p">]</span>
+                    <span class="p">)</span>
+                <span class="p">]</span>
+            <span class="k">return</span> <span class="p">[]</span>
+</code></pre></div></div>
+
+<p>现在当我们按下定义跳转的快捷键时，会从 <code class="language-plaintext highlighter-rouge">$(call f,hello)</code> 的 <code class="language-plaintext highlighter-rouge">f</code> 跳转到 <code class="language-plaintext highlighter-rouge">define f</code> 的 <code class="language-plaintext highlighter-rouge">f</code> 了。</p>
+
+<p>除了函数的定义跳转，我们还需要：</p>
+
+<ul>
+  <li>变量的跳转，例如 <code class="language-plaintext highlighter-rouge">KERNEL_SRC</code>:</li>
+</ul>
+
+<div class="language-make highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">KERNEL_SRC</span> <span class="o">:=</span> /usr/src/linux
+<span class="nv">KERNEL_MAKE</span> <span class="o">:=</span> <span class="p">$(</span>MAKE<span class="p">)</span> <span class="nt">-C</span><span class="p">$(</span>KERNEL_SRC<span class="p">)</span> <span class="nv">M</span><span class="o">=</span><span class="p">$(</span>SRC<span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>规则的跳转，例如 <code class="language-plaintext highlighter-rouge">all</code>:</li>
+</ul>
+
+<!-- markdownlint-disable MD010 -->
+
+<div class="language-make highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">all</span>
+<span class="nl">all</span><span class="o">:</span>
+	<span class="p">$(</span>call f,hello<span class="p">)</span>
+</code></pre></div></div>
+
+<!-- markdownlint-enable MD010 -->
+
+<p>另外我们可以把定义的内容和系列文章二提及的文档悬停结合起来：</p>
+
+<p><img src="https://github.com/Freed-Wu/autotools-language-server/assets/32936898/f19d240e-7ad3-4ed9-b7fa-03cee410300d" alt="hover"></p>
+
+<p>这些实现留待读者思考。</p>
+
+<h3 id="引用跳转">引用跳转</h3>
+
+<p>定义跳转的逆操作就是引用跳转。实现不能说一模一样，只能说丝毫不差：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MakeLanguageServer</span><span class="p">(</span><span class="n">LanguageServer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="c1"># ...
+</span>        <span class="nd">@self.feature</span><span class="p">(</span><span class="n">TEXT_DOCUMENT_REFERENCES</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">references</span><span class="p">(</span><span class="n">params</span><span class="p">:</span> <span class="n">TextDocumentPositionParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Location</span><span class="p">]:</span>
+            <span class="n">document</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">workspace</span><span class="p">.</span><span class="nf">get_document</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="n">text_document</span><span class="p">.</span><span class="n">uri</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">uni</span> <span class="o">=</span> <span class="nc">PositionFinder</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="n">position</span><span class="p">).</span><span class="nf">find</span><span class="p">(</span>
+                <span class="n">document</span><span class="p">.</span><span class="n">uri</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">trees</span><span class="p">[</span><span class="n">document</span><span class="p">.</span><span class="n">uri</span><span class="p">]</span>
+            <span class="p">):</span>
+                <span class="k">return</span> <span class="p">[</span>
+                    <span class="n">uni</span><span class="p">.</span><span class="nf">get_location</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">uni</span> <span class="ow">in</span> <span class="nc">ReferenceFinder</span><span class="p">(</span><span class="n">uni</span><span class="p">.</span><span class="n">node</span><span class="p">).</span><span class="nf">find_all</span><span class="p">(</span>
+                        <span class="n">document</span><span class="p">.</span><span class="n">uri</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">trees</span><span class="p">[</span><span class="n">document</span><span class="p">.</span><span class="n">uri</span><span class="p">]</span>
+                    <span class="p">)</span>
+                <span class="p">]</span>
+            <span class="k">return</span> <span class="p">[]</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">ReferenceFinder</code> 的实现留给读者自己思考。</p>
+
+<p>还有最后一更。先前所有埋下的伏笔和陷阱都会被揭晓。</p>
+
+<div class="reward">
+  <button id="rewardButton" disable="enable" onclick="toggle()">
+    如果这篇博客帮助到你，可以请我喝一杯奶茶~
+  </button>
+  <table id="rewardQRs">
+    <tr>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" alt="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" alt="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" alt="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" height="300pt"></td>
+    </tr>
+  </table>
+</div>
+<script src="/assets/js/valine.js"></script>
+
+    </article>
+    <input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+    <aside class="sidebar">
+      <div class="sidebar-item">
+        <div class="ih-item">
+          <a title="
+              Wu Zhenyu
+            ">
+            <img class="img" src="https://github.com/Freed-Wu.png" alt="img">
+            <div class="info">
+              <br>
+              <br>
+              A personal blog to record valuable and interesting things.
+            </div>
+          </a>
+        </div>
+        <iframe height="42" width="240" src="https://music.163.com/outchain/player?type=2&id=27646786&height=32"></iframe>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-nav-item" href="/">
+          <i class="fa-solid fa-home fa-fw"></i> Home
+        </a>
+        <a class="sidebar-nav-item" href="/tag">
+          <i class="fa-solid fa-tags fa-fw"></i> Tag
+        </a>
+        <a class="sidebar-nav-item" href="/feed.xml">
+          <i class="fa-solid fa-rss fa-fw"></i> RSS
+        </a>
+        <a class="sidebar-nav-item" href="/Freed-Wu">
+          <i class="fa-solid fa-comments fa-fw"></i> About Me
+        </a>
+        <a class="sidebar-nav-item" href="/jekyll-theme-freed">
+          <i class="fa-solid fa-code fa-fw"></i> About the Website
+        </a>
+        <a class="sidebar-nav-item" href="/2020/01/01/honour">
+          <i class="fa-solid fa-trophy fa-fw"></i> Honour
+        </a>
+      </nav>
+      <div class="sidebar-item">
+        <!-- https://github.com/christian-fei/Simple-Jekyll-Search#preparing-the-plugin -->
+        <input id="search-input" placeholder="Search posts">
+        <div id="results-container"></div>
+      </div>
+    </aside>
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+  </body>
+</html>

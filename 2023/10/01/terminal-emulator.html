@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>论终端模拟器的优劣 | wzy</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="论终端模拟器的优劣">
+<meta name="author" content="Wu Zhenyu">
+<meta property="og:locale" content="zh_CN">
+<meta name="description" content="这应该是全网第一篇终端模拟器比较的文章。">
+<meta property="og:description" content="这应该是全网第一篇终端模拟器比较的文章。">
+<link rel="canonical" href="https://freed-wu.github.io/2023/10/01/terminal-emulator.html">
+<meta property="og:url" content="https://freed-wu.github.io/2023/10/01/terminal-emulator.html">
+<meta property="og:site_name" content="wzy">
+<meta property="og:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2023-10-01T00:00:00+00:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="twitter:title" content="论终端模拟器的优劣">
+<meta name="twitter:site" content="@FreedWu">
+<meta name="twitter:creator" content="@Wu Zhenyu">
+<meta property="fb:admins" content="100057378480375">
+<meta property="article:publisher" content="100057378480375">
+<meta property="fb:app_id" content="100057378480375">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Wu Zhenyu","url":"https://Freed-Wu.github.io"},"dateModified":"2023-10-01T00:00:00+00:00","datePublished":"2023-10-01T00:00:00+00:00","description":"这应该是全网第一篇终端模拟器比较的文章。","headline":"论终端模拟器的优劣","image":"https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://freed-wu.github.io/2023/10/01/terminal-emulator.html"},"url":"https://freed-wu.github.io/2023/10/01/terminal-emulator.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="icon" href="https://github.com/Freed-Wu.png">
+    <link rel="apple-touch-icon" href="https://github.com/Freed-Wu.png">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/poole.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/lanyon.min.css">
+    <link rel="stylesheet" href="//jekyllrb.com/css/screen.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/sindresorhus/github-markdown-css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <script async src="https://kit.fontawesome.com/556f02e0e5.js"></script>
+    <script async src="//cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget/autoload.min.js"></script>
+    <!-- https://github.com/christian-fei/Simple-Jekyll-Search -->
+    <script async src="//cdn.jsdelivr.net/npm/simple-jekyll-search/dest/simple-jekyll-search.min.js"></script>
+    <script async src="/assets/js/search.js"></script>
+  </head>
+  <!-- https://github.com/poole/lanyon -->
+  <body class="theme-base-08 layout-reverse sidebar-overlay">
+    <article class="container">
+      <header>
+        <h1>论终端模拟器的优劣</h1>
+      </header>
+      <script src="/assets/js/qr.js"></script>
+<small class="post-date">
+  <i class="fa-solid fa-calendar-day"></i> 01 Oct 2023
+  <i class="fa-solid fa-file-word"></i> 3654 words
+  <i class="fa-solid fa-coffee"></i> 13 minutes
+  <span id="/2023/10/01/terminal-emulator.html" class="leancloud-visitors" data-flag-title="论终端模拟器的优劣">
+    <i class="fa-regular fa-eye"></i>
+    <span class="leancloud-visitors-count"></span>
+  </span>
+  <a rel="license" href="//creativecommons.org/licenses/by-sa/4.0/deed.zh">
+    <i class="fa-brands fa-creative-commons"></i> BY-SA 4.0
+  </a>
+  <br>
+  <a href="/tag/develop"> <i class="fa-solid fa-tag"></i> develop </a>
+</small>
+<ul>
+<li><a href="#%E7%B3%BB%E7%BB%9F%E8%87%AA%E5%B8%A6">系统自带</a></li>
+<li><a href="#%E8%B7%A8%E5%B9%B3%E5%8F%B0">跨平台</a></li>
+<li><a href="#%E8%BF%9E%E5%AD%97">连字</a></li>
+<li><a href="#gpu-%E5%8A%A0%E9%80%9F">GPU 加速</a></li>
+<li><a href="#%E8%83%8C%E6%99%AF%E9%80%8F%E6%98%8E">背景透明</a></li>
+<li><a href="#%E9%BC%A0%E6%A0%87%E6%94%AF%E6%8C%81">鼠标支持</a></li>
+<li><a href="#%E8%A7%A6%E6%8E%A7%E5%B1%8F%E6%94%AF%E6%8C%81">触控屏支持</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AE%E8%AF%AD%E8%A8%80">配置语言</a></li>
+<li><a href="#%E5%BC%80%E5%8F%91%E8%AF%AD%E8%A8%80">开发语言</a></li>
+<li><a href="#%E5%85%B6%E5%AE%83">其它</a></li>
+<li><a href="#%E6%80%BB%E7%BB%93">总结</a></li>
+</ul> <p>这应该是全网第一篇终端模拟器比较的文章。</p>
+
+<p>闲话少说：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>终端模拟器比较</th>
+      <th>系统自带</th>
+      <th>跨平台（支持 Linux ）</th>
+      <th>跨平台（支持 macOS ）</th>
+      <th>跨平台（支持 win32 ）</th>
+      <th>跨平台（支持 Android ）</th>
+      <th>支持连字</th>
+      <th>GPU 加速</th>
+      <th>背景透明（X11）</th>
+      <th>背景透明（Wayland）</th>
+      <th>鼠标支持（URL）</th>
+      <th>触控屏支持（单指滚动）</th>
+      <th>触控屏支持（双指缩放）</th>
+      <th>显示图像</th>
+      <th>配置语言</th>
+      <th>开发语言</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>(u)xterm</td>
+      <td>×</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>×</td>
+      <td>×</td>
+      <td>×</td>
+      <td>×</td>
+      <td>×</td>
+      <td>×</td>
+      <td>×</td>
+      <td>拖动</td>
+      <td>×</td>
+      <td>×</td>
+      <td>×</td>
+      <td>C</td>
+    </tr>
+    <tr>
+      <td>gnome-terminal</td>
+      <td>gnome</td>
+      <td>✓</td>
+      <td>×</td>
+      <td>×</td>
+      <td>×</td>
+      <td>×</td>
+      <td>×</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>×</td>
+      <td>拖动</td>
+      <td>×</td>
+      <td>×</td>
+      <td>dconf</td>
+      <td>C</td>
+    </tr>
+    <tr>
+      <td>konsole</td>
+      <td>KDE</td>
+      <td>✓</td>
+      <td>×</td>
+      <td>×</td>
+      <td>×</td>
+      <td>✓</td>
+      <td>×</td>
+      <td>Not test</td>
+      <td>×</td>
+      <td>×</td>
+      <td>拖动</td>
+      <td>×</td>
+      <td>×</td>
+      <td>dosini</td>
+      <td>C++</td>
+    </tr>
+    <tr>
+      <td>xfce4-terminal</td>
+      <td>xfce</td>
+      <td>✓</td>
+      <td>×</td>
+      <td>×</td>
+      <td>×</td>
+      <td>×</td>
+      <td>×</td>
+      <td>Not test</td>
+      <td>×</td>
+      <td>×</td>
+      <td>长按拖动</td>
+      <td>×</td>
+      <td>×</td>
+      <td>xfconf</td>
+      <td>C</td>
+    </tr>
+    <tr>
+      <td>qterminal</td>
+      <td>LXQt</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>×</td>
+      <td>×</td>
+      <td>✓</td>
+      <td>×</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>×</td>
+      <td>拖动</td>
+      <td>×</td>
+      <td>×</td>
+      <td>dosini</td>
+      <td>C++</td>
+    </tr>
+    <tr>
+      <td>kitty</td>
+      <td>×</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>×</td>
+      <td>×</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>×</td>
+      <td>×</td>
+      <td>✓</td>
+      <td>kitty conf</td>
+      <td>C++</td>
+    </tr>
+    <tr>
+      <td>alacritty</td>
+      <td>×</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>×</td>
+      <td>×</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>×</td>
+      <td>yaml</td>
+      <td>rust</td>
+    </tr>
+    <tr>
+      <td>wezterm</td>
+      <td>×</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>×</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>×</td>
+      <td>✓</td>
+      <td>×</td>
+      <td>×</td>
+      <td>✓</td>
+      <td>lua</td>
+      <td>rust</td>
+    </tr>
+    <tr>
+      <td>termux</td>
+      <td>termux</td>
+      <td>×</td>
+      <td>×</td>
+      <td>×</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>×</td>
+      <td>-</td>
+      <td>-</td>
+      <td>×</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>×</td>
+      <td>properties</td>
+      <td>Java</td>
+    </tr>
+    <tr>
+      <td>mintty</td>
+      <td>cygwin/msys2</td>
+      <td>×</td>
+      <td>×</td>
+      <td>✓</td>
+      <td>×</td>
+      <td>×</td>
+      <td>×</td>
+      <td>-</td>
+      <td>-</td>
+      <td>×</td>
+      <td>?</td>
+      <td>?</td>
+      <td>×</td>
+      <td>dosini</td>
+      <td>C</td>
+    </tr>
+    <tr>
+      <td>windows-terminal</td>
+      <td>Windows 10 1903</td>
+      <td>×</td>
+      <td>×</td>
+      <td>✓</td>
+      <td>×</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>-</td>
+      <td>-</td>
+      <td>✓</td>
+      <td>?</td>
+      <td>?</td>
+      <td>?</td>
+      <td>json</td>
+      <td>C++</td>
+    </tr>
+    <tr>
+      <td>conhost</td>
+      <td>Windows</td>
+      <td>×</td>
+      <td>×</td>
+      <td>✓</td>
+      <td>×</td>
+      <td>×</td>
+      <td>×</td>
+      <td>-</td>
+      <td>-</td>
+      <td>×</td>
+      <td>?</td>
+      <td>?</td>
+      <td>×</td>
+      <td>×</td>
+      <td>C++</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>解释之前的温馨提醒：</p>
+
+<ul>
+  <li>关于终端、终端模拟器和伪终端看这篇<a href="https://xie.infoq.cn/article/a6153354865c225bdce5bd55e">文章</a>就够了</li>
+  <li>如果没有看懂，记住：
+    <ul>
+      <li>没有 GUI 界面的是终端</li>
+      <li>有 GUI 界面的是终端模拟器</li>
+      <li>终端模拟器（终端复用器也是）连接了伪终端</li>
+    </ul>
+  </li>
+</ul>
+
+<p>开始解释：</p>
+
+<h2 id="系统自带">系统自带</h2>
+
+<p>在
+<a href="https://freed-wu.github.io/2023/08/01/combine-two-monitors-to-one-screen.html#%E6%A1%8C%E9%9D%A2%E7%8E%AF%E5%A2%83">桌面环境</a>
+中已经知道：</p>
+
+<blockquote>
+  <p>桌面环境通常包含：</p>
+
+  <ul>
+    <li>终端模拟器</li>
+  </ul>
+</blockquote>
+
+<p>所以四大桌面都有自己的终端模拟器。除此之外，某些操作系统和软件发行版 (termux, cygwin, msys2) 也会预装终端模拟器。</p>
+
+<h2 id="跨平台">跨平台</h2>
+
+<ul>
+  <li>某些终端模拟器会使用跨平台的 GUI 库开发
+    <ul>
+      <li>gtk: gnome, xfce</li>
+      <li>qt: KDE, LXQt</li>
+    </ul>
+  </li>
+  <li>某些不会
+    <ul>
+      <li>WinRT: windows-terminal <a href="https://github.com/microsoft/terminal/issues/504">不会支持 Linux</a>
+</li>
+    </ul>
+  </li>
+  <li>在
+<a href="https://freed-wu.github.io/2023/08/01/combine-two-monitors-to-one-screen.html#%E5%9B%BE%E5%BD%A2%E5%8C%96%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2">图形化用户界面</a>
+中，已经讨论过支持 GNU/Linux/X 的软件基本都可以通过
+    <ul>
+      <li>Cygwin/X 支持 Windows</li>
+      <li>termux/X 支持 Android</li>
+    </ul>
+  </li>
+  <li>kitty 因为使用 GLFW 对输入法的支持配置比较麻烦</li>
+</ul>
+
+<h2 id="连字">连字</h2>
+
+<p><img src="https://github.com/Freed-Wu/Freed-Wu.github.io/assets/32936898/5c938b14-bc53-4abc-8c3d-2d536a940bd5" alt="doesn't support"></p>
+
+<p><img src="https://github.com/Freed-Wu/Freed-Wu.github.io/assets/32936898/3b22eb5b-5e51-4142-8aa1-7ffec033660b" alt="support"></p>
+
+<p>支持连字需要满足 2 个条件：</p>
+
+<ul>
+  <li>终端模拟器支持
+    <ul>
+      <li>alacritty 因为连字影响性能<a href="https://github.com/alacritty/alacritty/issues/50">选择不支持</a>
+据说 alacritty 比 kitty 和 wezterm 性能快一倍就是因为放弃了连字</li>
+    </ul>
+  </li>
+  <li>字体支持
+    <ul>
+      <li>
+<a href="https://github.com/tonsky/FiraCode">Firacode</a> 是第一个支持连字的字体</li>
+      <li>笔者目前在用 <a href="https://github.com/JetBrains/JetBrainsMono">JetBrainsMono</a>
+</li>
+      <li>建议选用有 <a href="https://github.com/ryanoasis/nerd-fonts">nerd-fonts</a> 补丁过的字体</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="gpu-加速">GPU 加速</h2>
+
+<p>可以通过以下方式查看终端模拟器是否使用了 GPU ：</p>
+
+<ul>
+  <li>
+<a href="https://gitlab.freedesktop.org/drm/igt-gpu-tools">intel_gpu_top</a>: intel GPU</li>
+  <li>
+<a href="http://www.nvidia.com">nvidia-smi</a>: nvidia GPU</li>
+</ul>
+
+<h2 id="背景透明">背景透明</h2>
+
+<p>coding 时可以看到后面的窗口：</p>
+
+<ul>
+  <li>参考网页浏览器上的代码</li>
+  <li>写 HTML，LaTeX 时看输出的效果</li>
+</ul>
+
+<p>注意， <a href="https://github.com/wez/wezterm/issues/3766">window_background_opacity cannot work on wayland</a>
+指出同时在以下条件下因为设计原因无法透明：</p>
+
+<ul>
+  <li>使用 Wayland</li>
+  <li>全屏</li>
+</ul>
+
+<h2 id="鼠标支持">鼠标支持</h2>
+
+<!-- markdownlint-disable MD033 -->
+
+<ul>
+  <li>当鼠标移动到某个 URL 时改变鼠标形状</li>
+  <li>当鼠标移动到某个 URL 时可以用 <kbd>Shift</kbd> + 单击之类的快捷键打开该 URL 。</li>
+</ul>
+
+<!-- markdownlint-enable MD033 -->
+
+<h2 id="触控屏支持">触控屏支持</h2>
+
+<p>触控屏不是触控板。</p>
+
+<p>支持触控屏需要满足 2 个条件：</p>
+
+<ul>
+  <li>终端模拟器支持触控屏（不仅仅是鼠标）
+    <ul>
+      <li>目前仅有 alacritty <a href="https://github.com/alacritty/alacritty/pull/6695">支持</a>
+</li>
+      <li>kitty <a href="https://github.com/kovidgoyal/kitty/issues/5432">不支持</a>
+</li>
+      <li>wezterm <a href="https://github.com/wez/wezterm/issues/792">不支持</a>
+</li>
+      <li>四大桌面的终端模拟器在单指上下滑动的情况下只会拖动选中高亮文本，不会滚动。和设置 <code class="language-plaintext highlighter-rouge">export MOZ_USE_XINPUT2=1</code> 前的火狐浏览器类似。
+考虑到使用触控屏 GNU/Linux 设备的用户不多，所以对触控屏的支持之糟糕倒也情有可原。</li>
+    </ul>
+  </li>
+  <li>终端软件支持鼠标，例如：
+    <ul>
+      <li>
+<a href="https://github.com/tmux/tmux">tmux</a>: <code class="language-plaintext highlighter-rouge">set -g mouse on</code>
+</li>
+      <li>(<a href="https://github.com/neovim/neovim">neo</a>)<a href="https://github.com/vim/vim">vim</a>: <code class="language-plaintext highlighter-rouge">set mouse=a</code>
+</li>
+      <li>
+<a href="https://www.greenwoodsoftware.com/less/">less</a>: <code class="language-plaintext highlighter-rouge">export LESS=--mouse</code>
+</li>
+      <li>
+<a href="https://github.com/junegunn/fzf">fzf</a>/<a href="https://github.com/lotabout/skim">skim</a>: 默认开启，用 <code class="language-plaintext highlighter-rouge">--no-mouse</code> 关闭</li>
+      <li>
+<a href="https://github.com/prompt-toolkit/ptpython">ptpython</a>: <code class="language-plaintext highlighter-rouge">repl.enable_mouse_support = True</code>
+</li>
+      <li>
+<a href="https://github.com/saulpw/visidata">visidata</a>: 默认开启</li>
+      <li>(<a href="https://github.com/neomutt/neomutt">neo</a>)mutt: <a href="https://github.com/neomutt/neomutt/issues/309">不支持</a>
+</li>
+      <li>
+<a href="https://github.com/newsboat/newsboat">newsboat</a>: <a href="https://github.com/newsboat/newsboat/issues/1433">不支持</a>
+</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="配置语言">配置语言</h2>
+
+<ul>
+  <li>不少终端模拟器使用 dosini, json, yaml, properties 之类的数据描述语言。
+    <ul>
+      <li>优点：可以轻易的提供一个图形化用户界面的配置按钮来修改配置。但注意 alacritty 没有提供图形化用户界面的配置按钮</li>
+      <li>缺点：不能使用条件逻辑</li>
+    </ul>
+  </li>
+  <li>Kitty 使用 kitty config（一门 DSL ）来配置
+    <ul>
+      <li>缺点：不能使用常见数据描述语言的语言服务器，语法高亮，必须另造轮子：
+        <ul>
+          <li><a href="https://github.com/fladson/vim-kitty">vim-kitty</a></li>
+        </ul>
+      </li>
+      <li>优点：有一个 <code class="language-plaintext highlighter-rouge">include</code> 语法，可以在各个平台包含不同的文件 （这个文件需要被 gitignore ）实现不同平台统一一份点文件</li>
+    </ul>
+  </li>
+  <li>wezerm 使用 lua
+    <ul>
+      <li>优点：可以用 <code class="language-plaintext highlighter-rouge">if</code>/<code class="language-plaintext highlighter-rouge">else</code>/<code class="language-plaintext highlighter-rouge">end</code> 实现不同平台统一一份点文件。例如，笔者希望在笔记本电脑和台式电脑上使用不同的字体（两台电脑屏幕大小不一样，字体自然也要不一样）</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">local</span> <span class="n">wezterm</span> <span class="o">=</span> <span class="nb">require</span> <span class="s1">'wezterm'</span>
+<span class="kd">local</span> <span class="n">hostname</span> <span class="o">=</span> <span class="n">wezterm</span><span class="p">.</span><span class="n">hostname</span><span class="p">()</span>
+<span class="kd">local</span> <span class="n">font_size</span>
+<span class="k">if</span> <span class="n">hostname</span> <span class="o">==</span> <span class="s1">'desktop'</span> <span class="k">then</span> <span class="c1">-- 2560x2880</span>
+    <span class="n">font_size</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="k">elseif</span> <span class="n">hostname</span> <span class="o">==</span> <span class="s1">'laptop'</span> <span class="k">then</span> <span class="c1">-- 3120x2080</span>
+    <span class="n">font_size</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="k">else</span>
+    <span class="n">font_size</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h2 id="开发语言">开发语言</h2>
+
+<p>不说了，会挨打。</p>
+
+<p><img src="https://pic3.zhimg.com/80/v2-c93dfcee55886d5d3a18fd3c2edb8c56_1440w.webp" alt="best language"></p>
+
+<h2 id="其它">其它</h2>
+
+<p>笔者根本不关心以下功能：</p>
+
+<!-- markdownlint-disable MD033 -->
+
+<ul>
+  <li>分屏：这是终端复用器的工作</li>
+  <li>选择模式：选择终端上的某些字符。这是终端复用器的工作</li>
+  <li>下拉模式：有些终端模拟器可以按一个快捷键在显示和隐藏间切换，比如：
+    <ul>
+      <li><a href="https://github.com/Guake/guake">guake</a></li>
+      <li>笔者早年也用过，但后来随着时间推移，笔者基本上大多数情况下电脑只会开 2 个软件
+        <ul>
+          <li>终端模拟器。在里面运行所有 TUI 软件，包括文本编辑器 (neovim) ，邮件客户端 (neomutt) ，版本控制 (git)</li>
+          <li>网页浏览器</li>
+        </ul>
+      </li>
+      <li>所以直接 <kbd>Alt</kbd> + <kbd>Tab</kbd> 切换就可以了<img class="emoji" title=":smile:" alt=":smile:" raw="😄" src="https://github.githubassets.com/images/icons/emoji/unicode/1f604.png" style="vertical-align: middle; display: inline; max-width: 1em; visibility: hidden;" onload="this.style.visibility='visible'" onerror="this.replaceWith(this.getAttribute('raw'))">
+</li>
+    </ul>
+  </li>
+</ul>
+
+<!-- markdownlint-enable MD033 -->
+
+<p>终端复用器一般有如下功能：</p>
+
+<ul>
+  <li>分屏</li>
+  <li>attach/detach: 把某个伪终端放在后台运行。嗯，笔者的惨痛教训：
+    <ul>
+      <li>当年在图书馆 <code class="language-plaintext highlighter-rouge">ssh</code> 服务器跑深度学习模型，大概训练了一天到最后一个 epoch 了，然后图书馆关门就抱着笔记本电脑刚离开图书馆，网就断了，于是 <code class="language-plaintext highlighter-rouge">ssh</code> 失败， <code class="language-plaintext highlighter-rouge">shell</code> 向所有子进程发送 <code class="language-plaintext highlighter-rouge">HUP</code> 信号，笔者辛苦训练一天的结果就全没了。然后笔者就学会了怎么开 <code class="language-plaintext highlighter-rouge">tmux</code> 在后台 <code class="language-plaintext highlighter-rouge">detach</code> 一个进程了<img class="emoji" title=":smile:" alt=":smile:" raw="😄" src="https://github.githubassets.com/images/icons/emoji/unicode/1f604.png" style="vertical-align: middle; display: inline; max-width: 1em; visibility: hidden;" onload="this.style.visibility='visible'" onerror="this.replaceWith(this.getAttribute('raw'))">
+</li>
+    </ul>
+  </li>
+  <li>选择模式：通常会提供 vi 和 emacs 两种键盘映射</li>
+</ul>
+
+<p>终端复用器目前的选择有如下：</p>
+
+<!-- markdownlint-disable MD033 -->
+
+<ul>
+  <li>
+<a href="https://github.com/martanne/abduco/">abduco</a>: 只支持 attach/detach 。通常和 dvtm 一起使用</li>
+  <li>
+<a href="https://github.com/martanne/dvtm/">dvtm</a>: 只支持分屏。通常和 abduco 一起使用</li>
+  <li>
+<a href="https://www.gnu.org/software/screen/">screen</a>: 最早的终端复用器
+    <ul>
+      <li>默认使用 <kbd>Ctrl</kbd> + <kbd>A</kbd> 做前缀键</li>
+    </ul>
+  </li>
+  <li>
+<a href="https://github.com/tmux/tmux">tmux</a>: 目前最流行的终端复用器
+    <ul>
+      <li>有一门 DSL</li>
+      <li>拥有大量的插件生态。笔者也贡献了不少插件</li>
+      <li>默认使用 <kbd>Ctrl</kbd> + <kbd>B</kbd> 做前缀键</li>
+    </ul>
+  </li>
+  <li>
+<a href="https://github.com/zellij-org/zellij">zellij</a>: rust 派的作品
+    <ul>
+      <li>支持 wasm 格式的插件，插件开发门槛高于 tmux ，插件生态不如 tmux</li>
+      <li>支持一个非常惊艳的分屏算法，比如 tmux 里先左右二等分屏再左右两边都上下二等分屏，这时增加左上屏的宽度，左下屏的宽度也会随之增加。因为在 tmux 的“认知”里，左边 2 个屏幕是一个整体，增加的是这个整体的宽度。相对的，增加左上屏的高度，右上屏的高度不会增加，因为它们不是一个整体。 <code class="language-plaintext highlighter-rouge">zellij</code> 用一个奇特的算法解决了这个问题。</li>
+      <li>默认使用 <kbd>Ctrl</kbd> + <kbd>G</kbd> 做前缀键</li>
+    </ul>
+  </li>
+</ul>
+
+<p>为了不影响终端程序，终端复用器通常只有在一个前缀键按下的情况下才会通过等待第二个键来执行相对应的操作（分屏、attach/detach 等）。
+这是常见设定，例如</p>
+
+<ul>
+  <li>docker 拿 <kbd>Ctrl</kbd> + <kbd>p</kbd> 做前缀键，按 <kbd>Ctrl</kbd> + <kbd>P</kbd>, <kbd>Ctrl</kbd> + <kbd>Q</kbd> 或暂停。</li>
+  <li>ssh 按 <kbd>CR</kbd>, <kbd>Ctrl</kbd> + <kbd>Z</kbd> 暂停。</li>
+</ul>
+
+<p>笔者本人选择前缀键为 <kbd>Ctrl</kbd> + <kbd>Q</kbd> ，原因如下：</p>
+
+<ul>
+  <li>
+<kbd>Ctrl</kbd> + <kbd>Q</kbd> 用左手按方便。 <code class="language-plaintext highlighter-rouge">tmux</code> 的 <kbd>Ctrl</kbd> + <kbd>A</kbd> 也是同样的原因</li>
+  <li>
+<kbd>Ctrl</kbd> + <kbd>Q</kbd> 是用途最少的键。例如：
+    <ul>
+      <li>
+<kbd>Ctrl</kbd> + <kbd>A</kbd>:
+        <ul>
+          <li>支持 readline 的软件：移动光标到行首</li>
+          <li>vi 风格软件：光标下的数字增加</li>
+        </ul>
+      </li>
+      <li>
+<kbd>Ctrl</kbd> + <kbd>B</kbd>
+        <ul>
+          <li>支持 readline 的软件：光标前移</li>
+          <li>vi 风格软件：向前翻页</li>
+        </ul>
+      </li>
+      <li>
+<kbd>Ctrl</kbd> + <kbd>Q</kbd>
+        <ul>
+          <li>支持 readline 的软件：解除屏幕冻结。默认 <kbd>Ctrl</kbd> + <kbd>S</kbd> 是屏幕冻结，但使用 <code class="language-plaintext highlighter-rouge">tmux</code> 后可以用：
+            <ul>
+              <li>前缀键, <kbd>\[</kbd> 屏幕冻结</li>
+              <li>
+<code class="language-plaintext highlighter-rouge">q</code> 解除屏幕冻结</li>
+              <li>所以建议直接在 <code class="language-plaintext highlighter-rouge">zsh</code> 中 <code class="language-plaintext highlighter-rouge">setopt noflowcontrol</code> 取消屏幕冻结相关的原生功能</li>
+            </ul>
+          </li>
+          <li>vi 风格软件：功能与 <kbd>Ctrl</kbd> + <kbd>V</kbd> 相同，都是进入块选择模式。</li>
+          <li>所以笔者使用一个功能都有重复的快捷键做前缀键不过分吧？</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<!-- markdownlint-enable MD033 -->
+
+<h2 id="总结">总结</h2>
+
+<p>笔者目前选择如下：</p>
+
+<ul>
+  <li>Android 手机上只能选 termux</li>
+  <li>虚拟机里的 Windows 上使用默认的 Windows terminal 即可</li>
+  <li>没有触控屏的 GNU/Linux 使用 wezterm</li>
+  <li>有触控屏的 GNU/Linux 使用 alacritty</li>
+</ul>
+
+<p>撒花！</p>
+
+<div class="reward">
+  <button id="rewardButton" disable="enable" onclick="toggle()">
+    如果这篇博客帮助到你，可以请我喝一杯奶茶~
+  </button>
+  <table id="rewardQRs">
+    <tr>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" alt="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" alt="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" alt="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" height="300pt"></td>
+    </tr>
+  </table>
+</div>
+<script src="/assets/js/valine.js"></script>
+
+    </article>
+    <input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+    <aside class="sidebar">
+      <div class="sidebar-item">
+        <div class="ih-item">
+          <a title="
+              Wu Zhenyu
+            ">
+            <img class="img" src="https://github.com/Freed-Wu.png" alt="img">
+            <div class="info">
+              <br>
+              <br>
+              A personal blog to record valuable and interesting things.
+            </div>
+          </a>
+        </div>
+        <iframe height="42" width="240" src="https://music.163.com/outchain/player?type=2&id=27646786&height=32"></iframe>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-nav-item" href="/">
+          <i class="fa-solid fa-home fa-fw"></i> Home
+        </a>
+        <a class="sidebar-nav-item" href="/tag">
+          <i class="fa-solid fa-tags fa-fw"></i> Tag
+        </a>
+        <a class="sidebar-nav-item" href="/feed.xml">
+          <i class="fa-solid fa-rss fa-fw"></i> RSS
+        </a>
+        <a class="sidebar-nav-item" href="/Freed-Wu">
+          <i class="fa-solid fa-comments fa-fw"></i> About Me
+        </a>
+        <a class="sidebar-nav-item" href="/jekyll-theme-freed">
+          <i class="fa-solid fa-code fa-fw"></i> About the Website
+        </a>
+        <a class="sidebar-nav-item" href="/2020/01/01/honour">
+          <i class="fa-solid fa-trophy fa-fw"></i> Honour
+        </a>
+      </nav>
+      <div class="sidebar-item">
+        <!-- https://github.com/christian-fei/Simple-Jekyll-Search#preparing-the-plugin -->
+        <input id="search-input" placeholder="Search posts">
+        <div id="results-container"></div>
+      </div>
+    </aside>
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+  </body>
+</html>

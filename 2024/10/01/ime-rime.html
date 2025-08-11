@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>输入法的奇妙冒险： rime 之血 | wzy</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="输入法的奇妙冒险： rime 之血">
+<meta name="author" content="Wu Zhenyu">
+<meta property="og:locale" content="zh_CN">
+<meta name="description" content="输入法的名字叫 rime , 15 岁。住在 github 的 rime 组织的 librime 仓库……">
+<meta property="og:description" content="输入法的名字叫 rime , 15 岁。住在 github 的 rime 组织的 librime 仓库……">
+<link rel="canonical" href="https://freed-wu.github.io/2024/10/01/ime-rime.html">
+<meta property="og:url" content="https://freed-wu.github.io/2024/10/01/ime-rime.html">
+<meta property="og:site_name" content="wzy">
+<meta property="og:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2024-10-01T00:00:00+00:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="twitter:title" content="输入法的奇妙冒险： rime 之血">
+<meta name="twitter:site" content="@FreedWu">
+<meta name="twitter:creator" content="@Wu Zhenyu">
+<meta property="fb:admins" content="100057378480375">
+<meta property="article:publisher" content="100057378480375">
+<meta property="fb:app_id" content="100057378480375">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Wu Zhenyu","url":"https://Freed-Wu.github.io"},"dateModified":"2024-10-01T00:00:00+00:00","datePublished":"2024-10-01T00:00:00+00:00","description":"输入法的名字叫 rime , 15 岁。住在 github 的 rime 组织的 librime 仓库……","headline":"输入法的奇妙冒险： rime 之血","image":"https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://freed-wu.github.io/2024/10/01/ime-rime.html"},"url":"https://freed-wu.github.io/2024/10/01/ime-rime.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="icon" href="https://github.com/Freed-Wu.png">
+    <link rel="apple-touch-icon" href="https://github.com/Freed-Wu.png">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/poole.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/lanyon.min.css">
+    <link rel="stylesheet" href="//jekyllrb.com/css/screen.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/sindresorhus/github-markdown-css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <script async src="https://kit.fontawesome.com/556f02e0e5.js"></script>
+    <script async src="//cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget/autoload.min.js"></script>
+    <!-- https://github.com/christian-fei/Simple-Jekyll-Search -->
+    <script async src="//cdn.jsdelivr.net/npm/simple-jekyll-search/dest/simple-jekyll-search.min.js"></script>
+    <script async src="/assets/js/search.js"></script>
+  </head>
+  <!-- https://github.com/poole/lanyon -->
+  <body class="theme-base-08 layout-reverse sidebar-overlay">
+    <article class="container">
+      <header>
+        <h1>输入法的奇妙冒险： rime 之血</h1>
+      </header>
+      <script src="/assets/js/qr.js"></script>
+<small class="post-date">
+  <i class="fa-solid fa-calendar-day"></i> 01 Oct 2024
+  <i class="fa-solid fa-file-word"></i> 2390 words
+  <i class="fa-solid fa-coffee"></i> 8 minutes
+  <span id="/2024/10/01/ime-rime.html" class="leancloud-visitors" data-flag-title="输入法的奇妙冒险： rime 之血">
+    <i class="fa-regular fa-eye"></i>
+    <span class="leancloud-visitors-count"></span>
+  </span>
+  <a rel="license" href="//creativecommons.org/licenses/by-sa/4.0/deed.zh">
+    <i class="fa-brands fa-creative-commons"></i> BY-SA 4.0
+  </a>
+  <br>
+  <a href="/tag/develop"> <i class="fa-solid fa-tag"></i> develop </a>
+  <a href="/tag/ime"> <i class="fa-solid fa-tag"></i> ime </a>
+</small>
+<ul>
+<li><a href="#rime">rime</a></li>
+<li>
+<a href="#librime">librime</a><ul>
+<li><a href="#%E5%88%87%E6%8D%A2%E8%BE%93%E5%85%A5%E6%96%B9%E6%A1%88">切换输入方案</a></li>
+<li><a href="#%E9%83%A8%E7%BD%B2">部署</a></li>
+<li><a href="#%E5%90%8C%E6%AD%A5">同步</a></li>
+</ul>
+</li>
+<li><a href="#rime-%E6%8F%92%E4%BB%B6">rime 插件</a></li>
+</ul> <p>输入法的名字叫 rime , 15 岁。住在 github 的 rime 组织的
+<a href="https://github.com/rime/librime">librime</a> 仓库……</p>
+
+<p>串台了。</p>
+
+<h2 id="rime">rime</h2>
+
+<p>据我观察，输入法用户分为以下 2 类：</p>
+
+<ol>
+  <li>系统预装了什么输入法就用什么</li>
+  <li>要输入方言 / 要自己定制 / 要保护隐私……然后有自己摸索出的一套解决方案</li>
+</ol>
+
+<p>rime 是为后者准备的。</p>
+
+<p>当然，欲戴王冠，必承其重。古尔丹，代价是什么呢？</p>
+
+<p>代价是当别人已经开始轻松打字的时候你还在那里研究 rime 的 yaml 语法……</p>
+
+<p>试举几例：</p>
+
+<p>希望每页显示 10 个候选栏：</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">---</span>
+<span class="na">patch</span><span class="pi">:</span>
+  <span class="na">menu/page_size</span><span class="pi">:</span> <span class="m">10</span>
+</code></pre></div></div>
+
+<p>希望 Control + 4 切换简体 / 繁体：</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">---</span>
+<span class="na">patch</span><span class="pi">:</span>
+  <span class="na">key_binder/bindings/@before 0</span><span class="pi">:</span>
+    <span class="na">accept</span><span class="pi">:</span> <span class="s">Control+4</span>
+    <span class="na">toggle</span><span class="pi">:</span> <span class="s">simplification</span>
+    <span class="na">when</span><span class="pi">:</span> <span class="s">always</span>
+</code></pre></div></div>
+
+<p>一个可能的好的帮助方案是基于 json schema 的语言服务器的自动补全功能：</p>
+
+<p><img src="https://github.com/ClementTsang/bottom/assets/32936898/2d4d2226-2259-4e6d-b164-7db6b2ef34cd" alt="json schema"></p>
+
+<p>但相关 <a href="https://github.com/rime/home/issues/1478">issue</a> 似乎毫无动静……</p>
+
+<h2 id="librime">librime</h2>
+
+<p>严格地说， rime 不是一个输入法，而是一个封装了输入法逻辑的库。任何用户可以基于此库开发特定于某一平台（称为前端）的输入法。</p>
+
+<p>看<a href="https://m.ituring.com.cn/article/118072">采访</a>这一设定是作者佛振本人在百度开发输入法时学到的。
+但必须承认这一设定以及 rime 的开源让 rime 成为了当今支持最多平台的输入法，甚至有些前端你根本想象不到：</p>
+
+<p><img src="https://github.com/user-attachments/assets/ad3860ea-2ea5-436d-8b57-5d2ad1a605f5" alt="python"></p>
+
+<p><img src="https://github.com/rime/librime/assets/32936898/e0c6db26-8ea0-40d8-9395-f7387b6460ff" alt="zsh"></p>
+
+<p><img src="https://github.com/user-attachments/assets/cd13b1cf-958a-4cd4-91c7-2f2adf1f386e" alt="neovim"></p>
+
+<p>真正意义上的跨平台<img class="emoji" title=":smile:" alt=":smile:" raw="😄" src="https://github.githubassets.com/images/icons/emoji/unicode/1f604.png" style="vertical-align: middle; display: inline; max-width: 1em; visibility: hidden;" onload="this.style.visibility='visible'" onerror="this.replaceWith(this.getAttribute('raw'))"></p>
+
+<p>除了上面 3 个笔者自己开发的 rime 前端外，笔者经常使用的 rime 前端还有：</p>
+
+<ul>
+  <li>
+<a href="https://github.com/rime/ibus-rime">ibus-rime</a>: ibus 输入法是 Linux 平台的一个输入法，以使用 DBus 协议（ Linux 的 Freedesktop 标准采纳的一个进程间通讯协议）而闻名</li>
+  <li>
+<a href="https://github.com/fcitx/fcitx5-rime">fcitx5-rime</a>: fcitx5 是原来 fcitx 输入法的重写，支持 Linux/macOS/Android 平台</li>
+  <li>
+<a href="https://github.com/osfans/trime">trime</a>: 同文输入法，在 Android 平台更有名的一个 rime 前端，以提供了语法类似 rime YAML 的 trime.yaml 而闻名。允许用户通过 trime.yaml 来定义软键盘的样式。而除此之外的输入法都没有这样的功能。</li>
+</ul>
+
+<p>大多数 rime 前端都会有切换输入方案、部署、同步三个按钮。</p>
+
+<p><img src="https://github.com/user-attachments/assets/87ff120d-19c5-4968-97fe-15918f5fb7ff" alt="ibus-rime"></p>
+
+<h3 id="切换输入方案">切换输入方案</h3>
+
+<p>输入方案指全拼、五笔、双拼等。笔者常用的输入方案是微软双拼和日本语。</p>
+
+<p>没错， <a href="https://github.com/gkovacs/rime-japanese">rime-japanese</a> 让罗马字也成为了一种汉字的输入方案。</p>
+
+<p>当然，如果你学会了 rime 的 YAML 语法，其他非汉字的输入法也是可以的，比如维吾尔语：</p>
+
+<p><a href="https://github.com/biopolyhedron/rime-uyghur/blob/master/uyghur.schema.yaml">uyghur</a></p>
+
+<p>双拼和全拼相比方案不唯一，以笔者选择的微软双拼为例：</p>
+
+<p><img src="https://github.com/user-attachments/assets/ea2a93de-643a-4d78-8b29-66dfd1a8099b" alt="trime"></p>
+
+<p>输入“你好”需要按下 nihk 。这里的 k 就是 ao 。这样所有汉字都只需要 2 次按键，一次声母一次韵母。
+顺便一提，因为有一定的学习成本，所以双拼的用户比全拼少不少，进而一些商业输入法对双拼的测试就不太够，有些地方 bug 很多。
+一个离谱的案例是 Android 的百度输入法，正常输入“拽”需要按下 vy 然后解码得到 zhuai ，输入“越”需要按下 yv 然后解码得到 yue 。但实际上在他们的输入法下按下 yv 解码得到的是 yzh ，这根本构不成任何全拼。笔者建议有使用双拼、粤拼、注音、吴语等小众的汉字输入方案的用户可以使用 rime 来看看能不能得到更好的用户体验。</p>
+
+<h3 id="部署">部署</h3>
+
+<p>rime 输入方案的配置文件是 YAML 。为了加快速度，会被编译为若干二进制文件。</p>
+
+<p>用户可以在命令行中通过 <code class="language-plaintext highlighter-rouge">rime_deployer --build</code> 来编译。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">--build</span> <span class="o">[</span>user_data_dir] <span class="o">[</span>shared_data_dir] <span class="o">[</span>staging_dir]
+        Build and deploy Rime data.
+        If unspecified, user_data_dir and shared_data_dir defaults to the working directory.
+        To deploy data <span class="k">for </span>ibus-rime, use the following directories:
+        user_data_dir    ~/.config/ibus/rime
+        shared_data_dir  /usr/share/rime-data
+        staging_dir      ~/.config/ibus/rime/build
+</code></pre></div></div>
+
+<p>最后一个参数的输出目录。前两个参数是输入目录，分别是用户自定义的配置和系统安装的配置。系统安装的配置的一些设置选项被用户自定义的配置覆盖后得到最终的 YAML 文件会在输出目录中，可以查看以确认用户配置是否正确。编译得到的二进制文件也在输出目录中。</p>
+
+<h3 id="同步">同步</h3>
+
+<p>通过网盘同步词库。 rime 自带的词库很小。举个例子，用户 1, 2, 3 的词库是集合 A, B,
+C ，商业软件可能会携带一个很大的词库是这些集合的并集，而 rime 则会倾向于携带一个较小的词库包含这些集合的交集。
+所以用户需要“养”自己的词库。这个很像 Ubuntu 和 ArchLinux 的区别：一个系统上预装了很多软件，用户需要卸载自己不需要的以节省空间；另一个系统上则预装了很少但不可或缺的软件，用户需要安装软件以满足自己的需要。</p>
+
+<p>rime 也有一些方案来将一些词库添加到输入法中。比如 <a href="https://github.com/rime/rime-emoji">rime-emoji</a> 添加绘文字。
+笔者也以之为参考写了一个 <a href="https://github.com/Freed-Wu/rime-kaomoji">rime-kaomoji</a> 来输入颜文字。
+原理其实是借助了 openCC ，一个基于 Markov 模型的简繁中文转换的库，将一些词库作为某些繁体中文的“简体”加入了词库。例如同文输入法那张图中的“你好”。</p>
+
+<h2 id="rime-插件">rime 插件</h2>
+
+<p>rime 也提供了一些插件来支持高级功能，比如 rime-lua 允许输出候选项是通过某个 lua 函数计算得到的。自此，你可以输入 shijian 得到当前的时间。一些高级功能，比如拆字来输入不知道拼音的汉字、五笔反查拼音，都被 rime 支持。</p>
+
+<p>作为系列文章的第一篇，仅仅介绍 rime 的使用方法的冰山一角。但也足以管中窥豹见到
+rime 的伟大。</p>
+
+<blockquote>
+  <p>“对一个匠人来说，创作一件有情调的作品，一定是出于对精湛技艺的追求。如果仅仅是为了现实目的，固然可以写出高质量的软件，代码本身却容易缺乏灵气。”</p>
+
+  <p>– 佛振</p>
+</blockquote>
+
+<div class="reward">
+  <button id="rewardButton" disable="enable" onclick="toggle()">
+    如果这篇博客帮助到你，可以请我喝一杯奶茶~
+  </button>
+  <table id="rewardQRs">
+    <tr>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" alt="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" alt="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" alt="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" height="300pt"></td>
+    </tr>
+  </table>
+</div>
+<script src="/assets/js/valine.js"></script>
+
+    </article>
+    <input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+    <aside class="sidebar">
+      <div class="sidebar-item">
+        <div class="ih-item">
+          <a title="
+              Wu Zhenyu
+            ">
+            <img class="img" src="https://github.com/Freed-Wu.png" alt="img">
+            <div class="info">
+              <br>
+              <br>
+              A personal blog to record valuable and interesting things.
+            </div>
+          </a>
+        </div>
+        <iframe height="42" width="240" src="https://music.163.com/outchain/player?type=2&id=27646786&height=32"></iframe>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-nav-item" href="/">
+          <i class="fa-solid fa-home fa-fw"></i> Home
+        </a>
+        <a class="sidebar-nav-item" href="/tag">
+          <i class="fa-solid fa-tags fa-fw"></i> Tag
+        </a>
+        <a class="sidebar-nav-item" href="/feed.xml">
+          <i class="fa-solid fa-rss fa-fw"></i> RSS
+        </a>
+        <a class="sidebar-nav-item" href="/Freed-Wu">
+          <i class="fa-solid fa-comments fa-fw"></i> About Me
+        </a>
+        <a class="sidebar-nav-item" href="/jekyll-theme-freed">
+          <i class="fa-solid fa-code fa-fw"></i> About the Website
+        </a>
+        <a class="sidebar-nav-item" href="/2020/01/01/honour">
+          <i class="fa-solid fa-trophy fa-fw"></i> Honour
+        </a>
+      </nav>
+      <div class="sidebar-item">
+        <!-- https://github.com/christian-fei/Simple-Jekyll-Search#preparing-the-plugin -->
+        <input id="search-input" placeholder="Search posts">
+        <div id="results-container"></div>
+      </div>
+    </aside>
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+  </body>
+</html>

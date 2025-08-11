@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Re: 从零开始的语言服务器开发冒险：代码诊断 &amp; 代码补全 &amp; 文档悬停 again | wzy</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="Re: 从零开始的语言服务器开发冒险：代码诊断 &amp; 代码补全 &amp; 文档悬停 again">
+<meta name="author" content="Wu Zhenyu">
+<meta property="og:locale" content="zh_CN">
+<meta name="description" content="在之前的文章中我们留下了一个伏笔：">
+<meta property="og:description" content="在之前的文章中我们留下了一个伏笔：">
+<link rel="canonical" href="https://freed-wu.github.io/2024/06/01/lsp-schema.html">
+<meta property="og:url" content="https://freed-wu.github.io/2024/06/01/lsp-schema.html">
+<meta property="og:site_name" content="wzy">
+<meta property="og:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2024-06-01T00:00:00+00:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="twitter:title" content="Re: 从零开始的语言服务器开发冒险：代码诊断 &amp; 代码补全 &amp; 文档悬停 again">
+<meta name="twitter:site" content="@FreedWu">
+<meta name="twitter:creator" content="@Wu Zhenyu">
+<meta property="fb:admins" content="100057378480375">
+<meta property="article:publisher" content="100057378480375">
+<meta property="fb:app_id" content="100057378480375">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Wu Zhenyu","url":"https://Freed-Wu.github.io"},"dateModified":"2024-06-01T00:00:00+00:00","datePublished":"2024-06-01T00:00:00+00:00","description":"在之前的文章中我们留下了一个伏笔：","headline":"Re: 从零开始的语言服务器开发冒险：代码诊断 &amp; 代码补全 &amp; 文档悬停 again","image":"https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://freed-wu.github.io/2024/06/01/lsp-schema.html"},"url":"https://freed-wu.github.io/2024/06/01/lsp-schema.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="icon" href="https://github.com/Freed-Wu.png">
+    <link rel="apple-touch-icon" href="https://github.com/Freed-Wu.png">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/poole.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/lanyon.min.css">
+    <link rel="stylesheet" href="//jekyllrb.com/css/screen.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/sindresorhus/github-markdown-css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <script async src="https://kit.fontawesome.com/556f02e0e5.js"></script>
+    <script async src="//cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget/autoload.min.js"></script>
+    <!-- https://github.com/christian-fei/Simple-Jekyll-Search -->
+    <script async src="//cdn.jsdelivr.net/npm/simple-jekyll-search/dest/simple-jekyll-search.min.js"></script>
+    <script async src="/assets/js/search.js"></script>
+  </head>
+  <!-- https://github.com/poole/lanyon -->
+  <body class="theme-base-08 layout-reverse sidebar-overlay">
+    <article class="container">
+      <header>
+        <h1>Re: 从零开始的语言服务器开发冒险：代码诊断 &amp; 代码补全 &amp; 文档悬停 again</h1>
+      </header>
+      <script src="/assets/js/qr.js"></script>
+<small class="post-date">
+  <i class="fa-solid fa-calendar-day"></i> 01 Jun 2024
+  <i class="fa-solid fa-file-word"></i> 10647 words
+  <i class="fa-solid fa-coffee"></i> 36 minutes
+  <span id="/2024/06/01/lsp-schema.html" class="leancloud-visitors" data-flag-title="Re: 从零开始的语言服务器开发冒险：代码诊断 &amp; 代码补全 &amp; 文档悬停 again">
+    <i class="fa-regular fa-eye"></i>
+    <span class="leancloud-visitors-count"></span>
+  </span>
+  <a rel="license" href="//creativecommons.org/licenses/by-sa/4.0/deed.zh">
+    <i class="fa-brands fa-creative-commons"></i> BY-SA 4.0
+  </a>
+  <br>
+  <a href="/tag/develop"> <i class="fa-solid fa-tag"></i> develop </a>
+  <a href="/tag/lsp"> <i class="fa-solid fa-tag"></i> lsp </a>
+</small>
+<ul>
+<li><a href="#%E9%AA%8C%E8%AF%81%E6%A8%A1%E5%BC%8F">验证模式</a></li>
+<li><a href="#%E5%8C%85%E6%9E%84%E5%BB%BA%E8%84%9A%E6%9C%AC">包构建脚本</a></li>
+<li>
+<a href="#%E5%AE%9E%E7%8E%B0">实现</a><ul>
+<li><a href="#%E6%8A%BD%E8%B1%A1%E8%AF%AD%E6%B3%95%E6%A0%91">抽象语法树</a></li>
+<li><a href="#json-schema">JSON schema</a></li>
+<li><a href="#%E9%AA%8C%E8%AF%81%E5%99%A8">验证器</a></li>
+<li><a href="#%E5%BA%8F%E5%88%97%E5%8C%96">序列化</a></li>
+<li><a href="#%E6%90%9C%E7%B4%A2">搜索</a></li>
+<li><a href="#%E4%BB%A3%E7%A0%81%E8%AF%8A%E6%96%AD">代码诊断</a></li>
+<li><a href="#%E4%BB%A3%E7%A0%81%E8%A1%A5%E5%85%A8">代码补全</a></li>
+<li><a href="#%E6%96%87%E6%A1%A3%E6%82%AC%E5%81%9C">文档悬停</a></li>
+<li><a href="#%E6%80%BB%E7%BB%93">总结</a></li>
+</ul>
+</li>
+</ul> <p>在之前的文章中我们留下了一个伏笔：</p>
+
+<blockquote>
+  <p>接下来我们将引入新的技术</p>
+</blockquote>
+
+<p>现在回收此伏笔。</p>
+
+<p>友情提醒：本文给出的技术会给 ArchLinux 和 Windows Msys2 用户带来一点小小的震撼。</p>
+
+<h2 id="验证模式">验证模式</h2>
+
+<p>JSON, YAML, TOML, DOS ini, XML 等都是流行的数据交换格式，或者叫数据描述语言。大多数软件使用这些通用的数据描述语言来描述信息，例如日志、配置等等。配置文件需要用编辑器修改，由语言服务器提供代码补全、代码诊断等功能。语言服务器不光提供通用的功能：检查某 JSON 格式的配置文件是否是合法的 JSON ，更要提供专用的功能：检查配置文件是否是符合该软件配置要求的合法的 JSON 。所以需要：</p>
+
+<ul>
+  <li>抽象出一种数据格式用来存储该软件的配置要求，即验证模式</li>
+  <li>再用一个软件根据验证模式验证配置文件是否符合某软件配置要求，即验证器</li>
+</ul>
+
+<p>因为 JSON, YAML 等格式可以相互转换，所以验证模式其实是不限于某一种数据描述语言。但验证器必须和验证模式保持对应关系，不同验证器和不同验证模式不能混用。</p>
+
+<p>常见的验证模式有：</p>
+
+<ul>
+  <li>
+<a href="https://json-schema.org/">json schema</a>: 最初是为 JSON 设计</li>
+  <li>
+<a href="https://en.wikipedia.org/wiki/Document_type_definition">Document Type Definition</a>: 为 XML 设计</li>
+  <li>
+<a href="https://en.wikipedia.org/wiki/XML_Schema_(W3C)">XML Schema Definition</a>: 为 XML 设计，似乎不如 DTD 流行</li>
+</ul>
+
+<p>本文接下来使用的方式是基于 json schema 的，如果想看基于 XML 的方案的话， <a href="https://github.com/bergercookie/asm-lsp">asm-lsp</a> 会是个不错的选择。</p>
+
+<h2 id="包构建脚本">包构建脚本</h2>
+
+<p>ArchLinux 和 Windows Msys2 用户应该对下面这个流程毫不陌生：</p>
+
+<p><code class="language-plaintext highlighter-rouge">PKGBUILD</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">pkgname</span><span class="o">=</span>hello
+<span class="nv">pkgver</span><span class="o">=</span>0.0.1
+<span class="nv">pkgrel</span><span class="o">=</span>1
+<span class="nv">pkgdesc</span><span class="o">=</span><span class="s2">"hello"</span>
+<span class="nb">arch</span><span class="o">=(</span>any<span class="o">)</span>
+<span class="nv">license</span><span class="o">=(</span>GPL3<span class="o">)</span>
+
+build<span class="o">()</span> <span class="o">{</span>
+    <span class="nb">cat</span> <span class="o">&lt;&lt;</span><span class="no">EOF</span><span class="sh"> &gt; hello
+#!/usr/bin/env sh
+echo hello
+</span><span class="no">EOF
+</span><span class="o">}</span>
+
+package<span class="o">()</span> <span class="o">{</span>
+    <span class="nb">install</span> <span class="nt">-D</span> hello <span class="nt">-t</span> <span class="nv">$pkgdir</span>/usr/bin
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>makepkg
+<span class="o">==&gt;</span> Making package: hello 0.0.1-1 <span class="o">(</span>Wed 20 Dec 2023 08:14:08 PM CST<span class="o">)</span>
+<span class="o">==&gt;</span> Checking runtime dependencies...
+<span class="o">==&gt;</span> Checking buildtime dependencies...
+<span class="o">==&gt;</span> Retrieving sources...
+<span class="o">==&gt;</span> Extracting sources...
+<span class="o">==&gt;</span> Starting build<span class="o">()</span>...
+<span class="o">==&gt;</span> Entering fakeroot environment...
+<span class="o">==&gt;</span> Starting package<span class="o">()</span>...
+<span class="o">==&gt;</span> Tidying install...
+-&gt; Removing libtool files...
+-&gt; Purging unwanted files...
+-&gt; Removing static library files...
+-&gt; Stripping unneeded symbols from binaries and libraries...
+-&gt; Compressing man and info pages...
+<span class="o">==&gt;</span> Checking <span class="k">for </span>packaging issues...
+<span class="o">==&gt;</span> Creating package <span class="s2">"hello"</span>...
+-&gt; Generating .PKGINFO file...
+-&gt; Generating .BUILDINFO file...
+-&gt; Generating .MTREE file...
+-&gt; Compressing package...
+<span class="o">==&gt;</span> Leaving fakeroot environment.
+<span class="o">==&gt;</span> Finished making: hello 0.0.1-1 <span class="o">(</span>Wed 20 Dec 2023 08:14:09 PM CST<span class="o">)</span>
+<span class="nv">$ </span><span class="nb">tar </span>vtaf hello-0.0.1-1-any.pkg.tar.zst
+<span class="nt">-rw-r--r--</span> root/root     98536 2023-12-20 20:14 .BUILDINFO
+<span class="nt">-rw-r--r--</span> root/root       357 2023-12-20 20:14 .MTREE
+<span class="nt">-rw-r--r--</span> root/root       233 2023-12-20 20:14 .PKGINFO
+drwxr-xr-x root/root         0 2023-12-20 20:14 usr/
+drwxr-xr-x root/root         0 2023-12-20 20:14 usr/bin/
+<span class="nt">-rwxr-xr-x</span> root/root        29 2023-12-20 20:14 usr/bin/hello
+<span class="nv">$ </span><span class="nb">sudo </span>pacman <span class="nt">-U</span> hello-0.0.1-1-any.pkg.tar.zst
+loading packages...
+resolving dependencies...
+looking <span class="k">for </span>conflicting packages...
+
+Packages <span class="o">(</span>1<span class="o">)</span> hello-0.0.1-1
+
+Total Installed Size:  0.00 MiB
+
+:: Proceed with installation? <span class="o">[</span>Y/n]
+<span class="o">(</span>1/1<span class="o">)</span> checking keys <span class="k">in </span>keyring                                                                     <span class="o">[</span><span class="c">##########################################################] 100%</span>
+<span class="o">(</span>1/1<span class="o">)</span> checking package integrity                                                                   <span class="o">[</span><span class="c">##########################################################] 100%</span>
+<span class="o">(</span>1/1<span class="o">)</span> loading package files                                                                        <span class="o">[</span><span class="c">##########################################################] 100%</span>
+<span class="o">(</span>1/1<span class="o">)</span> checking <span class="k">for </span>file conflicts                                                                  <span class="o">[</span><span class="c">##########################################################] 100%</span>
+<span class="o">(</span>1/1<span class="o">)</span> checking available disk space                                                                <span class="o">[</span><span class="c">##########################################################] 100%</span>
+:: Processing package changes...
+<span class="o">(</span>1/1<span class="o">)</span> installing hello                                                                             <span class="o">[</span><span class="c">##########################################################] 100%</span>
+:: Running post-transaction hooks...
+<span class="o">(</span>1/1<span class="o">)</span> Arming ConditionNeedsUpdate...
+<span class="nv">$ </span>hello
+hello
+</code></pre></div></div>
+
+<p>我们来实现一个语言服务器对 <a href="https://wiki.archlinux.org/title/PKGBUILD">PKGBUILD</a> 进行代码诊断、代码补全和文档悬停。</p>
+
+<p><code class="language-plaintext highlighter-rouge">PKGBUILD</code> 有很多地方是需要诊断和补全的，例如：</p>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">arch</code> 必须是包含 <code class="language-plaintext highlighter-rouge">any</code>, <code class="language-plaintext highlighter-rouge">i686</code>, <code class="language-plaintext highlighter-rouge">x86_64</code>, <code class="language-plaintext highlighter-rouge">arm</code> 等架构名的数组，不能有用户自己随便编的架构，需要补全合法的架构名</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">license</code> 必须是包含合法许可证名 (MIT, BSD, …) 的数组，需要补全合法的许可证名</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">build</code>, <code class="language-plaintext highlighter-rouge">package</code> 必须是函数，不能是字符串和数组</li>
+</ul>
+
+<h2 id="实现">实现</h2>
+
+<p>本文代码开源于 <a href="https://github.com/termux/termux-language-server">termux-language-server</a> 。</p>
+
+<h3 id="抽象语法树">抽象语法树</h3>
+
+<p>抽象语法树的解析器，我们将选用 <a href="https://github.com/grantjenks/py-tree-sitter-languages">py-tree-sitter-languages</a> 封装好的现成的解析器：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">lsprotocol.types</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="n">pygls.server</span> <span class="kn">import</span> <span class="n">LanguageServer</span>
+<span class="kn">from</span> <span class="n">tree_sitter_languages</span> <span class="kn">import</span> <span class="n">get_parser</span>
+
+
+<span class="k">class</span> <span class="nc">BashLanguageServer</span><span class="p">(</span><span class="n">LanguageServer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">parser</span> <span class="o">=</span> <span class="nf">get_parser</span><span class="p">(</span><span class="sh">"</span><span class="s">bash</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>只有当文件发生变化时，我们才重新生成抽象语法树：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">BashLanguageServer</span><span class="p">(</span><span class="n">LanguageServer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">trees</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">parser</span> <span class="o">=</span> <span class="nf">get_parser</span><span class="p">(</span><span class="sh">"</span><span class="s">bash</span><span class="sh">"</span><span class="p">)</span>
+
+        <span class="nd">@self.feature</span><span class="p">(</span><span class="n">TEXT_DOCUMENT_DID_OPEN</span><span class="p">)</span>
+        <span class="nd">@self.feature</span><span class="p">(</span><span class="n">TEXT_DOCUMENT_DID_CHANGE</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">did_change</span><span class="p">(</span><span class="n">params</span><span class="p">:</span> <span class="n">DidChangeTextDocumentParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">document</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">workspace</span><span class="p">.</span><span class="nf">get_document</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="n">text_document</span><span class="p">.</span><span class="n">uri</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">trees</span><span class="p">[</span><span class="n">document</span><span class="p">.</span><span class="n">uri</span><span class="p">]</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">parser</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span>
+                <span class="n">document</span><span class="p">.</span><span class="n">source</span><span class="p">.</span><span class="nf">encode</span><span class="p">()</span>
+            <span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="json-schema">JSON schema</h3>
+
+<p>我们需要将 <code class="language-plaintext highlighter-rouge">PKGBUILD</code> 转换为合法的可 JSON 序列化的字典。注意到 <code class="language-plaintext highlighter-rouge">bash</code> 中只有 4 种类型：</p>
+
+<ul>
+  <li>字符串</li>
+  <li>数组</li>
+  <li>关联数组，即字典</li>
+  <li>函数</li>
+</ul>
+
+<p>所以我们人为把函数视为整数 0 ，上节的 <code class="language-plaintext highlighter-rouge">PKGBUILD</code> 即可序列化为：</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"pkgname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"hello"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"pkgver"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.0.1"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"pkgrel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"pkgdesc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"hello"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"arch"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"any"</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"license"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"GPL3"</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"build"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"package"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>我们遵循 <code class="language-plaintext highlighter-rouge">PKGBUILD</code> 的 <code class="language-plaintext highlighter-rouge">man</code> 手册来编写 JSON schema 文件。例如如果手册上描述了：</p>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">pkgname</code> 是一个字符串，</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">arch</code> 是一个数组，元素仅可为 <code class="language-plaintext highlighter-rouge">arch</code>, <code class="language-plaintext highlighter-rouge">i686</code>, <code class="language-plaintext highlighter-rouge">x86_64</code>
+</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">build</code> 是一个函数</li>
+</ul>
+
+<p>那么我们需要编写的 JSON schema 如下：</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"$id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PKGBUILD.json"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"$schema"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://json-schema.org/draft-07/schema#"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"$comment"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Written by wzy"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"object"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"pkgname"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Either the name of the package or an array of names for split packages. Valid characters for members of this array are alphanumerics, and any of the following characters: </span><span class="se">\"</span><span class="s2">@ . </span><span class="se">\\</span><span class="s2">_ + -</span><span class="se">\"</span><span class="s2">. Additionally, names are not allowed to start with hyphens or dots."</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"arch"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Defines on which architectures the given package is available (e.g., arch=(i686 x86_64)). Packages that contain no architecture specific files should use arch=(any). Valid characters for members of this array are alphanumerics and </span><span class="se">\"\\</span><span class="s2">_</span><span class="se">\"</span><span class="s2">."</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"array"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"enum"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="s2">"any"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"i686"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"x86_64"</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"uniqueItems"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"build"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The optional build() function is used to compile and/or adjust the source files in preparation to be installed by the package() function."</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"const"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>完整的 JSON schema 见<a href="https://github.com/termux/termux-language-server/tree/main/src/termux_language_server/assets/json">这里</a>。</p>
+
+<h3 id="验证器">验证器</h3>
+
+<p>我们使用的 json schema 验证器是 <a href="https://python-jsonschema.readthedocs.io/">python-jsonschema</a> 。因为该验证器是纯 python 实现，可以更好地被 python 编写的语言服务器调用。</p>
+
+<h3 id="序列化">序列化</h3>
+
+<p>我们需要实现序列化 <code class="language-plaintext highlighter-rouge">PKGBUILD</code> 的代码。方法还是从抽象语法树出发生成一个树。我们在该树中保留节点和范围的对应关系。当把序列化后的字典传递给验证器后，验证器会返回错误的消息和错误的节点路径，比如 <code class="language-plaintext highlighter-rouge">$.arch[0]</code> 就是 <code class="language-plaintext highlighter-rouge">arch</code> 数组的第一个元素。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Trie</span><span class="p">:</span>
+    <span class="nb">range</span><span class="p">:</span> <span class="n">Range</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="sh">"</span><span class="s">Trie | None</span><span class="sh">"</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="c1"># can be serialized to a json
+</span>    <span class="n">value</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="sh">"</span><span class="s">Trie</span><span class="sh">"</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="sh">"</span><span class="s">Trie</span><span class="sh">"</span><span class="p">]</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">get_root</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">Trie</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">self</span>
+        <span class="k">while</span> <span class="n">node</span><span class="p">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">parent</span>
+        <span class="k">return</span> <span class="n">node</span>
+
+    <span class="k">def</span> <span class="nf">from_path</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">Trie</span><span class="sh">"</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sh">"""</span><span class="s">Get node from a json path like ``$.arch[0]``.</span><span class="sh">"""</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">self</span>
+        <span class="k">if</span> <span class="n">path</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">$</span><span class="sh">"</span><span class="p">):</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="p">.</span><span class="nf">lstrip</span><span class="p">(</span><span class="sh">"</span><span class="s">$</span><span class="sh">"</span><span class="p">)</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">get_root</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">node</span><span class="p">.</span><span class="nf">from_relative_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">from_relative_path</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">Trie</span><span class="sh">"</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sh">"""</span><span class="s">Get node from a json path like ``.arch[0]``.</span><span class="sh">"""</span>
+        <span class="k">if</span> <span class="n">path</span> <span class="o">==</span> <span class="sh">""</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">self</span>
+        <span class="k">if</span> <span class="n">path</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">.</span><span class="sh">"</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="nb">TypeError</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="p">.</span><span class="nf">lstrip</span><span class="p">(</span><span class="sh">"</span><span class="s">.</span><span class="sh">"</span><span class="p">)</span>
+            <span class="n">index</span><span class="p">,</span> <span class="n">mid</span><span class="p">,</span> <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="p">.</span><span class="nf">partition</span><span class="p">(</span><span class="sh">"</span><span class="s">.</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">mid</span> <span class="o">==</span> <span class="sh">"</span><span class="s">.</span><span class="sh">"</span><span class="p">:</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="n">path</span>
+            <span class="n">index</span><span class="p">,</span> <span class="n">mid</span><span class="p">,</span> <span class="n">suffix</span> <span class="o">=</span> <span class="n">index</span><span class="p">.</span><span class="nf">partition</span><span class="p">(</span><span class="sh">"</span><span class="s">[</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">mid</span> <span class="o">==</span> <span class="sh">"</span><span class="s">[</span><span class="sh">"</span><span class="p">:</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="n">suffix</span> <span class="o">+</span> <span class="n">path</span>
+            <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">value</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="nf">from_relative_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">path</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">[</span><span class="sh">"</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="nb">TypeError</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="p">.</span><span class="nf">lstrip</span><span class="p">(</span><span class="sh">"</span><span class="s">[</span><span class="sh">"</span><span class="p">)</span>
+            <span class="n">index</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="p">.</span><span class="nf">partition</span><span class="p">(</span><span class="sh">"</span><span class="s">]</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">value</span><span class="p">[</span><span class="nf">int</span><span class="p">(</span><span class="n">index</span><span class="p">)].</span><span class="nf">from_relative_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="nb">TypeError</span>
+
+    <span class="k">def</span> <span class="nf">to_path</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sh">"""</span><span class="s">Generate json path like ``$.arch[0]``.</span><span class="sh">"""</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sh">"</span><span class="s">$</span><span class="sh">"</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">parent</span><span class="p">.</span><span class="nf">to_path</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">parent</span><span class="p">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">parent</span><span class="p">.</span><span class="n">value</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="n">self</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s">.</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="sh">"</span>
+            <span class="k">raise</span> <span class="nb">TypeError</span>
+        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">parent</span><span class="p">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">parent</span><span class="p">.</span><span class="n">value</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="n">self</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s">[</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s">]</span><span class="sh">"</span>
+            <span class="k">raise</span> <span class="nb">TypeError</span>
+        <span class="k">return</span> <span class="n">path</span>
+
+    <span class="k">def</span> <span class="nf">to_json</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sh">"""</span><span class="s">Generate json dict.</span><span class="sh">"""</span>
+        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="p">.</span><span class="nf">to_json</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">value</span><span class="p">.</span><span class="nf">items</span><span class="p">()}</span>
+        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">v</span><span class="p">.</span><span class="nf">to_json</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">value</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">value</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_tree</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">tree</span><span class="p">:</span> <span class="n">Tree</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">Trie</span><span class="sh">"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="p">.</span><span class="nf">from_node</span><span class="p">(</span><span class="n">tree</span><span class="p">.</span><span class="n">root_node</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_node</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">Node</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="sh">"</span><span class="s">Trie | None</span><span class="sh">"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">Trie</span><span class="sh">"</span><span class="p">:</span>
+        <span class="c1"># ...
+</span></code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">from_node</code> 的一个伪代码如下：</p>
+
+<ol>
+  <li>输入根节点</li>
+  <li>遍历子节点</li>
+  <li>若子节点是函数定义，增加一个对应属性，值为 0 ，范围为函数体的范围</li>
+  <li>若子节点是值为字符串的变量，增加一个对应属性，值为该字符串，范围为该字符串的范围</li>
+  <li>若子节点是值为数组或字典，增加一个对应属性，值为空数组或空字典，范围为数组或字典的范围，再返回第 1 步</li>
+</ol>
+
+<p>一个更复杂的序列化参见 <a href="https://github.com/Freed-Wu/zathura-language-server">zathura-language-server</a> ，这是系列文章二的实现，因为它远比本文提到的序列化算法更复杂所以没有拿它举例：</p>
+
+<div class="language-conf highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">include</span> <span class="n">desktop</span>/<span class="n">zathurarc</span>
+<span class="n">map</span> [<span class="n">fullscreen</span>] &lt;<span class="n">Esc</span>&gt; <span class="n">zoom</span> <span class="n">in</span><span class="c">#with argument
+</span><span class="n">map</span> &lt;<span class="n">F1</span>&gt; <span class="n">recolor</span>          <span class="c">#without argument
+</span><span class="n">set</span> <span class="n">recolor</span> <span class="n">true</span>
+<span class="n">set</span> <span class="n">notification</span>-<span class="n">error</span>-<span class="n">bg</span>       <span class="s2">"#fbf1c7"</span> <span class="c"># bg
+</span><span class="n">unmap</span> &lt;<span class="n">F1</span>&gt;
+</code></pre></div></div>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"include"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"desktop/zathurarc"</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"map"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"fullscreen"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;Esc&gt;"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"function"</span><span class="p">:</span><span class="w"> </span><span class="s2">"zoom"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"argument"</span><span class="p">:</span><span class="w"> </span><span class="s2">"in"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"normal"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;F1&gt;"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"function"</span><span class="p">:</span><span class="w"> </span><span class="s2">"recolor"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"set"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"recolor"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"notification-error-bg"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#fbf1c7"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"unmap"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"normal"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="s2">"&lt;F1&gt;"</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="搜索">搜索</h3>
+
+<p>和之前的文章一样，我们封装一个 <code class="language-plaintext highlighter-rouge">Finder</code> 。事实上，无论是</p>
+
+<ul>
+  <li>基于 tree-sitter-query 的搜索</li>
+  <li>基于我们在系列文章三中用 python 实现的深度优先搜索</li>
+  <li>还是 <code class="language-plaintext highlighter-rouge">python-jsonschema</code> 内部实现的搜索</li>
+</ul>
+
+<p>我们都把它封装成一个 <code class="language-plaintext highlighter-rouge">Finder</code> ，提供用于代码诊断、代码格式化等 LSP feature 的接口。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@dataclass</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">SchemaFinder</span><span class="p">(</span><span class="n">Finder</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">Trie</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">validator</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">schema2validator</span><span class="p">(</span><span class="n">schema</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">cls</span> <span class="o">=</span> <span class="n">cls</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">schema2validator</span><span class="p">(</span><span class="n">schema</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Validator</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nf">validator_for</span><span class="p">(</span><span class="n">schema</span><span class="p">)(</span><span class="n">schema</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_diagnostics</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tree</span><span class="p">:</span> <span class="n">Tree</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Diagnostic</span><span class="p">]:</span>
+        <span class="n">trie</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">cls</span><span class="p">.</span><span class="nf">from_tree</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="nc">Diagnostic</span><span class="p">(</span>
+                <span class="n">trie</span><span class="p">.</span><span class="nf">from_path</span><span class="p">(</span><span class="n">error</span><span class="p">.</span><span class="n">json_path</span><span class="p">).</span><span class="nb">range</span><span class="p">,</span>
+                <span class="n">error</span><span class="p">.</span><span class="n">message</span><span class="p">,</span>
+                <span class="n">DiagnosticSeverity</span><span class="p">.</span><span class="n">Error</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">error</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">validator</span><span class="p">.</span><span class="nf">iter_errors</span><span class="p">(</span><span class="n">trie</span><span class="p">.</span><span class="nf">to_json</span><span class="p">())</span>
+        <span class="p">]</span>
+</code></pre></div></div>
+
+<h3 id="代码诊断">代码诊断</h3>
+
+<p>其中 <code class="language-plaintext highlighter-rouge">schema</code> 是 json schema 被读入到 python 后得到的 python 字典。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">BashLanguageServer</span><span class="p">(</span><span class="n">LanguageServer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="nd">@self.feature</span><span class="p">(</span><span class="n">TEXT_DOCUMENT_DID_OPEN</span><span class="p">)</span>
+        <span class="nd">@self.feature</span><span class="p">(</span><span class="n">TEXT_DOCUMENT_DID_CHANGE</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">did_change</span><span class="p">(</span><span class="n">params</span><span class="p">:</span> <span class="n">DidChangeTextDocumentParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">document</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">workspace</span><span class="p">.</span><span class="nf">get_document</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="n">text_document</span><span class="p">.</span><span class="n">uri</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">trees</span><span class="p">[</span><span class="n">document</span><span class="p">.</span><span class="n">uri</span><span class="p">]</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">parser</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span>
+                <span class="n">document</span><span class="p">.</span><span class="n">source</span><span class="p">.</span><span class="nf">encode</span><span class="p">()</span>
+            <span class="p">)</span>
+            <span class="n">diagnostics</span> <span class="o">=</span> <span class="nc">SchemaFinder</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">Trie</span><span class="p">).</span><span class="nf">get_diagnostics</span><span class="p">(</span>
+                <span class="sh">""</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">trees</span><span class="p">[</span><span class="n">document</span><span class="p">.</span><span class="n">uri</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">publish_diagnostics</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="n">text_document</span><span class="p">.</span><span class="n">uri</span><span class="p">,</span> <span class="n">diagnostics</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><img src="https://github.com/termux/termux-language-server/assets/32936898/efcc4bfa-7dc5-4c0c-b90a-88dd0dbba1e3" alt="diagnostic"></p>
+
+<p>系列文章二结尾的解决方案亦是如此。</p>
+
+<h3 id="代码补全">代码补全</h3>
+
+<p>补全来自 json schema 中的 <code class="language-plaintext highlighter-rouge">enum</code> 属性。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">BashLanguageServer</span><span class="p">(</span><span class="n">LanguageServer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="nd">@self.feature</span><span class="p">(</span><span class="n">TEXT_DOCUMENT_COMPLETION</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">completions</span><span class="p">(</span><span class="n">params</span><span class="p">:</span> <span class="n">CompletionParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CompletionList</span><span class="p">:</span>
+            <span class="n">document</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">workspace</span><span class="p">.</span><span class="nf">get_document</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="n">text_document</span><span class="p">.</span><span class="n">uri</span><span class="p">)</span>
+            <span class="n">uni</span> <span class="o">=</span> <span class="nc">PositionFinder</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="n">position</span><span class="p">,</span> <span class="n">right_equal</span><span class="o">=</span><span class="bp">True</span><span class="p">).</span><span class="nf">find</span><span class="p">(</span>
+                <span class="n">document</span><span class="p">.</span><span class="n">uri</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">trees</span><span class="p">[</span><span class="n">document</span><span class="p">.</span><span class="n">uri</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">uni</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nc">CompletionList</span><span class="p">(</span><span class="bp">False</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="n">uni</span><span class="p">.</span><span class="n">node</span><span class="p">.</span><span class="n">parent</span>
+            <span class="k">if</span> <span class="n">parent</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nc">CompletionList</span><span class="p">(</span><span class="bp">False</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">uni</span><span class="p">.</span><span class="nf">get_text</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">parent</span><span class="p">.</span><span class="nb">type</span> <span class="o">==</span> <span class="sh">"</span><span class="s">array</span><span class="sh">"</span> <span class="ow">and</span> <span class="n">parent</span><span class="p">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="nb">property</span> <span class="o">=</span> <span class="n">schema</span><span class="p">[</span><span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">].</span><span class="nf">get</span><span class="p">(</span>
+                    <span class="n">parent</span><span class="p">.</span><span class="n">parent</span><span class="p">.</span><span class="n">children</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">text</span><span class="p">.</span><span class="nf">decode</span><span class="p">(),</span> <span class="p">{}</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="nf">get_completion_list_by_enum</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="nb">property</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">get_completion_list_by_enum</span><span class="p">(</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CompletionList</span><span class="p">:</span>
+    <span class="c1"># if contains .items, it is an array
+</span>    <span class="nb">property</span> <span class="o">=</span> <span class="nb">property</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">items</span><span class="sh">"</span><span class="p">,</span> <span class="nb">property</span><span class="p">)</span>
+    <span class="n">enum</span> <span class="o">=</span> <span class="nb">property</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span>
+        <span class="sh">"</span><span class="s">enum</span><span class="sh">"</span><span class="p">,</span>
+        <span class="nb">property</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span>
+            <span class="sh">"</span><span class="s">oneOf</span><span class="sh">"</span><span class="p">,</span> <span class="nb">property</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">anyOf</span><span class="sh">"</span><span class="p">,</span> <span class="nb">property</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">allOf</span><span class="sh">"</span><span class="p">,</span> <span class="p">[{}]))</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">enum</span><span class="sh">"</span><span class="p">,</span> <span class="p">[]),</span>
+    <span class="p">)</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">enum</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">k</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+            <span class="n">items</span> <span class="o">+=</span> <span class="p">[</span>
+                <span class="nc">CompletionItem</span><span class="p">(</span>
+                    <span class="n">k</span><span class="p">,</span>
+                    <span class="n">kind</span><span class="o">=</span><span class="n">CompletionItemKind</span><span class="p">.</span><span class="n">Constant</span><span class="p">,</span>
+                    <span class="n">insert_text</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">]</span>
+    <span class="k">return</span> <span class="nc">CompletionList</span><span class="p">(</span><span class="bp">False</span><span class="p">,</span> <span class="n">items</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><img src="https://github.com/termux/termux-language-server/assets/32936898/17224e8f-5cdc-4b82-98a9-3eb9fda34a4b" alt="completion"></p>
+
+<h3 id="文档悬停">文档悬停</h3>
+
+<p>文档来自 json schema 中的 <code class="language-plaintext highlighter-rouge">description</code> 属性。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">BashLanguageServer</span><span class="p">(</span><span class="n">LanguageServer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="nd">@self.feature</span><span class="p">(</span><span class="n">TEXT_DOCUMENT_HOVER</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">hover</span><span class="p">(</span><span class="n">params</span><span class="p">:</span> <span class="n">TextDocumentPositionParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Hover</span> <span class="o">|</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">document</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">workspace</span><span class="p">.</span><span class="nf">get_document</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="n">text_document</span><span class="p">.</span><span class="n">uri</span><span class="p">)</span>
+            <span class="n">uni</span> <span class="o">=</span> <span class="nc">PositionFinder</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="n">position</span><span class="p">).</span><span class="nf">find</span><span class="p">(</span>
+                <span class="n">document</span><span class="p">.</span><span class="n">uri</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">trees</span><span class="p">[</span><span class="n">document</span><span class="p">.</span><span class="n">uri</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">uni</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">None</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">uni</span><span class="p">.</span><span class="nf">get_text</span><span class="p">()</span>
+            <span class="n">_range</span> <span class="o">=</span> <span class="n">uni</span><span class="p">.</span><span class="nf">get_range</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">description</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+                <span class="nf">get_schema</span><span class="p">(</span><span class="n">filetype</span><span class="p">)</span>
+                <span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">,</span> <span class="p">{})</span>
+                <span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="p">{})</span>
+                <span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">)</span>
+            <span class="p">):</span>
+                <span class="k">return</span> <span class="nc">Hover</span><span class="p">(</span>
+                    <span class="nc">MarkupContent</span><span class="p">(</span><span class="n">MarkupKind</span><span class="p">.</span><span class="n">Markdown</span><span class="p">,</span> <span class="n">description</span><span class="p">),</span>
+                    <span class="n">_range</span><span class="p">,</span>
+                <span class="p">)</span>
+</code></pre></div></div>
+
+<p><img src="https://github.com/termux/termux-language-server/assets/32936898/dd00c8d2-d416-4f7d-ae2d-82d58e4c603d" alt="hover"></p>
+
+<h3 id="总结">总结</h3>
+
+<p>可以看到在引入验证模式后我们成功用更简洁的方式实现了以下三大 LSP features:</p>
+
+<ul>
+  <li>代码诊断</li>
+  <li>代码补全</li>
+  <li>文档悬停</li>
+</ul>
+
+<p>鉴于在笔者之前没有人尝试过在数据描述语言之外的 DSL 中引入验证模式，这绝对是一个创新<img class="emoji" title=":smile:" alt=":smile:" raw="😄" src="https://github.githubassets.com/images/icons/emoji/unicode/1f604.png" style="vertical-align: middle; display: inline; max-width: 1em; visibility: hidden;" onload="this.style.visibility='visible'" onerror="this.replaceWith(this.getAttribute('raw'))"></p>
+
+<p>还有一篇碎碎念，因为字数不少就单独放一篇文章了。</p>
+
+<div class="reward">
+  <button id="rewardButton" disable="enable" onclick="toggle()">
+    如果这篇博客帮助到你，可以请我喝一杯奶茶~
+  </button>
+  <table id="rewardQRs">
+    <tr>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" alt="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" alt="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" alt="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" height="300pt"></td>
+    </tr>
+  </table>
+</div>
+<script src="/assets/js/valine.js"></script>
+
+    </article>
+    <input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+    <aside class="sidebar">
+      <div class="sidebar-item">
+        <div class="ih-item">
+          <a title="
+              Wu Zhenyu
+            ">
+            <img class="img" src="https://github.com/Freed-Wu.png" alt="img">
+            <div class="info">
+              <br>
+              <br>
+              A personal blog to record valuable and interesting things.
+            </div>
+          </a>
+        </div>
+        <iframe height="42" width="240" src="https://music.163.com/outchain/player?type=2&id=27646786&height=32"></iframe>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-nav-item" href="/">
+          <i class="fa-solid fa-home fa-fw"></i> Home
+        </a>
+        <a class="sidebar-nav-item" href="/tag">
+          <i class="fa-solid fa-tags fa-fw"></i> Tag
+        </a>
+        <a class="sidebar-nav-item" href="/feed.xml">
+          <i class="fa-solid fa-rss fa-fw"></i> RSS
+        </a>
+        <a class="sidebar-nav-item" href="/Freed-Wu">
+          <i class="fa-solid fa-comments fa-fw"></i> About Me
+        </a>
+        <a class="sidebar-nav-item" href="/jekyll-theme-freed">
+          <i class="fa-solid fa-code fa-fw"></i> About the Website
+        </a>
+        <a class="sidebar-nav-item" href="/2020/01/01/honour">
+          <i class="fa-solid fa-trophy fa-fw"></i> Honour
+        </a>
+      </nav>
+      <div class="sidebar-item">
+        <!-- https://github.com/christian-fei/Simple-Jekyll-Search#preparing-the-plugin -->
+        <input id="search-input" placeholder="Search posts">
+        <div id="results-container"></div>
+      </div>
+    </aside>
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+  </body>
+</html>
