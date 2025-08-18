@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>C/C++ 构建系统简史：旧约 | wzy</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="C/C++ 构建系统简史：旧约">
+<meta name="author" content="Wu Zhenyu">
+<meta property="og:locale" content="zh_CN">
+<meta name="description" content="C/C++ 不能没有构建系统，就像 GNU/Linux 不能没有包管理器。">
+<meta property="og:description" content="C/C++ 不能没有构建系统，就像 GNU/Linux 不能没有包管理器。">
+<link rel="canonical" href="https://freed-wu.github.io/2023/04/01/c-build-system.html">
+<meta property="og:url" content="https://freed-wu.github.io/2023/04/01/c-build-system.html">
+<meta property="og:site_name" content="wzy">
+<meta property="og:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2023-04-01T00:00:00+00:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="twitter:title" content="C/C++ 构建系统简史：旧约">
+<meta name="twitter:site" content="@FreedWu">
+<meta name="twitter:creator" content="@Wu Zhenyu">
+<meta property="fb:admins" content="100057378480375">
+<meta property="article:publisher" content="100057378480375">
+<meta property="fb:app_id" content="100057378480375">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Wu Zhenyu","url":"https://Freed-Wu.github.io"},"dateModified":"2023-04-01T00:00:00+00:00","datePublished":"2023-04-01T00:00:00+00:00","description":"C/C++ 不能没有构建系统，就像 GNU/Linux 不能没有包管理器。","headline":"C/C++ 构建系统简史：旧约","image":"https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://freed-wu.github.io/2023/04/01/c-build-system.html"},"url":"https://freed-wu.github.io/2023/04/01/c-build-system.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="icon" href="https://github.com/Freed-Wu.png">
+    <link rel="apple-touch-icon" href="https://github.com/Freed-Wu.png">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/poole.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/lanyon.min.css">
+    <link rel="stylesheet" href="//jekyllrb.com/css/screen.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/sindresorhus/github-markdown-css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <script async src="https://kit.fontawesome.com/556f02e0e5.js"></script>
+    <script async src="//cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget/autoload.min.js"></script>
+    <!-- https://github.com/christian-fei/Simple-Jekyll-Search -->
+    <script async src="//cdn.jsdelivr.net/npm/simple-jekyll-search/dest/simple-jekyll-search.min.js"></script>
+    <script async src="/assets/js/search.js"></script>
+  </head>
+  <!-- https://github.com/poole/lanyon -->
+  <body class="theme-base-08 layout-reverse sidebar-overlay">
+    <article class="container">
+      <header>
+        <h1>C/C++ 构建系统简史：旧约</h1>
+      </header>
+      <script src="/assets/js/qr.js"></script>
+<small class="post-date">
+  <i class="fa-solid fa-calendar-day"></i> 01 Apr 2023
+  <i class="fa-solid fa-file-word"></i> 5209 words
+  <i class="fa-solid fa-coffee"></i> 18 minutes
+  <span id="/2023/04/01/c-build-system.html" class="leancloud-visitors" data-flag-title="C/C++ 构建系统简史：旧约">
+    <i class="fa-regular fa-eye"></i>
+    <span class="leancloud-visitors-count"></span>
+  </span>
+  <a rel="license" href="//creativecommons.org/licenses/by-sa/4.0/deed.zh">
+    <i class="fa-brands fa-creative-commons"></i> BY-SA 4.0
+  </a>
+  <br>
+  <a href="/tag/develop"> <i class="fa-solid fa-tag"></i> develop </a>
+  <a href="/tag/c"> <i class="fa-solid fa-tag"></i> c </a>
+</small>
+<ul>
+<li><a href="#%E5%88%9B%E4%B8%96%E8%AE%B0-make">创世记： <code class="language-plaintext highlighter-rouge">make</code></a></li>
+<li>
+<a href="#%E5%87%BA%E5%9F%83%E5%8F%8A%E8%AE%B0-configure">出埃及记： <code class="language-plaintext highlighter-rouge">./configure</code></a><ul>
+<li><a href="#%E7%94%9F%E6%88%90-x64-windows-%E5%B9%B3%E5%8F%B0%E7%9A%84-makefile">生成 <code class="language-plaintext highlighter-rouge">x64 windows</code> 平台的 <code class="language-plaintext highlighter-rouge">Makefile</code></a></li>
+<li><a href="#%E7%94%9F%E6%88%90-arm64-android-%E5%B9%B3%E5%8F%B0-api-%E7%89%88%E6%9C%AC%E4%B8%BA-32-%E7%9A%84-makefile">生成 <code class="language-plaintext highlighter-rouge">arm64 android</code> 平台 (API 版本为 32) 的 <code class="language-plaintext highlighter-rouge">Makefile</code></a></li>
+<li><a href="#%E7%94%9F%E6%88%90-arm-%E6%97%A0%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84-makefile">生成 <code class="language-plaintext highlighter-rouge">arm</code> 无操作系统的 <code class="language-plaintext highlighter-rouge">Makefile</code></a></li>
+</ul>
+</li>
+<li><a href="#%E5%88%A9%E6%9C%AA%E8%AE%B0-autoconf">利未记： <code class="language-plaintext highlighter-rouge">autoconf</code></a></li>
+<li><a href="#%E6%B0%91%E6%95%B0%E8%AE%B0-autoheader">民数记： <code class="language-plaintext highlighter-rouge">autoheader</code></a></li>
+<li><a href="#%E7%94%B3%E5%91%BD%E8%AE%B0-automake">申命记： <code class="language-plaintext highlighter-rouge">automake</code></a></li>
+<li>
+<a href="#%E6%91%A9%E8%A5%BF%E4%BA%94%E7%BB%8F%E4%B9%8B%E5%90%8E-%E6%96%B0%E7%9A%84%E6%9E%84%E5%BB%BA%E7%B3%BB%E7%BB%9F">摩西五经之后： 新的构建系统</a><ul>
+<li>
+<a href="#cmake"></a><a href="https://github.com/Kitware/CMake"><code class="language-plaintext highlighter-rouge">cmake</code></a>
+</li>
+<li>
+<a href="#bazel"></a><a href="https://bazel.build/basics/build-systems"><code class="language-plaintext highlighter-rouge">bazel</code></a>
+</li>
+<li>
+<a href="#scons"></a><a href="https://github.com/SCons/scons"><code class="language-plaintext highlighter-rouge">scons</code></a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#%E6%80%BB%E7%BB%93">总结</a><ul>
+<li><a href="#perl"><code class="language-plaintext highlighter-rouge">perl</code></a></li>
+<li><a href="#python"><code class="language-plaintext highlighter-rouge">python</code></a></li>
+<li><a href="#plaintexlatex"><code class="language-plaintext highlighter-rouge">plainTeX/LaTeX</code></a></li>
+</ul>
+</li>
+</ul> <p>C/C++ 不能没有构建系统，就像 GNU/Linux 不能没有包管理器。</p>
+
+<h2 id="创世记-make">创世记： <code class="language-plaintext highlighter-rouge">make</code>
+</h2>
+
+<blockquote>
+  <p><img src="https://picx.zhimg.com/80/v2-835fe62f2d1a722219c2f43566c55595_1440w.webp" alt="腾讯 1 号员工在 1999 年大年初六写的 Makefile 。知乎上有鹅厂员工分享过内部群的高清版，但后来删了。"></p>
+</blockquote>
+
+<p>起初（应该是 20 世纪七八十年代吧，甚至可能更早），在打包这个概念还不存在的时候，所有的计算机用户都是软件开发者，他们从源代码为自己构建软件，就像这样：</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc a.c <span class="nt">-c</span> <span class="nt">-o</span> a.o  <span class="c"># compile</span>
+gcc b.c <span class="nt">-c</span> <span class="nt">-o</span> b.o
+...
+gcc a.o b.o ... <span class="nt">-o</span> a-good-program  <span class="c"># link</span>
+</code></pre></div></div>
+
+<p>后来，随着代码规模的一步步增加，第一个问题出现了：编译太慢了。不妨假设 <code class="language-plaintext highlighter-rouge">a.c</code> <code class="language-plaintext highlighter-rouge">#include "main.h"</code>。一旦 <code class="language-plaintext highlighter-rouge">main.h</code> 发生改变，就必须重新编译 <code class="language-plaintext highlighter-rouge">a.o</code> 。只能把所有的 <code class="language-plaintext highlighter-rouge">*.o</code> 都重新编译。这非常耗时——例如，在笔者上一台 PC 上编译 linux 需要整整 2 个小时——于是开发者们很快想到了解决方法：在一个文件中记录所有源代码文件的依赖关系，例如 <code class="language-plaintext highlighter-rouge">a.o</code> 依赖 <code class="language-plaintext highlighter-rouge">a.c</code> 和 <code class="language-plaintext highlighter-rouge">main.h</code>。然后每次编译时，看看 <code class="language-plaintext highlighter-rouge">a.o</code> 和 <code class="language-plaintext highlighter-rouge">a.c</code>, <code class="language-plaintext highlighter-rouge">main.h</code> 的时间戳，发现 <code class="language-plaintext highlighter-rouge">main.h</code> 的修改时间迟于 <code class="language-plaintext highlighter-rouge">a.o</code> 的修改时间：说明 <code class="language-plaintext highlighter-rouge">a.o</code> 需要重新编译，从而省下 <code class="language-plaintext highlighter-rouge">b.o</code>, <code class="language-plaintext highlighter-rouge">c.o</code>, … 的时间。这样的文件叫做 <code class="language-plaintext highlighter-rouge">Makefile</code> ，这样的调用 <code class="language-plaintext highlighter-rouge">Makefile</code> 编辑的软件叫做 <code class="language-plaintext highlighter-rouge">make</code> 。</p>
+
+<p><code class="language-plaintext highlighter-rouge">make</code> 不是唯一加速编译的方式，但和其他方式相比（分布式编译的 <code class="language-plaintext highlighter-rouge">distcc</code> 和使用缓存的 <code class="language-plaintext highlighter-rouge">ccache</code>）相比，所需要的条件最少。</p>
+
+<h2 id="出埃及记-configure">出埃及记： <code class="language-plaintext highlighter-rouge">./configure</code>
+</h2>
+
+<blockquote>
+  <p>传统上，交叉开发是一门黑魔法，需要大量研究、反复试验和坚持不懈。</p>
+
+  <p>– Gentoo <a href="https://wiki.gentoo.org/wiki/Embedded_Handbook/General/Introduction">嵌入式手册</a></p>
+</blockquote>
+
+<p>很快新的问题出现了：软件运行需要平台（CPU，操作系统），编译需要编译器。当时世界上存在的 CPU, 操作系统，编译器五花八门，每一个都有不同的“怪癖”。为了支持它们， <code class="language-plaintext highlighter-rouge">Makefile</code> 也要写得五花八门。更特殊的情况是：用户需要另一个平台上的软件但有没有该平台的设备（例如用户使用 Linux 开发但需要发布支持别的操作系统和 CPU 的软件）或者有该平台的设备但该设备性能很弱，编译很慢所以用户宁愿用自己的另一个平台的电脑编译（例如用户想编译树莓派上的软件）甚至该平台根本不能为自己编译软件（例如 TI 的 DSP ）。所以交叉编译出现了–在一个平台上编译另一个平台的软件。</p>
+
+<p><img src="https://hacks.mozilla.org/files/2019/03/04-01-portability-1.png" alt="cross-compile"></p>
+
+<p>不管怎样，开发者希望有一种方法能自动检测用户的平台和安装了哪些编译器，用合适的编译器生成适用于用户需要的平台的软件，就像这样：</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./configure
+make
+</code></pre></div></div>
+
+<p>开发者无需指定适用哪一个 <code class="language-plaintext highlighter-rouge">Makefile</code>, 因为 <code class="language-plaintext highlighter-rouge">./configure</code> 会为根据一个叫 <code class="language-plaintext highlighter-rouge">Makefile.in</code> 的模板生成适合开发者所在平台的 <code class="language-plaintext highlighter-rouge">Makefile</code> 。（也有生成 <code class="language-plaintext highlighter-rouge">config.mk</code>, 再在 <code class="language-plaintext highlighter-rouge">Makefile</code> 中 <code class="language-plaintext highlighter-rouge">include config.mk</code> 的 <code class="language-plaintext highlighter-rouge">./configure</code> ，例如 <a href="https://github.com/rofl0r/proxychains-ng">proxychains-ng</a> 和 <a href="https://github.com/mirror/x264">x264</a>）如果开发者想交叉编译，在拥有支持交叉编译的编译器的情况下：</p>
+
+<h3 id="生成-x64-windows-平台的-makefile">生成 <code class="language-plaintext highlighter-rouge">x64 windows</code> 平台的 <code class="language-plaintext highlighter-rouge">Makefile</code>
+</h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./configure  <span class="nt">--build</span><span class="o">=</span>x86_64-pc-linux-gnu <span class="nt">--host</span><span class="o">=</span>x86_64-w64-mingw32
+</code></pre></div></div>
+
+<h3 id="生成-arm64-android-平台-api-版本为-32-的-makefile">生成 <code class="language-plaintext highlighter-rouge">arm64 android</code> 平台 (API 版本为 32) 的 <code class="language-plaintext highlighter-rouge">Makefile</code>
+</h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./configure <span class="nt">--build</span><span class="o">=</span>x86_64-pc-linux-gnu <span class="nt">--host</span><span class="o">=</span>aarch64-linux-android32
+</code></pre></div></div>
+
+<h3 id="生成-arm-无操作系统的-makefile">生成 <code class="language-plaintext highlighter-rouge">arm</code> 无操作系统的 <code class="language-plaintext highlighter-rouge">Makefile</code>
+</h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./configure <span class="nt">--build</span><span class="o">=</span>x86_64-pc-linux-gnu <span class="nt">--host</span><span class="o">=</span>arm-none-eabi
+</code></pre></div></div>
+
+<p>还可以生成 <code class="language-plaintext highlighter-rouge">macOS</code> 平台的 <code class="language-plaintext highlighter-rouge">Makefile</code>, 参见 <a href="https://github.com/tpoechtrager/osxcross">https://github.com/tpoechtrager/osxcross</a>。但笔者没有尝试过，因为就算尝试了笔者也没有苹果电脑来测试程序到底能不能跑。</p>
+
+<p><code class="language-plaintext highlighter-rouge">./configure</code> 只是一个由开发者编写的 <code class="language-plaintext highlighter-rouge">shell</code> 脚本，它接受 <code class="language-plaintext highlighter-rouge">--build</code> 等命令行选项确定用户想要编译什么样的软件，并生成对应的 <code class="language-plaintext highlighter-rouge">Makefile</code> 。</p>
+
+<h2 id="利未记-autoconf">利未记： <code class="language-plaintext highlighter-rouge">autoconf</code>
+</h2>
+
+<blockquote>
+  <p>那些不了解 Autoconf 的人注定要重新发明它，而且很糟糕。</p>
+
+  <p>– GNU <a href="https://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.71/autoconf.html#Introduction">autoconf</a></p>
+</blockquote>
+
+<p>每个开发者都要为自己的软件写 <code class="language-plaintext highlighter-rouge">configure</code> ，每个 <code class="language-plaintext highlighter-rouge">configure</code> 都有相似的选项 <code class="language-plaintext highlighter-rouge">--build</code>, <code class="language-plaintext highlighter-rouge">--host</code>, … 很快每个开发者发现自己只是找自己之前某个开源项目的 <code class="language-plaintext highlighter-rouge">configure</code>, 复制一份再二次修改。既然如此，为什么不让每个开发者在一个配置文件里写上自己项目独有的信息，再运行一个软件从把这些信息送到一个模板里自动生成一个 <code class="language-plaintext highlighter-rouge">configure</code> 呢？</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>autoconf
+./configure
+make
+</code></pre></div></div>
+
+<p>这样的软件叫 <code class="language-plaintext highlighter-rouge">autoconf</code> ，这样的配置文件叫 <code class="language-plaintext highlighter-rouge">configure.ac</code> 。</p>
+
+<h2 id="民数记-autoheader">民数记： <code class="language-plaintext highlighter-rouge">autoheader</code>
+</h2>
+
+<blockquote>
+  <p>当事情出错时， 但是，您会感谢 autoheader 。</p>
+
+  <p>– GNU <a href="https://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.71/autoconf.html#autoheader-Invocation">autoheader</a></p>
+</blockquote>
+
+<p>在编译 C/C++ 软件时开发者根据需要定义各种各样的宏，例如量化位数到底是 8 bit 还是 10 bit ？图像格式是 YUV422 还是 YUV 420 ？这样的宏可以写在 <code class="language-plaintext highlighter-rouge">Makefile</code> 在 <code class="language-plaintext highlighter-rouge">make</code> 的时候调用 <code class="language-plaintext highlighter-rouge">gcc -DX264_BIT_DEPTH=8 -DX264_CHROMA_FORMAT=0</code>。当宏越来越多的时候，<code class="language-plaintext highlighter-rouge">make</code> 时回显调用的命令的输出就会越来越长，影响开发者快速查看日志。而日志里的这些宏信息是不需要的，可以从类似 <code class="language-plaintext highlighter-rouge">./configure --enable-8-bit --enable-yuv420</code> 的命令中直接知道。一个简单的想法让 <code class="language-plaintext highlighter-rouge">configure</code> 生成 <code class="language-plaintext highlighter-rouge">config.h</code>:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define X264_BIT_DEPTH 8
+#define X264_CHROMA_FORMAT 0
+</span></code></pre></div></div>
+
+<p>然后让需要这 2 个宏的 <code class="language-plaintext highlighter-rouge">*.c</code> <code class="language-plaintext highlighter-rouge">#include "config.h"</code> 。</p>
+
+<p>当然，实际上是 <code class="language-plaintext highlighter-rouge">./configure</code> 从 <code class="language-plaintext highlighter-rouge">config.h.in</code> 生成 <code class="language-plaintext highlighter-rouge">configure.h</code> 的。而 <code class="language-plaintext highlighter-rouge">config.h.in</code> 从 <code class="language-plaintext highlighter-rouge">autoheader</code> 从 <code class="language-plaintext highlighter-rouge">configure.ac</code> 生成。</p>
+
+<h2 id="申命记-automake">申命记： <code class="language-plaintext highlighter-rouge">automake</code>
+</h2>
+
+<blockquote>
+  <p>这是一个公认的事实，作为一个开发者拥有一个新包，你一定需要一个构建系统。</p>
+
+  <p>– GNU <a href="https://www.gnu.org/software/automake/manual/automake.html#GNU-Build-System">automake</a></p>
+</blockquote>
+
+<p>问题都解决了吗？不，开发者还需要手写一个 <code class="language-plaintext highlighter-rouge">Makefile.in</code> 的文件（忘了这是什么的回头看出埃及记）。就像 <code class="language-plaintext highlighter-rouge">autoconf</code> 从 <code class="language-plaintext highlighter-rouge">configure.ac</code> 生成 <code class="language-plaintext highlighter-rouge">configure</code> 一样， <code class="language-plaintext highlighter-rouge">automake</code> 从 <code class="language-plaintext highlighter-rouge">Makefile.am</code> 生成 <code class="language-plaintext highlighter-rouge">Makefile.in</code> 。 Gentoo <a href="https://devmanual.gentoo.org/general-concepts/autotools/index.html">Autotools 基本知识</a>有一张完整的流程图：</p>
+
+<p><img src="https://devmanual.gentoo.org/general-concepts/autotools/diagram.png" alt="A basic overview of how the main autotools components fit together"></p>
+
+<p>当然，又是这个 <code class="language-plaintext highlighter-rouge">auto</code> ，又是那个 <code class="language-plaintext highlighter-rouge">auto</code> ，把开发者都绕进去了。一般 <code class="language-plaintext highlighter-rouge">autoreconf</code> 就可以按正确的顺序完成所有 <code class="language-plaintext highlighter-rouge">auto*</code> ，然后用户只需要 <code class="language-plaintext highlighter-rouge">./configure &amp;&amp; make</code> 就行了。一个小问题，用户必须要安装 <code class="language-plaintext highlighter-rouge">autoconf</code> （<code class="language-plaintext highlighter-rouge">autoheader</code> 已经是 <code class="language-plaintext highlighter-rouge">autoconf</code> 这个软件中的一个程序了，安装 <code class="language-plaintext highlighter-rouge">autoconf</code> 一定会有 <code class="language-plaintext highlighter-rouge">autoheader</code>）， <code class="language-plaintext highlighter-rouge">automake</code> 才能成功构建依赖 <code class="language-plaintext highlighter-rouge">autoconf</code> 的软件吗？读者先自己思考一会～</p>
+
+<h2 id="摩西五经之后-新的构建系统">摩西五经之后： 新的构建系统</h2>
+
+<blockquote>
+  <p>构建系统不仅适用于人工编写的代码；它们还允许机器自动创建构建，无论是用于测试还是用于发布到生产。</p>
+
+  <p>– Google <a href="https://bazel.build/basics/build-systems">bazel</a></p>
+</blockquote>
+
+<p><code class="language-plaintext highlighter-rouge">autotools</code> (<code class="language-plaintext highlighter-rouge">autoconf</code>, <code class="language-plaintext highlighter-rouge">automake</code> 和一系列其它软件和合称) 并不是唯一的构建系统。以 C/C++ 的构建系统为例，可以是：</p>
+
+<p><img src="https://github.com/Freed-Wu/Freed-Wu.github.io/assets/32936898/5f072e58-8650-4630-8388-2856b49c2665" alt="Build systems"></p>
+
+<h3 id="cmake"><a href="https://github.com/Kitware/CMake"><code class="language-plaintext highlighter-rouge">cmake</code></a></h3>
+
+<p>笔者所有见过的 <code class="language-plaintext highlighter-rouge">C/C++</code> 项目，构建系统几乎要么是 <code class="language-plaintext highlighter-rouge">autotools</code> ，要么是 <code class="language-plaintext highlighter-rouge">cmake</code>。<code class="language-plaintext highlighter-rouge">autotools</code> 因为问世时间更早，所以使用的开源项目似乎更多，但很多新的开源项目开始使用 <code class="language-plaintext highlighter-rouge">cmake</code> 或者用 <code class="language-plaintext highlighter-rouge">cmake</code> 代替 <code class="language-plaintext highlighter-rouge">autotools</code>。 <code class="language-plaintext highlighter-rouge">autotools</code> 存在一个历史遗留问题造成的学习门槛： <code class="language-plaintext highlighter-rouge">configure.ac</code> 是一种宏语言，在当今指令式/面向对象大行其道的今天，学习一门与之不同的采用新的编程范式的计算机语言难度可能跟一个精通了欧洲各国语言的欧洲人去学中文差不多。而 <code class="language-plaintext highlighter-rouge">cmake</code> 作为一门动态类型指令式的 DSL 其实学习难度相对而言可能更容易接受。除此之外 <code class="language-plaintext highlighter-rouge">cmake</code> 对 <a href="https://clang.llvm.org/docs/JSONCompilationDatabase.html">编译数据库文件</a> 的导出也有比 <code class="language-plaintext highlighter-rouge">autotools</code> 更好的支持。另外 <code class="language-plaintext highlighter-rouge">autotools</code> 主要支持 <code class="language-plaintext highlighter-rouge">gcc</code>, <code class="language-plaintext highlighter-rouge">clang</code>, <code class="language-plaintext highlighter-rouge">icc</code> 等，对 <code class="language-plaintext highlighter-rouge">MSVC</code> 的支持则被成为<a href="https://www.reddit.com/r/cpp/comments/e0kxsy/autotools_windows_the_build_systems_tragedy/">“地狱”</a><sup id="fnref:msvc"><a href="#fn:msvc" class="footnote" rel="footnote" role="doc-noteref">1</a></sup>，而 <code class="language-plaintext highlighter-rouge">cmake</code> 甚至支持直接生成 <code class="language-plaintext highlighter-rouge">MS Visual Studio</code> 的工程文件。（这也得益于 <code class="language-plaintext highlighter-rouge">cmake</code> 虽然比 <code class="language-plaintext highlighter-rouge">autotools</code> 问世时间迟但是一门新的计算机语言或多或少摸着 <code class="language-plaintext highlighter-rouge">automake</code> 见过的石头过河）。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>比较</th>
+      <th>autotools</th>
+      <th>cmake</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>源外构建</td>
+      <td><code class="language-plaintext highlighter-rouge">mkdir build &amp;&amp; cd build &amp;&amp; ../configure</code></td>
+      <td><code class="language-plaintext highlighter-rouge">cmake -Bbuild</code></td>
+    </tr>
+    <tr>
+      <td>源内构建</td>
+      <td><code class="language-plaintext highlighter-rouge">./configure</code></td>
+      <td><code class="language-plaintext highlighter-rouge">cmake .</code></td>
+    </tr>
+    <tr>
+      <td>构建</td>
+      <td><code class="language-plaintext highlighter-rouge">make</code></td>
+      <td><code class="language-plaintext highlighter-rouge">cmake --build build</code></td>
+    </tr>
+    <tr>
+      <td>安装</td>
+      <td><code class="language-plaintext highlighter-rouge">make install</code></td>
+      <td><code class="language-plaintext highlighter-rouge">cmake --install build</code></td>
+    </tr>
+    <tr>
+      <td>指定安装前缀</td>
+      <td><code class="language-plaintext highlighter-rouge">./configure --prefix=/usr</code></td>
+      <td><code class="language-plaintext highlighter-rouge">cmake -Bbuild -DCMAKE_INSTALL_PREFIX=/usr</code></td>
+    </tr>
+    <tr>
+      <td>指定安装路径</td>
+      <td><code class="language-plaintext highlighter-rouge">DESTDIR=XXX make install</code></td>
+      <td><code class="language-plaintext highlighter-rouge">DESTDIR=XXX cmake --install build</code></td>
+    </tr>
+    <tr>
+      <td>交叉编译</td>
+      <td><code class="language-plaintext highlighter-rouge">./configure --build=x86_64-pc-linux-gnu --host=aarch64-linux-android32</code></td>
+      <td><code class="language-plaintext highlighter-rouge">cmake -Bbuild -DCMAKE_TOOLCHAIN_FILE=cmake/android-ndk.cmake</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">autoheader</code></td>
+      <td><code class="language-plaintext highlighter-rouge">AC_CONFIG_HEADERS([config.h])</code></td>
+      <td><code class="language-plaintext highlighter-rouge">configure_file(config.h.in config.h)</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="language-plaintext highlighter-rouge">cmake/android-ndk.cmake</code> 参见笔者学习 <a href="https://github.com/ustc-ivclab/x264-dsp">C 构建</a> 练手的项目。</p>
+
+<h3 id="bazel"><a href="https://bazel.build/basics/build-systems"><code class="language-plaintext highlighter-rouge">bazel</code></a></h3>
+
+<p><code class="language-plaintext highlighter-rouge">bazel</code> 几乎是公认最强的构建系统——没有之一。 google 包括 android 在内的大部分软件都在使用。<code class="language-plaintext highlighter-rouge">bazel</code> 使用 <code class="language-plaintext highlighter-rouge">python</code> 做配置语言，甚至完全舍弃了 <code class="language-plaintext highlighter-rouge">Makefile</code> 。但 google 以外似乎很少使用，网传原因是<a href="https://zhuanlan.zhihu.com/p/112712537">“光使用 <code class="language-plaintext highlighter-rouge">bazel</code> 就需要一支 5 到 6 人的团队”</a>。</p>
+
+<h3 id="scons"><a href="https://github.com/SCons/scons"><code class="language-plaintext highlighter-rouge">scons</code></a></h3>
+
+<p><code class="language-plaintext highlighter-rouge">scons</code> 也使用 <code class="language-plaintext highlighter-rouge">python</code> 做配置语言。但除了它自己，笔者从未见过有开源项目使用过。可能是因为<a href="https://www.reddit.com/r/embedded/comments/q8foqe/scons_vs_cmake/">“速度比 <code class="language-plaintext highlighter-rouge">cmake</code> 慢”</a>。</p>
+
+<h2 id="总结">总结</h2>
+
+<p>除了 C/C++, 其实别的语言也有构建系统的概念，比如：</p>
+
+<h3 id="perl"><code class="language-plaintext highlighter-rouge">perl</code></h3>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">dzil build</code> 对应 <code class="language-plaintext highlighter-rouge">autoreconf</code>
+</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">perl Makefile.PL</code> 对应 <code class="language-plaintext highlighter-rouge">./configure</code>
+</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">make</code>, <code class="language-plaintext highlighter-rouge">make install</code><sup id="fnref:package"><a href="#fn:package" class="footnote" rel="footnote" role="doc-noteref">2</a></sup> 一模一样。</li>
+</ul>
+
+<h3 id="python"><code class="language-plaintext highlighter-rouge">python</code></h3>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">python -m build -s</code> 对应 <code class="language-plaintext highlighter-rouge">autoreconf</code>
+</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">python -m build -w</code> 对应 <code class="language-plaintext highlighter-rouge">./configure &amp;&amp; make</code>
+</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">python -m installer</code> 对应 <code class="language-plaintext highlighter-rouge">make install</code>
+</li>
+</ul>
+
+<h3 id="plaintexlatex"><code class="language-plaintext highlighter-rouge">plainTeX/LaTeX</code></h3>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">l3build tag</code> 对应 <code class="language-plaintext highlighter-rouge">autoreconf</code>
+</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">l3build ctan</code> 对应 <code class="language-plaintext highlighter-rouge">./configure &amp;&amp; make</code>
+</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">l3build install</code> 对应 <code class="language-plaintext highlighter-rouge">make install</code>
+</li>
+</ul>
+
+<p>所以，笔者个人认为了解 C/C++ 构建系统对学习其它语言也是有所裨益的。</p>
+
+<p>回到前面埋下的一个问题：用户必须要安装 <code class="language-plaintext highlighter-rouge">autoconf</code> 才能成功构建依赖 <code class="language-plaintext highlighter-rouge">autoconf</code> 的软件吗？答案是否：开发者只需 <code class="language-plaintext highlighter-rouge">autoreconf -i</code> ，然后打包压缩发布就行（这种包被称为软件分发包 <code class="language-plaintext highlighter-rouge">sdist</code> ），用户下载之后解压缩然后直接 <code class="language-plaintext highlighter-rouge">./configure &amp;&amp; make &amp;&amp; make install</code> ，不需要任何 <code class="language-plaintext highlighter-rouge">autotools</code>。如果以 <code class="language-plaintext highlighter-rouge">python</code> 为例介绍可能大家会更亲切，因为大家 <code class="language-plaintext highlighter-rouge">pip install</code> 时如果下载到了 <code class="language-plaintext highlighter-rouge">python -m build -w</code> 生成的 <code class="language-plaintext highlighter-rouge">wheel</code> 包，就可以直接安装，否则就会下载 <code class="language-plaintext highlighter-rouge">python -m build -s</code> 生成的 <code class="language-plaintext highlighter-rouge">sdist</code> 包构建后再安装。有些读者可能知道 <code class="language-plaintext highlighter-rouge">setup.py</code> 但 <code class="language-plaintext highlighter-rouge">setup.py</code> 不符合 <a href="https://peps.python.org/pep-0517/">PEP517</a> 标准已经被社区逐渐淘汰。这里介绍的 <code class="language-plaintext highlighter-rouge">python -m build</code> 是符合标准的。关于符合标准的 python 构建，可以参考笔者自己<a href="https://github.com/Freed-Wu/translate-shell/">学习 python 构建时写的项目</a>，不会单独再写文章介绍。笔者学习 <a href="https://github.com/ustc-ivclab/x264-dsp">C 构建 (autotools, cmake)</a>，<a href="https://github.com/Freed-Wu/Reply-Plugin-Prompt/">perl 构建</a> 和 <a href="https://github.com/Freed-Wu/njustthesis/">LaTeX 构建</a>写的项目也可参考，不过都只是学习时练手之作，不可和专业的开发者同日而语。</p>
+
+<p>最后，因为有些观点笔者没有亲身验证过（例如 <code class="language-plaintext highlighter-rouge">scons</code> 速度比 <code class="language-plaintext highlighter-rouge">cmake</code> 慢），只能确保给出观点的引用来源。是真是假，请读者自行甄别。最后，即使是笔者亲身验证后得出的观点，也有可能是因为知识的局限性得出错误，笔者只能尽力确保主观上不要犯错。</p>
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:msvc">
+      <p>毕竟 <code class="language-plaintext highlighter-rouge">MSVC</code> 是一个逼得 <code class="language-plaintext highlighter-rouge">ffmpeg</code> 写出 <a href="https://github.com/libav/c99-to-c89"><code class="language-plaintext highlighter-rouge">c99-to-c89</code></a> 的奇葩，出现任何问题都是毫不奇怪的<img class="emoji" title=":smile:" alt=":smile:" raw="😄" src="https://github.githubassets.com/images/icons/emoji/unicode/1f604.png" style="vertical-align: middle; display: inline; max-width: 1em; visibility: hidden;" onload="this.style.visibility='visible'" onerror="this.replaceWith(this.getAttribute('raw'))"> <a href="#fnref:msvc" class="reversefootnote" role="doc-backlink">↩</a></p>
+    </li>
+    <li id="fn:package">
+      <p>安装软件的指令，在包管理器出现之后才有 <code class="language-plaintext highlighter-rouge">apt install</code> 和 <code class="language-plaintext highlighter-rouge">pacman -S</code>，关于包管理器，后面可能会写一篇文章介绍。 <a href="#fnref:package" class="reversefootnote" role="doc-backlink">↩</a></p>
+    </li>
+  </ol>
+</div>
+
+<div class="reward">
+  <button id="rewardButton" disable="enable" onclick="toggle()">
+    如果这篇博客帮助到你，可以请我喝一杯奶茶~
+  </button>
+  <table id="rewardQRs">
+    <tr>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" alt="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" alt="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" alt="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" height="300pt"></td>
+    </tr>
+  </table>
+</div>
+<script src="/assets/js/valine.js"></script>
+
+    </article>
+    <input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+    <aside class="sidebar">
+      <div class="sidebar-item">
+        <div class="ih-item">
+          <a title="
+              Wu Zhenyu
+            ">
+            <img class="img" src="https://github.com/Freed-Wu.png" alt="img">
+            <div class="info">
+              <br>
+              <br>
+              A personal blog to record valuable and interesting things.
+            </div>
+          </a>
+        </div>
+        <iframe height="42" width="240" src="https://music.163.com/outchain/player?type=2&id=27646786&height=32"></iframe>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-nav-item" href="/">
+          <i class="fa-solid fa-home fa-fw"></i> Home
+        </a>
+        <a class="sidebar-nav-item" href="/tag">
+          <i class="fa-solid fa-tags fa-fw"></i> Tag
+        </a>
+        <a class="sidebar-nav-item" href="/feed.xml">
+          <i class="fa-solid fa-rss fa-fw"></i> RSS
+        </a>
+        <a class="sidebar-nav-item" href="/Freed-Wu">
+          <i class="fa-solid fa-comments fa-fw"></i> About Me
+        </a>
+        <a class="sidebar-nav-item" href="/jekyll-theme-freed">
+          <i class="fa-solid fa-code fa-fw"></i> About the Website
+        </a>
+        <a class="sidebar-nav-item" href="/2020/01/01/honour">
+          <i class="fa-solid fa-trophy fa-fw"></i> Honour
+        </a>
+      </nav>
+      <div class="sidebar-item">
+        <!-- https://github.com/christian-fei/Simple-Jekyll-Search#preparing-the-plugin -->
+        <input id="search-input" placeholder="Search posts">
+        <div id="results-container"></div>
+      </div>
+    </aside>
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+  </body>
+</html>

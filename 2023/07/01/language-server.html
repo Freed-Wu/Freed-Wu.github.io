@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>语言服务器简史 | wzy</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="语言服务器简史">
+<meta name="author" content="Wu Zhenyu">
+<meta property="og:locale" content="zh_CN">
+<meta name="description" content="A personal blog to record valuable and interesting things.">
+<meta property="og:description" content="A personal blog to record valuable and interesting things.">
+<link rel="canonical" href="https://freed-wu.github.io/2023/07/01/language-server.html">
+<meta property="og:url" content="https://freed-wu.github.io/2023/07/01/language-server.html">
+<meta property="og:site_name" content="wzy">
+<meta property="og:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2023-07-01T00:00:00+00:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="twitter:title" content="语言服务器简史">
+<meta name="twitter:site" content="@FreedWu">
+<meta name="twitter:creator" content="@Wu Zhenyu">
+<meta property="fb:admins" content="100057378480375">
+<meta property="article:publisher" content="100057378480375">
+<meta property="fb:app_id" content="100057378480375">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Wu Zhenyu","url":"https://Freed-Wu.github.io"},"dateModified":"2023-07-01T00:00:00+00:00","datePublished":"2023-07-01T00:00:00+00:00","description":"A personal blog to record valuable and interesting things.","headline":"语言服务器简史","image":"https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://freed-wu.github.io/2023/07/01/language-server.html"},"url":"https://freed-wu.github.io/2023/07/01/language-server.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="icon" href="https://github.com/Freed-Wu.png">
+    <link rel="apple-touch-icon" href="https://github.com/Freed-Wu.png">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/poole.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/lanyon.min.css">
+    <link rel="stylesheet" href="//jekyllrb.com/css/screen.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/sindresorhus/github-markdown-css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <script async src="https://kit.fontawesome.com/556f02e0e5.js"></script>
+    <script async src="//cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget/autoload.min.js"></script>
+    <!-- https://github.com/christian-fei/Simple-Jekyll-Search -->
+    <script async src="//cdn.jsdelivr.net/npm/simple-jekyll-search/dest/simple-jekyll-search.min.js"></script>
+    <script async src="/assets/js/search.js"></script>
+  <script>MathJax={"tex":{"inlineMath":[["$","$"],["\\(","\\)"]],"displayMath":[["$$","$$"],["\\[","\\]"]]},"svg":{"fontCache":"global"}}</script><script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+  <!-- https://github.com/poole/lanyon -->
+  <body class="theme-base-08 layout-reverse sidebar-overlay">
+    <article class="container">
+      <header>
+        <h1>语言服务器简史</h1>
+      </header>
+      <script src="/assets/js/qr.js"></script>
+<small class="post-date">
+  <i class="fa-solid fa-calendar-day"></i> 01 Jul 2023
+  <i class="fa-solid fa-file-word"></i> 6575 words
+  <i class="fa-solid fa-coffee"></i> 22 minutes
+  <span id="/2023/07/01/language-server.html" class="leancloud-visitors" data-flag-title="语言服务器简史">
+    <i class="fa-regular fa-eye"></i>
+    <span class="leancloud-visitors-count"></span>
+  </span>
+  <a rel="license" href="//creativecommons.org/licenses/by-sa/4.0/deed.zh">
+    <i class="fa-brands fa-creative-commons"></i> BY-SA 4.0
+  </a>
+  <br>
+  <a href="/tag/develop"> <i class="fa-solid fa-tag"></i> develop </a>
+  <a href="/tag/lsp"> <i class="fa-solid fa-tag"></i> lsp </a>
+</small>
+<ul>
+<li><a href="#%E7%BC%96%E8%BE%91%E5%99%A8%E5%92%8C%E9%9B%86%E6%88%90%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83ide">编辑器和集成开发环境（IDE）</a></li>
+<li>
+<a href="#%E8%AF%AD%E8%A8%80%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8D%8F%E8%AE%AElsp%E9%97%AE%E4%B8%96%E5%89%8D%E7%9A%84%E7%BC%96%E8%BE%91%E5%99%A8">语言服务器协议（LSP）问世前的编辑器</a><ul>
+<li><a href="#%E6%94%AF%E6%8C%81%E5%A4%9A%E7%A7%8D%E8%AF%AD%E8%A8%80%E7%9A%84%E5%B7%A5%E5%85%B7%E5%AE%8C%E6%88%90%E5%8A%9F%E8%83%BD%E5%90%8E%E9%80%80%E5%87%BA">支持多种语言的工具，完成功能后退出</a></li>
+<li><a href="#%E6%94%AF%E6%8C%81%E5%A4%9A%E7%A7%8D%E8%AF%AD%E8%A8%80%E7%9A%84%E5%B7%A5%E5%85%B7%E4%BB%A5%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%BD%A2%E5%BC%8F%E5%9C%A8%E5%90%8E%E5%8F%B0%E8%BF%90%E8%A1%8C%E7%AD%89%E5%BE%85%E4%B8%8E%E7%BC%96%E8%BE%91%E5%99%A8%E7%9A%84%E5%86%8D%E6%AC%A1%E4%BA%A4%E4%BA%92">支持多种语言的工具，以守护进程的形式在后台运行等待与编辑器的再次交互</a></li>
+</ul>
+</li>
+<li>
+<a href="#%E8%AF%AD%E8%A8%80%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8D%8F%E8%AE%AE">语言服务器协议</a><ul>
+<li><a href="#%E6%96%87%E6%A1%A3%E6%82%AC%E5%81%9C">文档悬停</a></li>
+<li><a href="#%E4%BB%A3%E7%A0%81%E8%A1%A5%E5%85%A8">代码补全</a></li>
+<li><a href="#%E4%BB%A3%E7%A0%81%E6%A0%BC%E5%BC%8F%E5%8C%96">代码格式化</a></li>
+<li><a href="#%E4%BB%A3%E7%A0%81%E8%AF%8A%E6%96%AD">代码诊断</a></li>
+<li><a href="#%E5%AE%9A%E4%B9%89%E5%A3%B0%E6%98%8E%E5%BC%95%E7%94%A8%E8%B7%B3%E8%BD%AC">定义、声明、引用跳转</a></li>
+<li><a href="#%E5%91%BD%E4%BB%A4">命令</a></li>
+<li><a href="#%E4%BB%A3%E7%A0%81%E6%93%8D%E4%BD%9C-code-action">代码操作 (code action)</a></li>
+</ul>
+</li>
+<li>
+<a href="#%E8%AF%AD%E8%A8%80%E5%AE%A2%E6%88%B7%E7%AB%AF">语言客户端</a><ul>
+<li>
+<a href="#%E6%9C%AC%E8%BA%AB%E4%B8%8D%E6%94%AF%E6%8C%81%E8%AF%AD%E8%A8%80%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8D%8F%E8%AE%AE%E4%BD%86%E5%8F%AF%E4%BB%A5%E9%80%9A%E8%BF%87%E8%AF%AD%E8%A8%80%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8D%8F%E8%AE%AE%E6%8F%92%E4%BB%B6%E6%88%90%E4%B8%BA%E8%AF%AD%E8%A8%80%E5%AE%A2%E6%88%B7%E7%AB%AF">本身不支持语言服务器协议，但可以通过语言服务器协议插件成为语言客户端</a><ul>
+<li>
+<a href="#cocnvim"></a><a href="https://github.com/neoclide/coc.nvim">coc.nvim</a>
+</li>
+<li>
+<a href="#vim-lsp"></a><a href="https://github.com/prabirshrestha/vim-lsp">vim-lsp</a>
+</li>
+</ul>
+</li>
+<li><a href="#%E5%8E%9F%E7%94%9F%E8%AF%AD%E8%A8%80%E5%AE%A2%E6%88%B7%E7%AB%AF">原生语言客户端</a></li>
+</ul>
+</li>
+<li><a href="#%E8%AF%AD%E8%A8%80%E6%9C%8D%E5%8A%A1%E5%99%A8">语言服务器</a></li>
+<li>
+<a href="#%E8%AF%AD%E8%A8%80%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8D%8F%E8%AE%AE%E4%B9%8B%E5%A4%96">语言服务器协议之外</a><ul>
+<li>
+<a href="#%E8%AF%AD%E6%B3%95%E9%AB%98%E4%BA%AE">语法高亮</a><ul>
+<li><a href="#vim-syn">Vim Syn</a></li>
+<li><a href="#tmlanguage">tmLanguage</a></li>
+<li><a href="#sublime-syntax">sublime-syntax</a></li>
+<li>
+<a href="#treesitter"></a><a href="https://github.com/tree-sitter/tree-sitter">Treesitter</a>
+</li>
+</ul>
+</li>
+<li><a href="#%E6%9F%A5%E6%89%BE%E5%88%97%E8%A1%A8">查找列表</a></li>
+<li><a href="#%E5%85%B6%E4%BB%96">其他</a></li>
+</ul>
+</li>
+</ul> <!-- markdownlint-disable MD010 -->
+
+<p>让我们来稍稍看一下代码编辑器“引擎盖下的秘密”。</p>
+
+<p><a href="https://github.com/neoclide/coc.nvim"><img src="https://camo.githubusercontent.com/ea345e71d256e0bda72ec57d04a4d45a6cba21a3703486049a5d312a9d662383/68747470733a2f2f616c66732e6368696775612e636e2f6469616e796f752f646174612f706c6174666f726d2f64656661756c742f32303232303830312f323032322d30382d303125323030322d31342d30332e323032322d30382d303125323030325f31355f31362e676966" alt="coc.nvim"></a></p>
+
+<h2 id="编辑器和集成开发环境ide">编辑器和集成开发环境（IDE）</h2>
+
+<blockquote>
+  <p>享受有趣的命令，带着屏幕上闪烁的一切。</p>
+
+  <p>– Bill Joy (vi 之父)</p>
+</blockquote>
+
+<p>与<a href="https://en.wikipedia.org/wiki/Editor_war">编辑器圣战</a>（黑客文化和自由软件社区争论哪一种代码编辑器更好）相对的，
+编辑器和集成开发环境的选择也常常是争论的焦点。用户要么：</p>
+
+<ul>
+  <li>为每一种语言安装一个集成了编辑器、编译器（或者解释器， <a href="https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop">REPL</a> ）、调试器、构建系统的集成开发环境
+    <ul>
+      <li>开箱即用</li>
+      <li>同时忍受多个集成开发环境带来的快捷键、交互界面不一致带来的用户体验问题</li>
+    </ul>
+  </li>
+  <li>为所有语言选择同一个编辑器
+    <ul>
+      <li>让用户编写任何语言时都可以享受相同、熟悉的用户界面并不需要记忆新的快捷键</li>
+      <li>同时面对如何配置该编辑器以让每一种语言的开发工具都能支持该编辑器的配置难题</li>
+    </ul>
+  </li>
+</ul>
+
+<p>目前大多数用户普遍的共识是：</p>
+
+<ul>
+  <li>对于萌新，集成开发环境可以省去配置的麻烦，前提是买个容量大点的硬盘（笔者在学会使用编辑器之前电脑最多同时装过十多个不同的集成开发环境，有些非常占用空间）</li>
+  <li>对于有配置编辑器经验的开发者，答案不言而喻，毕竟谁也不想记忆十多个不同的集成开发环境的快捷键<img class="emoji" title=":smile:" alt=":smile:" raw="😄" src="https://github.githubassets.com/images/icons/emoji/unicode/1f604.png" style="vertical-align: middle; display: inline; max-width: 1em; visibility: hidden;" onload="this.style.visibility='visible'" onerror="this.replaceWith(this.getAttribute('raw'))">
+</li>
+</ul>
+
+<p>那么问题来了：</p>
+
+<p>每一种语言的开发工具（不光是编辑器、解释器、调试器、构建系统，还包括语法高亮、类型标注、注释自动生成等工具）是怎么支持编辑器的？
+为何用户用编辑器打开一个文件就能看到语法高亮？为何用户执行一个快捷键就能跳转到函数的定义？为何用户写了有错或虽然没有错但不太好的代码会有错误或警告的悬停？
+为何用户能得到代码补全？在这一切的背后到底隐藏了什么秘密？</p>
+
+<h2 id="语言服务器协议lsp问世前的编辑器">语言服务器协议（LSP）问世前的编辑器</h2>
+
+<p>一般的，编辑器允许用户通过编写插件的形式获得对开发工具的支持，例如：</p>
+
+<ul>
+  <li>(neo)vim: 允许用户编写 vim script/python/ruby/perl/lua/js 等多种语言编写插件。这是因为有些 vim script 实现不了的功能必须依赖其他语言，比如某个插件必须用到 python 模块，那就干脆 <code class="language-plaintext highlighter-rouge">import vim</code> 直接在 python 里写 vim 插件算了</li>
+  <li>emacs: emacs lisp 是专门用于开发插件的 Lisp 方言</li>
+  <li>eclipse: eclipse 插件都是 java 的包</li>
+  <li>sublime text: python</li>
+  <li>Atom/VSCode: js</li>
+</ul>
+
+<p>有 $n$ 种编辑器和 $m$ 种语言的开发工具，那么我们要开发 $n \times m$ 个插件。</p>
+
+<h3 id="支持多种语言的工具完成功能后退出">支持多种语言的工具，完成功能后退出</h3>
+
+<p>出于方便，开始有对 m 种语言提供某一功能的统一工具出现。</p>
+
+<ul>
+  <li>
+<a href="https://ctags.sourceforge.net">ctags</a>: 提供了对 41 种语言的变量、函数定义跳转功能的支持。不需要 $41 n$ 个插件，只需要 $n$ 个！</li>
+  <li>
+<a href="https://www.gnu.org/software/global">gtags</a>: 类似</li>
+  <li>
+<a href="https://cscope.sourceforge.net">cscope</a>: 不光定义跳转，也支持调用跳转。将纯文本格式的 tags 缓存替换成了二进制缓存。</li>
+  <li>
+<a href="https://www.gnu.org/s/global">global</a>: 类似</li>
+</ul>
+
+<p>它们的原理是：</p>
+
+<p>扫描当前目录下所有支持语言的文件，生成缓存文件（例如 tags）记录变量、函数定义的位置信息，查找这些信息即可。当然生成缓存文件其实很慢，这考验编辑器插件的开发者能不能正确编写出异步的插件。如果只是简单的同步插件，用户光启动编辑器就要等半天……</p>
+
+<pre><code class="language-tags">!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	Development	//
+main	main.c	/^int main(int argc, char *argv[])$/;"	f
+</code></pre>
+
+<p>类似也有支持多种不同语言的代码格式化工具 <a href="https://gitlab.com/saalen/astyle">astyle</a>,
+<a href="https://github.com/prettier/prettier">prettier</a> 等等，动机同上。</p>
+
+<h3 id="支持多种语言的工具以守护进程的形式在后台运行等待与编辑器的再次交互">支持多种语言的工具，以守护进程的形式在后台运行等待与编辑器的再次交互</h3>
+
+<p>这其实已经是语言服务器的雏形了。
+<a href="https://github.com/ycm-core/YouCompleteMe">YouCompleteMe</a> 提供了对多种语言的代码补全支持。
+YouCompleteMe 没有流行开来，不过不必惋惜因为我们马上就要介绍语言服务器了。</p>
+
+<h2 id="语言服务器协议">语言服务器协议</h2>
+
+<blockquote>
+  <p>计算机科学领域的任何问题都可以通过增加一个间接的中间层来解决。</p>
+
+  <p>– David Wheeler （剑桥大学计算机科学教授）</p>
+</blockquote>
+
+<p>语言服务器协议成功将 $n$ 种编辑器和 $m$ 种语言的开发工具的 $n \times m$ 个插件开发难题简化为开发 $n$ 个语言客户端和 $m$ 个语言服务器的 $n + m$ 个软件通过 LSP 通信的问题。</p>
+
+<p><img src="https://camo.githubusercontent.com/2063680c4cbe69fe79f3d01400384659acadf8a6e08c9a5649ee61109410ec08/68747470733a2f2f636f64652e76697375616c73747564696f2e636f6d2f6173736574732f6170692f6c616e67756167652d657874656e73696f6e732f6c616e67756167652d7365727665722d657874656e73696f6e2d67756964652f6c73702d6c616e6775616765732d656469746f72732e706e67" alt="compare"></p>
+
+<p>一图胜千言：</p>
+
+<p><a href="https://learn.microsoft.com/zh-cn/visualstudio/extensibility/language-server-protocol"><img src="https://learn.microsoft.com/zh-cn/visualstudio/extensibility/media/lsp-flow-diagram.png" alt="LSP"></a></p>
+
+<p>语言服务器协议通常提供以下功能：（完整功能见<a href="https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification">官网</a>）</p>
+
+<h3 id="文档悬停">文档悬停</h3>
+
+<ul>
+  <li>显示关键词的文档。</li>
+  <li>函数、变量的定义、注释</li>
+  <li>光标下单词的翻译</li>
+</ul>
+
+<p><a href="https://github.com/Freed-Wu/requirements-language-server"><img src="https://user-images.githubusercontent.com/32936898/246655827-0e74a423-b07a-459a-8fb4-10789f245265.jpg" alt="hover"></a></p>
+
+<p><a href="https://github.com/voldikss/coc-extensions/tree/main/packages/coc-translator"><img src="https://user-images.githubusercontent.com/20282795/103474126-b8e31b00-4ddb-11eb-916b-2e2d7b2b29e0.png" alt="coc-translator"></a></p>
+
+<h3 id="代码补全">代码补全</h3>
+
+<p>根据上下文和用户输入的前几个字符（例如 <code class="language-plaintext highlighter-rouge">pr</code> ）预测用户的完整输入（例如 <code class="language-plaintext highlighter-rouge">printf()</code>），并按优先级排好，预测结果包含预测的类型（例如关键词、函数、变量会有一个不同的标记，例如 k, f, v）。可以显示对应的文档悬停。</p>
+
+<p>补全源：补全的来源，包括：</p>
+
+<ul>
+  <li>关键词、函数、变量等某种语言独有的补全源</li>
+  <li>词典、 emoji 表情、文件名等等</li>
+  <li>输入法。对！用户输入 <code class="language-plaintext highlighter-rouge">nihao</code> 补全 <code class="language-plaintext highlighter-rouge">你好</code>！</li>
+  <li>代码片段。例如：
+    <ul>
+      <li>输入 inc 补全为 <code class="language-plaintext highlighter-rouge">#include &lt;|&gt;</code>, <code class="language-plaintext highlighter-rouge">|</code> 是光标</li>
+      <li>输入 <code class="language-plaintext highlighter-rouge">p</code>, 补全为 <code class="language-plaintext highlighter-rouge">&lt;p&gt;|&lt;/p&gt;</code>
+</li>
+    </ul>
+  </li>
+  <li>预测。通常是机器学习模型预测的结果：
+    <ul>
+      <li><a href="https://app.tabnine.com">TabNine</a></li>
+      <li><a href="https://github.com/features/copilot">copilot</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p><a href="https://github.com/Freed-Wu/requirements-language-server"><img src="https://user-images.githubusercontent.com/32936898/246669412-d3a258ef-3d99-4666-a015-cc516bdb58fd.jpg" alt="completion"></a></p>
+
+<p><a href="https://github.com/tonyfettes/coc-rime"><img src="https://user-images.githubusercontent.com/29998228/111900984-6c20ef00-8a70-11eb-9920-4d9da5102a48.gif" alt="IME"></a></p>
+
+<p><a href="https://github.com/neoclide/coc-snippets"><img src="https://user-images.githubusercontent.com/251450/54837017-62891300-4d00-11e9-9e53-49742a1a33f2.gif" alt="snippet"></a></p>
+
+<h3 id="代码格式化">代码格式化</h3>
+
+<ul>
+  <li>部分格式化：格式化文档中的某一个给定范围，其余部分不变。</li>
+  <li>全文格式化</li>
+</ul>
+
+<h3 id="代码诊断">代码诊断</h3>
+
+<p>通常是某些事件后自动触发（例如文件打开（didOpen），文件修改（didChange））。显示提示、信息、警告、错误 4 个等级的诊断。
+通常可以有：</p>
+
+<ul>
+  <li>类型检查：函数定义是 <code class="language-plaintext highlighter-rouge">def echo_input(input: str) -&gt; str:</code>, 结果却 <code class="language-plaintext highlighter-rouge">return None</code>
+</li>
+  <li>格式：<code class="language-plaintext highlighter-rouge">echo_input( input)</code> 应该是 <code class="language-plaintext highlighter-rouge">echo_input(input)</code>
+</li>
+  <li>未定义的变量，未使用的变量</li>
+  <li>拼写：怀疑是错误的拼写，或者已经被确认一定是错误的拼写，例如 <a href="https://github.com/codespell-project/codespell">codespell</a> 就是一个专门收集拼写错误的开源项目</li>
+  <li>不合适的语法，像 <a href="https://alexjs.com">alexjs</a> 连可以引起性别歧视的单词都会给你警告……</li>
+  <li>编译的警告和报错：下图正确的包名应该是 autopep8</li>
+</ul>
+
+<p><a href="https://github.com/Freed-Wu/requirements-language-server"><img src="https://user-images.githubusercontent.com/32936898/194537147-bf4b4528-2594-46df-b05c-56c38c419920.png" alt="diagnostic"></a></p>
+
+<h3 id="定义声明引用跳转">定义、声明、引用跳转</h3>
+
+<p>可以用正则表达式查找，但一般的做法还是解析抽象语法树。</p>
+
+<p>注意：有些语言存在头文件，定义、声明可以不在一个位置。</p>
+
+<h3 id="命令">命令</h3>
+
+<p>执行某个命令。可以是同步、异步，也可以开子线程。通常是某些语言专属的功能。例如：</p>
+
+<ul>
+  <li>跳转到某个 C 文件对应的头文件</li>
+  <li>运行某个代码块并返回结果，常见于 markdown</li>
+  <li>验证 toml/json/yaml 是否正确</li>
+</ul>
+
+<p>基本上不同语言很难普遍存在的功能都会放在这里。</p>
+
+<p><img src="https://github.com/Freed-Wu/requirements-language-server/assets/32936898/9f993da4-f195-4d04-aa43-82c312097a45" alt="command"></p>
+
+<h3 id="代码操作-code-action">代码操作 (code action)</h3>
+
+<p>笔者目前不是很清楚，但似乎是某种给定范围的命令，类似 vim 带有范围的命令。</p>
+
+<ul>
+  <li>将某个范围里的某个被怀疑有错的单词修正或加入到字典，例如下图。</li>
+  <li>从某个范围的代码的类型标注自动生成 docstring 模板</li>
+</ul>
+
+<p><a href="https://github.com/iamcco/coc-spell-checker"><img src="https://github.com/Freed-Wu/requirements-language-server/assets/32936898/eb3a3fe0-5cbd-4de8-8bb8-dab297e2030a" alt="action"></a></p>
+
+<h2 id="语言客户端">语言客户端</h2>
+
+<p>语言客户端即支持语言服务器协议的编辑器。分为 2 种：</p>
+
+<h3 id="本身不支持语言服务器协议但可以通过语言服务器协议插件成为语言客户端">本身不支持语言服务器协议，但可以通过语言服务器协议插件成为语言客户端</h3>
+
+<p>以 vim 为例：</p>
+
+<h4 id="cocnvim"><a href="https://github.com/neoclide/coc.nvim">coc.nvim</a></h4>
+
+<p>这应该是 Vim 最有名的 LSP 插件。严格来说它不仅是语言服务器，还提供了一套用 js 编写 vim 插件的框架，或将 VSCode 插件移植到 Vim 的一套相仿的 API 。</p>
+
+<p>可以通过修改 <code class="language-plaintext highlighter-rouge">coc-settings.json</code> 使能某个语言服务器，或者为某个语言服务器创建 Coc 插件来使能该语言服务器。</p>
+
+<h4 id="vim-lsp"><a href="https://github.com/prabirshrestha/vim-lsp">vim-lsp</a></h4>
+
+<p>vim script 在很久之前不支持异步，所以在此前有相当多的 vim 的 LSP 插件都只能用别的语言编写，这不可避免的引入了依赖项。
+所以这个用纯 vim script 实现的异步 LSP 插件值得一提。</p>
+
+<h3 id="原生语言客户端">原生语言客户端</h3>
+
+<p>注意，即便原生支持 LSP ，也可以有插件简化使能语言服务器的配置。</p>
+
+<ul>
+  <li><a href="https://neovim.io">Neovim</a></li>
+  <li><a href="https://www.gnu.org/software/emacs">Emacs</a></li>
+  <li><a href="https://helix-editor.com/">Helix</a></li>
+  <li>
+<a href="https://code.visualstudio.com">VSCode</a>: 必须要为每一个语言服务器创建一个插件（类似 coc.nvim 创建的插件）。</li>
+</ul>
+
+<p>配置方法参见<a href="https://termux-language-server.readthedocs.io/en/latest/resources/configure.html">文档</a>。</p>
+
+<h2 id="语言服务器">语言服务器</h2>
+
+<p>语言服务器通常可以分为通用语言服务器和专用语言服务器：</p>
+
+<ul>
+  <li>通用语言服务器：支持多种语言。
+    <ul>
+      <li>通过配置。例如：
+        <ul>
+          <li>
+<a href="https://github.com/iamcco/diagnostic-languageserver">diagnostic-languageserver</a>: 通过修改一个 json 来支持多个语言的诊断和格式化。在语言服务器问世之前有很多语法检查工具和代码格式化工具，可以通过配置通过命令行调用它们从而为一个通用语言服务器提供对某种语言的支持。</li>
+          <li>
+<a href="https://github.com/mattn/efm-langserver">efm-langserver</a>: 最早的通用语言服务器</li>
+        </ul>
+      </li>
+      <li>通过编程来实现一种专用语言服务器，或者叫语言服务器源代码开发工具 <a href="https://microsoft.github.io/language-server-protocol/implementors/sdks">SDK</a> 。例如：
+        <ul>
+          <li>
+<a href="https://github.com/microsoft/vscode-languageserver-node">vscode-languageserver-node</a>: 名字上带有 VSCode ，但实际上支持所有语言客户端</li>
+          <li>
+<a href="https://github.com/openlawlibrary/pygls">pygls</a>: 通过继承一个通用的类再实现具体的功能（补全、文档悬停等）</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>专用语言服务器：支持某一种语言。官网有个<a href="https://microsoft.github.io/language-server-protocol/implementors/servers">列表</a>。</li>
+</ul>
+
+<p>笔者自己在学习中也基于 LSP SDK 动手实现了一些语言服务器：</p>
+
+<ul>
+  <li>
+<a href="https://github.com/neomutt/mutt-language-server">mutt-language-server</a>: (neo)muttrc</li>
+  <li>
+<a href="https://github.com/termux/termux-language-server">termux-language-server</a>:
+    <ul>
+      <li>Android termux <code class="language-plaintext highlighter-rouge">build.sh</code>
+</li>
+      <li>ArchLinux/Windows Msys2 <code class="language-plaintext highlighter-rouge">PKGBUILD</code>
+</li>
+      <li>Gentoo portage <code class="language-plaintext highlighter-rouge">ebuild</code>
+</li>
+    </ul>
+  </li>
+  <li>
+<a href="https://github.com/Freed-Wu/requirements-language-server">requirements-language-server</a>: python pip <code class="language-plaintext highlighter-rouge">requirements.txt</code>
+</li>
+  <li>
+<a href="https://github.com/Freed-Wu/autotools-language-server">autotools-language-server</a>: GNU autotools 。 嗯，不过笔者已经决定以后都用 CMake 了。 CMake 用户可以用 <a href="https://github.com/regen100/cmake-language-server">cmake-language-server</a>。</li>
+  <li>
+<a href="https://github.com/Freed-Wu/bitbake-language-server">bitbake-language-server</a>: openembedded bitbake 。某个嵌入式 Linux 发行版使用的构建系统。笔者正被老师要求把模型部署到这个嵌入式平台的某个项目整得焦头烂额……</li>
+  <li>
+<a href="https://github.com/Freed-Wu/expect-language-server">expect-language-server</a>: expect’s tcl script</li>
+  <li>
+<a href="https://github.com/Freed-Wu/xilinx-language-server">xilinx-language-server</a>: xilinx vivado/vitis’s tcl script</li>
+  <li>
+<a href="https://github.com/Freed-Wu/zathura-language-server">zathura-language-server</a>: zathurarc</li>
+  <li>
+<a href="https://github.com/Freed-Wu/sublime-syntax-language-server">sublime-syntax-language-server</a>: sublime text/bat sublime-syntax</li>
+</ul>
+
+<h2 id="语言服务器协议之外">语言服务器协议之外</h2>
+
+<p>并不是所有编辑器需要的功能都被语言服务器协议囊括在内了。</p>
+
+<h3 id="语法高亮">语法高亮</h3>
+
+<h4 id="vim-syn">Vim Syn</h4>
+
+<p>Vim 原生是通过 vim script 的 syntax 和 highlight 2 个关键词来实现语法高亮的。比如：</p>
+
+<div class="language-vim highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">syn</span> keyword requirementsKeyword implementation_name implementation_version os_name platform_machine platform_release platform_system platform_version python_full_version platform_python_implementation python_version sys_platform contained
+<span class="k">syn</span> <span class="k">match</span> requirementsPackageName <span class="s2">"\v^([a-zA-Z0-9][a-zA-Z0-9\-_\.]*[a-zA-Z0-9])"</span>
+<span class="k">syn</span> <span class="k">match</span> requirementsVersion <span class="s2">"\v\d+[a-zA-Z0-9\.\-\*]*"</span>
+<span class="c">" ...</span>
+
+<span class="k">hi</span> <span class="k">def</span> link requirementsKeyword Keyword
+<span class="k">hi</span> <span class="k">def</span> link requirementsPackageName Identifier
+<span class="k">hi</span> <span class="k">def</span> link requirementsVersion Number
+<span class="c">" ...</span>
+</code></pre></div></div>
+
+<p>再由 colorscheme 插件定义 Keyword, Identifier 到底应该是什么样式。用户也可以通过重新 <code class="language-plaintext highlighter-rouge">highlight default link</code> 将特定于某一种语言的高亮组高亮到其他高亮组。</p>
+
+<p>Vim 社区也有<a href="https://github.com/vim/vim/issues/9087">讨论到底要不要支持 Vim Syn 以外的语法高亮方式</a>。</p>
+
+<h4 id="tmlanguage">tmLanguage</h4>
+
+<p><a href="https://macromates.com">TextMate</a> 使用的一种描述语法高亮的 XML ，后被 VSCode 等广泛采用。但编写 XML 实在是太不友好了！</p>
+
+<h4 id="sublime-syntax">sublime-syntax</h4>
+
+<p>Sublime 使用的一种描述语法高亮的 YAML ，语法与 tmLanguage 兼容。后被 <a href="https://github.com/sharkdp/bat">bat</a> 采用。</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">name</span><span class="pi">:</span> <span class="s">Requirements.txt</span>
+<span class="na">scope</span><span class="pi">:</span> <span class="s">source.requirements-txt</span>
+<span class="na">contexts</span><span class="pi">:</span>
+  <span class="na">main</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">match</span><span class="pi">:</span> <span class="s">(?i)\d+[\da-z\-_\.\*]*</span>
+      <span class="na">scope</span><span class="pi">:</span> <span class="s">constant.other.version-control.requirements-txt</span>
+    <span class="pi">-</span> <span class="na">match</span><span class="pi">:</span> <span class="s">(?i)^[a-z\d_\-\.]*[a-z\d]</span>
+      <span class="na">scope</span><span class="pi">:</span> <span class="s">variable.parameter.package-name.requirements-txt</span>
+    <span class="c1"># ...</span>
+</code></pre></div></div>
+
+<h4 id="treesitter"><a href="https://github.com/tree-sitter/tree-sitter">Treesitter</a></h4>
+
+<p>是目前唯一支持增量式语法高亮的引擎：用户修改文本后只需要发送改动的部分将可以计算出如何从修改前的语法高亮得到修改后的语法高亮，不需要将完整的文本重新计算语法高亮。卖点就是性能。不过实现难度很大，像之前的语法高亮引擎要支持某种新语言只会正则表达式的开发者需要编写一个 vim 脚本或 XML/YAML 即可，而 treesitter 需要创建 1 个二进制程序来解析文本生成一个抽象语法树——这也带来了分发上的难题。而且实现难度很大也导致来很多语言的 treesittier 实现有很多 bug 。</p>
+
+<ul>
+  <li>Neovim 已经原生支持 treesittier 。笔者目前观测到的错误的语法高亮似乎都可以通过禁用 treesittier 来消除<img class="emoji" title=":smile:" alt=":smile:" raw="😄" src="https://github.githubassets.com/images/icons/emoji/unicode/1f604.png" style="vertical-align: middle; display: inline; max-width: 1em; visibility: hidden;" onload="this.style.visibility='visible'" onerror="this.replaceWith(this.getAttribute('raw'))">所以编写 treesittier 插件看起来真的很难呀！</li>
+  <li>VSCode 有使用 treesittier 的<a href="https://github.com/georgewfraser/vscode-tree-sitter">插件</a>。</li>
+  <li>Vim 社区目前还在<a href="https://github.com/vim/vim/issues/9087">讨论到底要不要支持</a>。</li>
+</ul>
+
+<h3 id="查找列表">查找列表</h3>
+
+<p><a href="https://github.com/Yggdroot/LeaderF"><img src="https://raw.githubusercontent.com/Yggdroot/Images/master/leaderf/leaderf_popup.gif" alt="leaderf"></a></p>
+
+<p>尽管 Coc.nvim 和 VSCode 都有内置的查找列表功能，但它确实不属于 LSP：</p>
+
+<ul>
+  <li>quickfix: Vim 原生的列表窗口，通常配合 <code class="language-plaintext highlighter-rouge">compiler/*.vim</code> 使用，编译完后显示报错的信息在名为 quickfix 的特定窗口。不支持模糊匹配。</li>
+  <li>
+<a href="https://github.com/Yggdroot/LeaderF">leaderf</a>: python 实现，悬浮窗口相当惊艳。</li>
+  <li>coc-list: 悬浮窗口支持还是太难了<img class="emoji" title=":cry:" alt=":cry:" raw="😢" src="https://github.githubassets.com/images/icons/emoji/unicode/1f622.png" style="vertical-align: middle; display: inline; max-width: 1em; visibility: hidden;" onload="this.style.visibility='visible'" onerror="this.replaceWith(this.getAttribute('raw'))">
+</li>
+  <li>
+<a href="https://github.com/junegunn/fzf">fzf</a>: 专门用于模糊查找的软件，封装成编辑器插件即可。 Go 实现</li>
+  <li>
+<a href="https://github.com/lotabout/skim">skim</a>: fzf 的 rust 实现。命令行 API 基本兼容。</li>
+</ul>
+
+<h3 id="其他">其他</h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>tree an_example_vim_plugin
+ <span class="nb">.</span>
+├──  addon-info.json
+├──  autoload
+│  └──  requirements
+│     ├──  utils.vim
+│     └──  ...
+├──  compiler
+│  └──  pip_compile.vim
+├──  doc
+│  └──  requirements-vim.txt
+├──  ftdetect
+│  └──  requirements.vim
+├──  ftplugin
+│  └──  requirements.vim
+├──  LICENSE
+├──  README.md
+└──  syntax
+   └──  requirements.vim
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">indent/*.vim</code> 的缩进可以看成代码格式化的特例。 <code class="language-plaintext highlighter-rouge">compiler/*.vim</code> 可以看成代码诊断的特例。除去之后剩下：</p>
+
+<ul>
+  <li>文件类型识别：根据后缀名和文件内容识别文件类型。例如 vim 插件中的 <code class="language-plaintext highlighter-rouge">ftdetect/*.vim</code> 。</li>
+  <li>注释符：定义在 vim 插件中的 <code class="language-plaintext highlighter-rouge">ftplugin/*.vim</code> 。</li>
+  <li>代码折叠：定义在 vim 插件中的 <code class="language-plaintext highlighter-rouge">ftplugin/*.vim</code> 。现在 treesitter 有实验性支持。</li>
+  <li>文件对象：定义在 vim 插件中的 <code class="language-plaintext highlighter-rouge">ftplugin/*.vim</code> 。现在 treesitter 有实验性支持。例如：（以 Vim 快捷键为例）
+    <ul>
+      <li>当用户按快捷键 <code class="language-plaintext highlighter-rouge">daf</code> 删除 (delete) 一个函数时，范围是多大？不同语言的函数定义是不一样的。</li>
+      <li>当用户按快捷键 <code class="language-plaintext highlighter-rouge">y2al</code> 复制 (yank) 2 行 时，范围是多大？不用语言的续行符不一样。</li>
+    </ul>
+  </li>
+  <li>其他定义在 <code class="language-plaintext highlighter-rouge">ftplugin/*.vim</code> 的功能。</li>
+</ul>
+
+<div class="reward">
+  <button id="rewardButton" disable="enable" onclick="toggle()">
+    如果这篇博客帮助到你，可以请我喝一杯奶茶~
+  </button>
+  <table id="rewardQRs">
+    <tr>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" alt="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" alt="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" alt="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" height="300pt"></td>
+    </tr>
+  </table>
+</div>
+<script src="/assets/js/valine.js"></script>
+
+    </article>
+    <input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+    <aside class="sidebar">
+      <div class="sidebar-item">
+        <div class="ih-item">
+          <a title="
+              Wu Zhenyu
+            ">
+            <img class="img" src="https://github.com/Freed-Wu.png" alt="img">
+            <div class="info">
+              <br>
+              <br>
+              A personal blog to record valuable and interesting things.
+            </div>
+          </a>
+        </div>
+        <iframe height="42" width="240" src="https://music.163.com/outchain/player?type=2&id=27646786&height=32"></iframe>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-nav-item" href="/">
+          <i class="fa-solid fa-home fa-fw"></i> Home
+        </a>
+        <a class="sidebar-nav-item" href="/tag">
+          <i class="fa-solid fa-tags fa-fw"></i> Tag
+        </a>
+        <a class="sidebar-nav-item" href="/feed.xml">
+          <i class="fa-solid fa-rss fa-fw"></i> RSS
+        </a>
+        <a class="sidebar-nav-item" href="/Freed-Wu">
+          <i class="fa-solid fa-comments fa-fw"></i> About Me
+        </a>
+        <a class="sidebar-nav-item" href="/jekyll-theme-freed">
+          <i class="fa-solid fa-code fa-fw"></i> About the Website
+        </a>
+        <a class="sidebar-nav-item" href="/2020/01/01/honour">
+          <i class="fa-solid fa-trophy fa-fw"></i> Honour
+        </a>
+      </nav>
+      <div class="sidebar-item">
+        <!-- https://github.com/christian-fei/Simple-Jekyll-Search#preparing-the-plugin -->
+        <input id="search-input" placeholder="Search posts">
+        <div id="results-container"></div>
+      </div>
+    </aside>
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+  </body>
+</html>

@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>点文件 – 开发第一课 | wzy</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="点文件 – 开发第一课">
+<meta name="author" content="Wu Zhenyu">
+<meta property="og:locale" content="zh_CN">
+<meta name="description" content="在 github 上搜索 dotfiles 可以找到至少二十万的代码仓库。 甚至有人“暴论”点文件是学校没教的重要一课。 那么，什么是点文件呢？">
+<meta property="og:description" content="在 github 上搜索 dotfiles 可以找到至少二十万的代码仓库。 甚至有人“暴论”点文件是学校没教的重要一课。 那么，什么是点文件呢？">
+<link rel="canonical" href="https://freed-wu.github.io/2023/09/01/dotfiles.html">
+<meta property="og:url" content="https://freed-wu.github.io/2023/09/01/dotfiles.html">
+<meta property="og:site_name" content="wzy">
+<meta property="og:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2023-09-01T00:00:00+00:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="twitter:title" content="点文件 – 开发第一课">
+<meta name="twitter:site" content="@FreedWu">
+<meta name="twitter:creator" content="@Wu Zhenyu">
+<meta property="fb:admins" content="100057378480375">
+<meta property="article:publisher" content="100057378480375">
+<meta property="fb:app_id" content="100057378480375">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Wu Zhenyu","url":"https://Freed-Wu.github.io"},"dateModified":"2023-09-01T00:00:00+00:00","datePublished":"2023-09-01T00:00:00+00:00","description":"在 github 上搜索 dotfiles 可以找到至少二十万的代码仓库。 甚至有人“暴论”点文件是学校没教的重要一课。 那么，什么是点文件呢？","headline":"点文件 – 开发第一课","image":"https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://freed-wu.github.io/2023/09/01/dotfiles.html"},"url":"https://freed-wu.github.io/2023/09/01/dotfiles.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="icon" href="https://github.com/Freed-Wu.png">
+    <link rel="apple-touch-icon" href="https://github.com/Freed-Wu.png">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/poole.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/lanyon.min.css">
+    <link rel="stylesheet" href="//jekyllrb.com/css/screen.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/sindresorhus/github-markdown-css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <script async src="https://kit.fontawesome.com/556f02e0e5.js"></script>
+    <script async src="//cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget/autoload.min.js"></script>
+    <!-- https://github.com/christian-fei/Simple-Jekyll-Search -->
+    <script async src="//cdn.jsdelivr.net/npm/simple-jekyll-search/dest/simple-jekyll-search.min.js"></script>
+    <script async src="/assets/js/search.js"></script>
+  </head>
+  <!-- https://github.com/poole/lanyon -->
+  <body class="theme-base-08 layout-reverse sidebar-overlay">
+    <article class="container">
+      <header>
+        <h1>点文件 -- 开发第一课</h1>
+      </header>
+      <script src="/assets/js/qr.js"></script>
+<small class="post-date">
+  <i class="fa-solid fa-calendar-day"></i> 01 Sep 2023
+  <i class="fa-solid fa-file-word"></i> 6372 words
+  <i class="fa-solid fa-coffee"></i> 22 minutes
+  <span id="/2023/09/01/dotfiles.html" class="leancloud-visitors" data-flag-title="点文件 -- 开发第一课">
+    <i class="fa-regular fa-eye"></i>
+    <span class="leancloud-visitors-count"></span>
+  </span>
+  <a rel="license" href="//creativecommons.org/licenses/by-sa/4.0/deed.zh">
+    <i class="fa-brands fa-creative-commons"></i> BY-SA 4.0
+  </a>
+  <br>
+  <a href="/tag/develop"> <i class="fa-solid fa-tag"></i> develop </a>
+</small>
+<ul>
+<li><a href="#%E6%B3%A8%E5%86%8C%E8%A1%A8-vs-%E7%BA%AF%E6%96%87%E6%9C%AC%E6%A0%BC%E5%BC%8F%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">注册表 v.s. 纯文本格式配置文件</a></li>
+<li><a href="#%E4%BB%8E%E7%82%B9%E6%96%87%E4%BB%B6%E5%88%B0%E6%A0%87%E5%87%86%E5%8C%96">从点文件到标准化</a></li>
+<li><a href="#%E8%A2%AB%E7%82%B9%E6%96%87%E4%BB%B6%E9%85%8D%E7%BD%AE%E7%9A%84%E5%B8%B8%E8%A7%81%E8%BD%AF%E4%BB%B6%E7%B1%BB%E5%88%AB">被点文件配置的常见软件类别</a></li>
+<li>
+<a href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E9%9C%80%E8%A6%81%E9%85%8D%E7%BD%AE%E7%9A%84%E9%83%A8%E5%88%86">常见的需要配置的部分</a><ul>
+<li>
+<a href="#repl-%E4%B8%BB%E9%A2%98">REPL 主题</a><ul>
+<li><a href="#zsh">zsh</a></li>
+<li><a href="#bash">bash</a></li>
+<li><a href="#tcl">tcl</a></li>
+<li><a href="#python">python</a></li>
+<li><a href="#octave">octave</a></li>
+<li><a href="#perl">perl</a></li>
+<li><a href="#lua">lua</a></li>
+<li><a href="#translate-shell">translate-shell</a></li>
+<li><a href="#gdb">gdb</a></li>
+<li><a href="#lftp">lftp</a></li>
+</ul>
+</li>
+<li>
+<a href="#%E7%8A%B6%E6%80%81%E6%A0%8F">状态栏</a><ul>
+<li><a href="#neovim">(neo)vim</a></li>
+<li><a href="#tmux">tmux</a></li>
+</ul>
+</li>
+<li>
+<a href="#%E8%89%B2%E5%BD%A9%E9%AB%98%E4%BA%AE">色彩高亮</a><ul>
+<li><a href="#%E9%AB%98%E4%BA%AE%E4%BB%A3%E7%A0%81">高亮代码</a></li>
+<li><a href="#%E9%AB%98%E4%BA%AE%E5%91%BD%E4%BB%A4">高亮命令</a></li>
+<li><a href="#%E9%AB%98%E4%BA%AE%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%BE%93%E5%85%A5">高亮命令行输入</a></li>
+<li><a href="#%E9%AB%98%E4%BA%AE%E8%A1%A5%E5%85%A8">高亮补全</a></li>
+</ul>
+</li>
+<li><a href="#%E8%A1%A5%E5%85%A8">补全</a></li>
+<li><a href="#%E6%9D%82%E9%A1%B9">杂项</a></li>
+</ul>
+</li>
+<li><a href="#%E7%82%B9%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86">点文件管理</a></li>
+<li>
+<a href="#%E8%81%94%E5%8A%A8">联动</a><ul>
+<li><a href="#github-codespace">Github codespace</a></li>
+<li><a href="#docker">Docker</a></li>
+</ul>
+</li>
+</ul> <p>在 github 上搜索 dotfiles 可以<a href="https://github.com/search?q=dotfiles">找到至少二十万的代码仓库</a>。
+甚至有人“暴论”点文件是<a href="https://zhuanlan.zhihu.com/p/628687491">学校没教的重要一课</a>。
+那么，什么是点文件呢？</p>
+
+<h2 id="注册表-vs-纯文本格式配置文件">注册表 v.s. 纯文本格式配置文件</h2>
+
+<p>在 Unix 刚刚问世的时候，利用利用纯文本作为软件配置方式的思路就被定下来了。例如许多 POSIX 兼容的系统中会有一个目录 <code class="language-plaintext highlighter-rouge">/etc</code> （甚至 Windows 也有 <code class="language-plaintext highlighter-rouge">C:\Windows\System32\Drivers\etc</code>）用来存储纯文本格式配置文件 （ editable text configuration ）。在这之后 Windows 3.0 才引入了注册表，通过二进制文件的数据库来存储软件的配置，同时提供一个图形化用户界面的软件（注册表编辑器）来修改软件的配置。</p>
+
+<ul>
+  <li>纯文本格式配置文件
+    <ul>
+      <li>方便：可以使用任何文本编辑器直接编辑，并通过语言服务器对配置文件的编辑提供辅助，例如 json, yaml, toml 格式的配置文件可以使用 <a href="https://www.schemastore.org/json/">json schema</a> ， xml 格式的配置文件可以使用 <a href="https://en.wikipedia.org/wiki/XML_Schema_(W3C)">XML Schema Definition</a> 或 <a href="https://en.wikipedia.org/wiki/Document_type_definition">Document type definition</a>， python/lua/perl 等脚本语言有专门的语言服务器。</li>
+      <li>可以添加注释说明某些修改的原因，方便后期维护</li>
+      <li>可以使用 git 备份</li>
+      <li>比数据库慢</li>
+    </ul>
+  </li>
+  <li>注册表
+    <ul>
+      <li>必须使用专门的软件进行编辑。例如：
+        <ul>
+          <li>Windows 的 <code class="language-plaintext highlighter-rouge">regedit</code>
+</li>
+          <li>Gnome 的 <code class="language-plaintext highlighter-rouge">dconf</code>
+</li>
+          <li>Xfce 的 <code class="language-plaintext highlighter-rouge">xfconf</code>
+</li>
+        </ul>
+      </li>
+      <li>不可以添加注释</li>
+      <li>git 备份后也无法通过 diff 看到每次改动二进制文件后的变化</li>
+      <li>快</li>
+    </ul>
+  </li>
+</ul>
+
+<p>早期 Windows 引入注册表是有进步意义的：那时 Unix 运行在性能更好的大型机上，而 Windows 运行的性能较弱的微机。然而随着技术的进步，注册表的优势被削弱，而劣势则暴露无疑。目前， GNU/Linux 除了 gtk 系的一些桌面在用数据库外，几乎所有软件都采用纯文本格式的配置文件。即便是微软开发的 powershell 和 VS Code 也使用纯文本格式的配置文件。毕竟，比起下图中的代码补全，又有谁愿意去打开根本记不住的 HKEY 开头的注册表路径去配置软件呢？</p>
+
+<p><img src="https://www.schemastore.org/img/autocomplete.png" alt="json schema"></p>
+
+<h2 id="从点文件到标准化">从点文件到标准化</h2>
+
+<blockquote>
+  <p>作为一名开发人员，你很可能在你的整个职业生涯都要使用并改进你的点文件，点文件很可能是你从事过最长的项目。</p>
+
+  <p>– Anish Athalye <a href="https://anishathalye.com/managing-your-dotfiles/">Managing Your Dotfiles</a></p>
+</blockquote>
+
+<p>Unix 将配置文件分为 2 类，一类是系统管理员 （ root 用户）编辑的 <code class="language-plaintext highlighter-rouge">/etc</code> ，是所有用户共用的。另一类是每个用户专属的配置文件。用户的配置文件比所有用户共用的配置文件拥有更高的优先级。早期这些文件被放在家目录下，以点开头，故称点文件。 Unix 会隐藏点开头的文件所以平时这些文件不会被看到。</p>
+
+<p>随着时间的推移，各个平台都开始通过标准来确定配置文件的存储路径。</p>
+
+<ul>
+  <li>GNU/Linux
+    <ul>
+      <li>
+<code class="language-plaintext highlighter-rouge">~/.local/share/my_app</code>, <code class="language-plaintext highlighter-rouge">/usr/share/my_app</code> 放共享资源</li>
+      <li>
+<code class="language-plaintext highlighter-rouge">~/.cache/my_app</code>, <code class="language-plaintext highlighter-rouge">/var/cache/my_app</code> 放缓存</li>
+      <li>
+<code class="language-plaintext highlighter-rouge">~/.config/my_app</code>, <code class="language-plaintext highlighter-rouge">/etc/my_app</code> 放配置</li>
+    </ul>
+  </li>
+  <li>Android
+    <ul>
+      <li>
+<code class="language-plaintext highlighter-rouge">/data/data/com.my_app/files</code> 放共享资源</li>
+      <li>
+<code class="language-plaintext highlighter-rouge">/data/data/com.my_app/caches</code> 放缓存</li>
+      <li>
+<code class="language-plaintext highlighter-rouge">/data/data/com.my_app/shared_prefs</code> 放配置</li>
+    </ul>
+  </li>
+  <li>macOS
+    <ul>
+      <li>
+<code class="language-plaintext highlighter-rouge">~/Library/Application Support/my_app</code> 放共享资源</li>
+      <li>
+<code class="language-plaintext highlighter-rouge">~/Library/Caches/my_app</code> 放缓存</li>
+    </ul>
+  </li>
+  <li>Windows
+    <ul>
+      <li>
+<code class="language-plaintext highlighter-rouge">C:\Users\%USERNAME%\AppData\Local\my_app</code> 放不需要同步的文件</li>
+      <li>
+<code class="language-plaintext highlighter-rouge">C:\Users\%USERNAME%\AppData\Roaming\my_app</code> 放需要云端同步的文件</li>
+    </ul>
+  </li>
+  <li>Windows XP
+    <ul>
+      <li>
+<code class="language-plaintext highlighter-rouge">C:\Documents and Settings\%USERNAME%\AppData</code> 含有空格所以后来被换成了 <code class="language-plaintext highlighter-rouge">Users</code>
+</li>
+    </ul>
+  </li>
+</ul>
+
+<p>例如 GNU/Linux 采用 Freedesktop 的 <a href="https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html">XDG</a> 标准，将原来的 <code class="language-plaintext highlighter-rouge">~/.my_app</code> 分成多个不同的目录分别存储共享资源、缓存、配置。这样的好处是：</p>
+
+<ul>
+  <li>不会污染保持家目录：让用户可以自行管理家目录而不用担心误操作破坏破坏某些点文件</li>
+  <li>分类管理
+    <ul>
+      <li>用户存储空间不够可以删掉 <code class="language-plaintext highlighter-rouge">~/.cache</code>
+</li>
+      <li>用户可以直接将 <code class="language-plaintext highlighter-rouge">~/.config</code> 用 git 备份</li>
+    </ul>
+  </li>
+</ul>
+
+<p>但并不是所以平台都分得这么细，例如在 Windows 上软件就不得不从 <code class="language-plaintext highlighter-rouge">C:\Users\%USERNAME%\AppData\Local\my_app</code> 自行分出几个子目录用来分别存储共享资源、缓存、配置，或者另创建 <code class="language-plaintext highlighter-rouge">C:\Users\%USERNAME%\AppData\Local\my_app-data</code> 来存储共享资源等。</p>
+
+<p>所以从引入 XDG 标准后，原先的备份 <code class="language-plaintext highlighter-rouge">~/.my_app</code> 就变成了备份 <code class="language-plaintext highlighter-rouge">~/.config/my_app</code> 了。因为 <code class="language-plaintext highlighter-rouge">.config</code> 仍是以点开头，所以通常不加区分地统称点文件。</p>
+
+<p>值得注意的是 XDG 标准定义了一些路径用来存储特定文件：</p>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">~/.local/share/fonts/</code>: 字体</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">~/.local/share/backgrounds/</code>: 桌面壁纸</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">~/.local/share/sounds/</code>: 铃声</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">~/.local/share/themes/</code>: 桌面环境的主题</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">~/.local/share/applications/</code>: 快捷方式</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">~/.cache/thumbnails/</code>: 缩略图，这个目录下所有 <code class="language-plaintext highlighter-rouge">XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.png</code> 的文件名均是缩略图对应的原始图片路径的 hash 。这个设计比 Windows 的 <code class="language-plaintext highlighter-rouge">Thumbs.db</code> 好，因为后者将缩略图文件放在与原始图片相同的目录下，想象以下用户将一个目录下的某几张图片删了，但忘记删除缩略图文件就直接将整个目录压缩发给另一个用户了，收到压缩包的用户完全可以通过缩略图文件看到被删除图片的一些信息，这样就造成了信息的泄漏。可以说 XDG 将缩略图单独放在一个目录下的设计是一个非常高明的设计。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">~/.config/autostart/</code>: 自启动</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">~/.config/user-dirs.dirs</code>: 描述桌面、文档、下载等是 <code class="language-plaintext highlighter-rouge">~/Desktop</code>, <code class="language-plaintext highlighter-rouge">~/Documents</code>, <code class="language-plaintext highlighter-rouge">~/Downloads</code> 等的配置文件。
+类似 Windows 下的 <code class="language-plaintext highlighter-rouge">~/Desktop/desktop.ini</code>, <code class="language-plaintext highlighter-rouge">~/Documents/desktop.ini</code>, <code class="language-plaintext highlighter-rouge">~/Downloads/desktop.ini</code> 等。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">~/.config/user-dirs.locale</code>: 描述语言。默认是 <code class="language-plaintext highlighter-rouge">en_US</code> 。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">~/.config/mimeapps.list</code>: 描述文件的默认打开方式。</li>
+</ul>
+
+<p>这意味着软件不能把名字命名为 <code class="language-plaintext highlighter-rouge">fonts</code>, <code class="language-plaintext highlighter-rouge">backgrounds</code> 等等。</p>
+
+<p>开发者开发软件时要遵守每一个平台的标准，但记住每个平台下的标准很麻烦。所以许多语言都能找到<a href="https://wiki.archlinux.org/title/XDG_Base_Directory#Libraries">支持这些标准的库</a>。</p>
+
+<h2 id="被点文件配置的常见软件类别">被点文件配置的常见软件类别</h2>
+
+<p>使用不同语言、不同软件的开发者点文件往往差异很大。按照 <a href="https://wiki.archlinux.org/title/Dotfiles#User_repositories">https://wiki.archlinux.org/title/Dotfiles#User_repositories</a> ，
+包括以下类别：</p>
+
+<ul>
+  <li>外壳 （ Shell ）</li>
+  <li>桌面环境或窗口管理器</li>
+  <li>编辑器</li>
+  <li>终端模拟器</li>
+  <li>终端复用器</li>
+  <li>声音播放器</li>
+  <li>进程监视器</li>
+  <li>邮件用户客户端</li>
+  <li>即时通信软件</li>
+  <li>文件管理器</li>
+  <li>RSS 阅读器</li>
+</ul>
+
+<p>每类软件单独拿出来介绍都足以构成一篇长篇大论。例如：</p>
+
+<ul>
+  <li>编辑器的作用是编辑文本</li>
+  <li>有哪些可供选择的编辑器，他们分别对编辑器开发史上提出了哪些贡献：
+    <ul>
+      <li>vi 第一个引入多模式编辑</li>
+      <li>emacs 第一个允许用户通过编写脚本 (Lisp) 配置编辑器</li>
+      <li>vim 继承了 vi 的多模式编辑，还允许用户通过图灵完备的脚本语言 (vim script) 来配置编辑器，并诞生了 LSP 的前身 YCM</li>
+      <li>text mate 引入 tmLanguage 通过数据描述语言来描述语法高亮</li>
+      <li>Sublime 第一个引入多光标编辑的模式，并改进 tmLanguage 成 sublime-syntax</li>
+      <li>Atom 第一个引入增量式语法高亮系统 tree-sitter</li>
+      <li>VS Code 统一了 LSP 标准</li>
+      <li>neovim 用 LuaJIT 改善了 vim script 的性能，并成为早期集成 tree-sitter 和 LSP 的编辑器之一</li>
+    </ul>
+  </li>
+  <li>然后又得介绍上面出现的所有新概念，介绍怎么开发对应的插件和软件……</li>
+</ul>
+
+<p>不再赘述。如有需要请自行搜索<img class="emoji" title=":smile:" alt=":smile:" raw="😄" src="https://github.githubassets.com/images/icons/emoji/unicode/1f604.png" style="vertical-align: middle; display: inline; max-width: 1em; visibility: hidden;" onload="this.style.visibility='visible'" onerror="this.replaceWith(this.getAttribute('raw'))"></p>
+
+<h2 id="常见的需要配置的部分">常见的需要配置的部分</h2>
+
+<h3 id="repl-主题">REPL 主题</h3>
+
+<p>许多语言的 <a href="https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop">REPL</a> 默认的提示符都非常丑陋。
+用户通常希望自定义提示符来显示当前平台的种类、当前所在的路径、时间、 git 信息等。
+在这些语言中， shell 是 REPL 使用最频繁的语言。有很多用户喜爱自定义他们的 shell 。
+一些主题封装了自定义的代码并允许用户进一步配置某些细节。笔者个人非常看重可配置性。</p>
+
+<p>笔者一开始在点文件中写了一些功能，后来发觉代码量开始变多，而且可能对其他人有用就单独提出来封装成一个个 zsh/tmux/vim 插件了。</p>
+
+<h4 id="zsh">zsh</h4>
+
+<p>笔者默认的 shell 是 zsh。 <a href="https://github.com/romkatv/powerlevel10k">powerlevel10k</a> 是目前性能最好的 zsh 主题，其获取 git 信息的部分用 C++ 实现从而在性能上成功超越了之前的 <a href="https://github.com/Powerlevel9k/powerlevel9k">powerlevel9k</a> 。</p>
+
+<p><img src="https://user-images.githubusercontent.com/32936898/205438934-4add45ea-62bc-477e-93bb-4d615bd7aa3f.png" alt="zsh"></p>
+
+<p>还有很多 REPL 笔者并没有找到很好的主题，甚至只好自己动手实现了一些轮子。</p>
+
+<h4 id="bash">bash</h4>
+
+<p>笔者一般交互用 zsh ，但日常写 shell 脚本还是用 bash 。</p>
+
+<ul>
+  <li>
+<a href="https://github.com/Freed-Wu/bash-prompt">bash-prompt</a>: 一个 bash 主题。</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/32936898/263515139-efe0951f-155a-4b0a-8ef2-ed40fcd79900.png" alt="bash"></p>
+
+<h4 id="tcl">tcl</h4>
+
+<p>也是一种 shell 。几乎是 EDA 行业的标准配置语言。</p>
+
+<ul>
+  <li>
+<a href="https://github.com/flightaware/tclreadline">tclreadline</a>: 为 tcl 默认的 REPL 添加了 readline 的快捷键支持</li>
+  <li>
+<a href="https://github.com/Freed-Wu/tcl-prompt">tcl-prompt</a>: tclreadline 主题，也提供了一些用 tcl 编写的软件的 REPL 主题：
+    <ul>
+      <li>
+<code class="language-plaintext highlighter-rouge">tk</code> 的 <code class="language-plaintext highlighter-rouge">wish</code>
+</li>
+      <li><code class="language-plaintext highlighter-rouge">expect</code></li>
+      <li>
+<code class="language-plaintext highlighter-rouge">vivado</code> 的 <code class="language-plaintext highlighter-rouge">vivado -mode tcl</code>
+</li>
+      <li>
+<code class="language-plaintext highlighter-rouge">vitis</code> 的 <code class="language-plaintext highlighter-rouge">xsct</code>
+</li>
+    </ul>
+  </li>
+</ul>
+
+<p><a href="https://github.com/Freed-Wu/tcl-prompt"><img src="https://github.com/Freed-Wu/Freed-Wu/assets/32936898/d410608b-6ddf-4c1b-a72e-9d6f6b1f48a4" alt="tclsh"></a></p>
+
+<p><img src="https://github.com/Freed-Wu/Freed-Wu/assets/32936898/a8a2304b-cc63-4597-befe-9e04fc453179" alt="wish"></p>
+
+<p><img src="https://github.com/Freed-Wu/tcl-prompt/assets/32936898/5ceddf38-6b59-45b1-8046-a64286f27189" alt="expectp"></p>
+
+<p><img src="https://github.com/Freed-Wu/tcl-prompt/assets/32936898/de90a851-8d62-4e42-a4bd-e8ec402599eb" alt="vivadop"></p>
+
+<p><img src="https://github.com/Freed-Wu/tcl-prompt/assets/32936898/eed76559-7aee-4854-a94b-5dd9c3782d87" alt="xsctp"></p>
+
+<h4 id="python">python</h4>
+
+<p><a href="https://translate-shell.readthedocs.io/en/latest/resources/tools.html#python-m-translate-shell-tools-repl">配置方法</a></p>
+
+<p><img src="https://user-images.githubusercontent.com/32936898/205494856-6f11d1a1-b2e3-469d-91c7-8a24c400fa78.jpg" alt="python"></p>
+
+<p>其实笔者一般用 <code class="language-plaintext highlighter-rouge">ptpython</code> 或者与 <code class="language-plaintext highlighter-rouge">ipython</code> 兼容但性能更快的 <code class="language-plaintext highlighter-rouge">ptipython</code> 。</p>
+
+<p><a href="https://github.com/ipython/ipython/issues/11898">关于 ipython 性能问题的报告</a></p>
+
+<h4 id="octave">octave</h4>
+
+<p>matlab 的开源解释器。</p>
+
+<ul>
+  <li>
+<a href="https://github.com/gnu-octave/prompt">prompt</a>: octave 主题</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/32936898/263538692-dc261e93-cd2f-4a59-8c66-590c460d2485.png" alt="octave"></p>
+
+<h4 id="perl">perl</h4>
+
+<p>有一说一， perl 做数据驱动编程真不错。</p>
+
+<ul>
+  <li>
+<a href="https://github.com/doy/reply">reply</a>: 一个比 perl 默认 REPL <code class="language-plaintext highlighter-rouge">perl -de0</code> 更好的 REPL</li>
+  <li>
+<a href="https://github.com/Freed-Wu/Reply-Plugin-Prompt/">Reply-Plugin-Prompt</a>: 一个 Reply 主题</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/32936898/221406537-5c9222e2-23ed-423c-9860-671b06421aef.jpg" alt="reply"></p>
+
+<h4 id="lua">lua</h4>
+
+<ul>
+  <li>
+<a href="https://github.com/dpapavas/luaprompt">luaprompt</a>: 一个比 lua 默认 REPL 更好的 REPL</li>
+  <li>
+<a href="https://github.com/Freed-Wu/prompt-style.lua">prompt-style.lua</a>: luaprompt 主题。因为 lua 经常作为一种“寄生型语言”寄生在很多软件中，所以也提供了对应的 REPL ：
+    <ul>
+      <li>neovim</li>
+      <li>luatex</li>
+      <li>pandoc</li>
+      <li>neomutt</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://github.com/dpapavas/luaprompt/assets/32936898/c4c6e13c-3b39-4315-b09b-206a1a7783ea" alt="luap"></p>
+
+<p><img src="https://user-images.githubusercontent.com/32936898/257267278-8d0b4863-15c6-4966-b8af-219c9c40c1ae.jpg" alt="neovimp"></p>
+
+<p><img src="https://user-images.githubusercontent.com/32936898/257267263-96d9f4c1-55fc-4ae3-87b8-7afd29f4ba0e.jpg" alt="texluap"></p>
+
+<p><img src="https://github.com/Freed-Wu/prompt-style.lua/assets/32936898/b556effe-6be7-4cf9-b612-b1283d6de721" alt="pandocp"></p>
+
+<h4 id="translate-shell">translate-shell</h4>
+
+<p><a href="https://github.com/Freed-Wu/translate-shell/">translate-shell</a>: 笔者嫌弃现在能找到的命令行翻译软件颜值太低时随手写的软件。</p>
+
+<p><img src="https://user-images.githubusercontent.com/32936898/205699472-5349d422-54c9-47a3-afc0-53a17f0acaf8.jpg" alt="translate-shell"></p>
+
+<p><img src="https://user-images.githubusercontent.com/32936898/205617815-3a2ba6b4-2673-4233-907b-202ffd4a9e44.jpg" alt="trans"></p>
+
+<p>高能预警。</p>
+
+<h4 id="gdb">gdb</h4>
+
+<p>嗯， gdb 也是一个 REPL ！</p>
+
+<p><a href="https://github.com/Freed-Wu/gdb-prompt">gdb-prompt</a>: 一个 gdb 主题</p>
+
+<p><img src="https://user-images.githubusercontent.com/32936898/263782466-4dd002fd-9259-4d44-a854-5e132c32b4db.png" alt="gdb-prompt"></p>
+
+<h4 id="lftp">lftp</h4>
+
+<p><a href="https://translate-shell.readthedocs.io/en/latest/resources/tools.html#python-m-translate-shell-tools-generate-prompt">配置方法</a></p>
+
+<p><img src="https://user-images.githubusercontent.com/32936898/205438945-7ac66e83-bcd4-4574-a520-614023fa1205.png" alt="lftp"></p>
+
+<p>还有一些 REPL 目前没有提供自定义提示符的功能：</p>
+
+<ul>
+  <li>
+<a href="https://github.com/root-project/cling/issues/494">cling</a>: C++ 的 REPL</li>
+  <li>
+<a href="https://github.com/NixOS/nix/issues/8156">nix</a>: Nix lang 的 REPL</li>
+</ul>
+
+<h3 id="状态栏">状态栏</h3>
+
+<p>一些软件的状态栏也是可以自定义的：</p>
+
+<h4 id="neovim">(neo)vim</h4>
+
+<ul>
+  <li>
+<a href="https://github.com/vim-airline/vim-airline">vim-airline</a>: 一个 vim 的状态栏主题。 Bram Moolenaar 去世后，该插件的作者接管了 vim</li>
+  <li>除了 airline 默认的插件外，笔者只添加了 <a href="https://github.com/lambdalisue/battery.vim">电池插件</a>、<a href="https://github.com/lambdalisue/wifi.vim">无线网插件</a>、<a href="https://github.com/enricobacis/vim-airline-clock">时钟插件</a>
+</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/32936898/205438937-349daa37-ba3d-4ebf-a485-7481a5066265.png" alt="vim"></p>
+
+<h4 id="tmux">tmux</h4>
+
+<ul>
+  <li>
+<a href="https://github.com/Freed-Wu/tmux-status-bar/">tmux-status-bar</a>: 笔者非常反感很多 tmux 主题极低的可配置性所以写了这个插件。</li>
+  <li>上方那个<a href="https://github.com/Freed-Wu/tmux-bitahub">显示实验室的 GPU 数量的插件</a> 也是笔者写的。不过整个实验室竟然没有别的人用？</li>
+  <li>
+<a href="https://github.com/Freed-Wu/tmux-digit">将阿拉伯数字转换为圆圈里的数字的插件</a>也是笔者写的~</li>
+  <li>还出现了其他<a href="https://github.com/olimorris/tmux-pomodoro-plus">番茄钟插件</a>、<a href="https://github.com/tmux-plugins/tmux-battery">电池电量插件</a>等</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/32936898/264420530-ecd6dd2e-fdbc-43fd-a245-a8b2df058202.png" alt="tmux"></p>
+
+<h3 id="色彩高亮">色彩高亮</h3>
+
+<h4 id="高亮代码">高亮代码</h4>
+
+<ul>
+  <li>
+<a href="https://github.com/wofr06/lesspipe">lesspipe</a>: 高亮 less 输出的结果</li>
+  <li>
+<a href="https://github.com/Freed-Wu/manpager">manpager</a>: 高亮 man 输出的结果</li>
+  <li>
+<a href="https://github.com/Freed-Wu/zsh-help">zsh-help</a>: 高亮 <code class="language-plaintext highlighter-rouge">--help</code> 输出的结果</li>
+  <li>
+<a href="https://github.com/Freed-Wu/zsh-colorize-functions">zsh-colorize-functions</a>: 高亮 <code class="language-plaintext highlighter-rouge">functions</code> 输出的结果</li>
+  <li>
+<a href="https://github.com/sharkdp/bat">bat</a>: 被以上程序调用</li>
+</ul>
+
+<p><img src="https://github.com/Freed-Wu/manpager/assets/32936898/80d5163d-26c4-455a-9585-60e0bb947b84" alt="man"></p>
+
+<p><img src="https://github.com/victor-gp/cmd-help-sublime-syntax/assets/32936898/ddfe38cb-e7ee-4a8d-803b-c693ee0b6482" alt="help"></p>
+
+<p><img src="https://user-images.githubusercontent.com/32936898/263457774-2dcb75f2-11e4-429a-b04d-15c259973423.jpg" alt="declare"></p>
+
+<h4 id="高亮命令">高亮命令</h4>
+
+<ul>
+  <li>
+<a href="https://github.com/zpm-zsh/colorize">colorize</a>: 高亮许多命令输出的结果</li>
+  <li>
+<a href="https://github.com/garabik/grc">grc</a>: 被 colorize 调用</li>
+  <li>
+<a href="https://github.com/sharkdp/vivid/">vivid</a>: 高亮 <code class="language-plaintext highlighter-rouge">ls</code> 等软件的输出结果</li>
+  <li>
+<a href="https://github.com/eza-community/eza">eza</a>: <code class="language-plaintext highlighter-rouge">ls</code> 和 <code class="language-plaintext highlighter-rouge">tree</code> 的有图标版。
+一些替代品例如 <a href="https://github.com/lsd-rs/lsd/"><code class="language-plaintext highlighter-rouge">lsd</code></a> <a href="https://github.com/lsd-rs/lsd/issues/658">有严重的性能问题</a>
+</li>
+</ul>
+
+<p><img src="https://github.com/Freed-Wu/Freed-Wu.github.io/assets/32936898/9470db4b-87d0-420e-857d-fd848f48cdde" alt="grc"></p>
+
+<p><img src="https://github.com/Freed-Wu/Freed-Wu.github.io/assets/32936898/6998f861-5213-414e-887e-0e708062e011" alt="eza"></p>
+
+<h4 id="高亮命令行输入">高亮命令行输入</h4>
+
+<ul>
+  <li>
+<a href="https://github.com/zdharma-continuum/fast-syntax-highlighting">fast-syntax-highlighting</a>: 高亮 zsh 命令行的输入。这个高亮非常厉害，如果 perl 语法不正确，那么 <code class="language-plaintext highlighter-rouge">perl -e 'wrong_code'</code> 中的 <code class="language-plaintext highlighter-rouge">wrong_code</code> 会被直接高亮为红色，如果语法正确才会被高亮为蓝色。</li>
+</ul>
+
+<p><img src="https://github.com/Freed-Wu/Freed-Wu.github.io/assets/32936898/9d2af40a-7e43-4eab-a796-46c9cf6672e1" alt="wrong perl"></p>
+
+<p><img src="https://github.com/Freed-Wu/Freed-Wu.github.io/assets/32936898/5753111d-cdfa-4549-94de-274f875b0d34" alt="correct perl"></p>
+
+<h4 id="高亮补全">高亮补全</h4>
+
+<ul>
+  <li><a href="https://github.com/Aloxaf/fzf-tab/">fzf-tab</a></li>
+  <li>
+<a href="https://github.com/junegunn/fzf">fzf</a>: 被 fzf-tab 调用</li>
+  <li>
+<a href="https://github.com/Freed-Wu/fzf-tab-source">fzf-tab-source</a>: fzf-tab 的预览源的一个收集</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/32936898/127728907-eab6b2e8-46c1-4f10-ad2c-0cca35609249.png" alt="fzf-tab"></p>
+
+<h3 id="补全">补全</h3>
+
+<ul>
+  <li>
+<a href="https://github.com/zsh-users/zsh-completions">zsh-completions</a>: zsh 的 第三方补全库</li>
+  <li>
+<a href="https://github.com/3v1n0/zsh-bash-completions-fallback">zsh-bash-completions-fallback</a>: 让 zsh 在没有找到某程序对应的补全脚本的时候使用 bash 的补全</li>
+  <li>
+<a href="https://github.com/scop/bash-completion">bash-completion</a>: bash 的 第三方补全库</li>
+  <li>
+<a href="https://github.com/Freed-Wu/zsh-completions-for-cross-compilers">zsh-completions-for-cross-compilers</a>: 拿 gcc 的补全来给 mingw 之类的交叉编译器用</li>
+</ul>
+
+<p>每种 shell 的补全语法各不相同。一般是软件开发者都是用一些库来自动生成补全的脚本：</p>
+
+<ul>
+  <li>
+<a href="https://github.com/iterative/shtab">shtab</a>: 为 python 的 argparse 生成补全脚本</li>
+  <li>
+<a href="https://github.com/casperdcl/argopt">argopt</a>: 可以和 shtab 一起为 python 的 <a href="https://github.com/docopt/docopt">docopt</a> 生成补全脚本</li>
+  <li>
+<a href="https://github.com/f/omelette">omelette</a>: 为 javascript 生成补全脚本</li>
+  <li>
+<a href="https://docs.rs/clap_complete/latest/clap_complete/">clap_complete</a>: 为 rust 的 clap 生成补全脚本</li>
+  <li>
+<a href="https://github.com/spf13/cobra">cobra</a>: 为 go 生成补全脚本</li>
+</ul>
+
+<p>有些语言没找到类似的库就直接自己造轮子吧……</p>
+
+<h3 id="杂项">杂项</h3>
+
+<ul>
+  <li>
+<a href="https://github.com/Freed-Wu/undollar">undollar</a>: 提供命令 <code class="language-plaintext highlighter-rouge">$</code> 和 <code class="language-plaintext highlighter-rouge">%</code> 来防止从 stackoverflow 上复制的代码不能运行</li>
+</ul>
+
+<h2 id="点文件管理">点文件管理</h2>
+
+<blockquote>
+  <p>为什么我希望将我的点文件放在 GitHub 上？</p>
+
+  <ul>
+    <li>备份、恢复和同步您的首选项和设置工具箱。您的点文件可能是计算机上最重要的文件。</li>
+    <li>向社区学习。发现适合您工具箱的新工具和那些你已经使用过的新技巧。</li>
+    <li>与我们其他人分享您所学到的知识。</li>
+  </ul>
+
+  <p>– <a href="https://dotfiles.github.io/">Github does dotfiles</a></p>
+</blockquote>
+
+<p>最常见的管理方式就是 git 。例如笔者平时把点文件托管在 github 上的<a href="https://github.com/Freed-Wu/Freed-Wu">一个仓库</a>里，每当有换新电脑时就会执行如下操作：</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd
+</span>git clone <span class="nt">--depth</span><span class="o">=</span>1 <span class="nt">--bare</span> https://github.com/Freed-Wu/Freed-Wu
+git config core.bare <span class="nb">false
+</span>git reset <span class="nt">--hard</span>
+</code></pre></div></div>
+
+<p>一个窍门是 github 允许用与自己用户名相同的仓库作为 github 用户主页的 profile 。所以我们可以利用这一特性将点文件的仓库名设置为用户名，从而让点文件的 README 在 github 用户主页被展示。</p>
+
+<p>一些其他的管理方法见 <a href="https://wiki.archlinux.org/title/Dotfiles#Tools">https://wiki.archlinux.org/title/Dotfiles#Tools</a> 。对 Nix 用户，<a href="https://github.com/nix-community/home-manager">home manager</a> 也是个不错的方法。</p>
+
+<p>笔者倾向于把所有平台的点文件放在一起。例如笔者的点文件里其实包含几个平台家目录下的点文件：</p>
+
+<ul>
+  <li>GNU/Linux</li>
+  <li>Android termux</li>
+  <li>Windows Msys2</li>
+</ul>
+
+<p>对于不同发行版的 <code class="language-plaintext highlighter-rouge">/etc</code> 下的不同配置，笔者倾向于在不同的仓库分别管理，因为不同发行版可能会使用不同的镜像，配置等。</p>
+
+<h2 id="联动">联动</h2>
+
+<h3 id="github-codespace">Github codespace</h3>
+
+<p>Github 支持<a href="https://docs.github.com/en/codespaces/customizing-your-codespace/personalizing-github-codespaces-for-your-account#dotfiles">用点文件自定义代码空间</a>。例如笔者自己用点文件定义的代码空间：</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh cs create <span class="nt">-RFreed-Wu</span>/Freed-Wu <span class="nt">-mbasicLinux32gb</span> <span class="nt">-dwzy</span>
+<span class="c"># wait about 3 minutes to install needed programs and zsh/vim/tmux plugins</span>
+gh cs ssh
+</code></pre></div></div>
+
+<p><img src="https://github.com/Freed-Wu/Freed-Wu/assets/32936898/315b328f-0bdd-4dad-ab70-44ca43b4ec01" alt="github codespace"></p>
+
+<h3 id="docker">Docker</h3>
+
+<p><a href="https://hub.docker.com/r/freedwu/freed-wu">docker 镜像</a></p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull freedwu/Freed-Wu:main
+docker run <span class="nt">--rm</span> <span class="nt">-it</span> <span class="nt">--name</span><span class="o">=</span><span class="nb">test</span> <span class="nt">--gpus</span><span class="o">=</span>all <span class="nt">-p</span> 8022:22 freedwu/Freed-Wu:main
+</code></pre></div></div>
+
+<p>结果类似 Github 代码空间。</p>
+
+<div class="reward">
+  <button id="rewardButton" disable="enable" onclick="toggle()">
+    如果这篇博客帮助到你，可以请我喝一杯奶茶~
+  </button>
+  <table id="rewardQRs">
+    <tr>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" alt="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" alt="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" alt="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" height="300pt"></td>
+    </tr>
+  </table>
+</div>
+<script src="/assets/js/valine.js"></script>
+
+    </article>
+    <input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+    <aside class="sidebar">
+      <div class="sidebar-item">
+        <div class="ih-item">
+          <a title="
+              Wu Zhenyu
+            ">
+            <img class="img" src="https://github.com/Freed-Wu.png" alt="img">
+            <div class="info">
+              <br>
+              <br>
+              A personal blog to record valuable and interesting things.
+            </div>
+          </a>
+        </div>
+        <iframe height="42" width="240" src="https://music.163.com/outchain/player?type=2&id=27646786&height=32"></iframe>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-nav-item" href="/">
+          <i class="fa-solid fa-home fa-fw"></i> Home
+        </a>
+        <a class="sidebar-nav-item" href="/tag">
+          <i class="fa-solid fa-tags fa-fw"></i> Tag
+        </a>
+        <a class="sidebar-nav-item" href="/feed.xml">
+          <i class="fa-solid fa-rss fa-fw"></i> RSS
+        </a>
+        <a class="sidebar-nav-item" href="/Freed-Wu">
+          <i class="fa-solid fa-comments fa-fw"></i> About Me
+        </a>
+        <a class="sidebar-nav-item" href="/jekyll-theme-freed">
+          <i class="fa-solid fa-code fa-fw"></i> About the Website
+        </a>
+        <a class="sidebar-nav-item" href="/2020/01/01/honour">
+          <i class="fa-solid fa-trophy fa-fw"></i> Honour
+        </a>
+      </nav>
+      <div class="sidebar-item">
+        <!-- https://github.com/christian-fei/Simple-Jekyll-Search#preparing-the-plugin -->
+        <input id="search-input" placeholder="Search posts">
+        <div id="results-container"></div>
+      </div>
+    </aside>
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+  </body>
+</html>

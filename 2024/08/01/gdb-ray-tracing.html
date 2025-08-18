@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>『新时代 C/C++ 面试题』 GDB 光追 | wzy</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="『新时代 C/C++ 面试题』 GDB 光追">
+<meta name="author" content="Wu Zhenyu">
+<meta property="og:locale" content="zh_CN">
+<meta name="description" content="前情提要：">
+<meta property="og:description" content="前情提要：">
+<link rel="canonical" href="https://freed-wu.github.io/2024/08/01/gdb-ray-tracing.html">
+<meta property="og:url" content="https://freed-wu.github.io/2024/08/01/gdb-ray-tracing.html">
+<meta property="og:site_name" content="wzy">
+<meta property="og:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2024-08-01T00:00:00+00:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="twitter:title" content="『新时代 C/C++ 面试题』 GDB 光追">
+<meta name="twitter:site" content="@FreedWu">
+<meta name="twitter:creator" content="@Wu Zhenyu">
+<meta property="fb:admins" content="100057378480375">
+<meta property="article:publisher" content="100057378480375">
+<meta property="fb:app_id" content="100057378480375">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Wu Zhenyu","url":"https://Freed-Wu.github.io"},"dateModified":"2024-08-01T00:00:00+00:00","datePublished":"2024-08-01T00:00:00+00:00","description":"前情提要：","headline":"『新时代 C/C++ 面试题』 GDB 光追","image":"https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://freed-wu.github.io/2024/08/01/gdb-ray-tracing.html"},"url":"https://freed-wu.github.io/2024/08/01/gdb-ray-tracing.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="icon" href="https://github.com/Freed-Wu.png">
+    <link rel="apple-touch-icon" href="https://github.com/Freed-Wu.png">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/poole.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/lanyon.min.css">
+    <link rel="stylesheet" href="//jekyllrb.com/css/screen.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/sindresorhus/github-markdown-css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <script async src="https://kit.fontawesome.com/556f02e0e5.js"></script>
+    <script async src="//cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget/autoload.min.js"></script>
+    <!-- https://github.com/christian-fei/Simple-Jekyll-Search -->
+    <script async src="//cdn.jsdelivr.net/npm/simple-jekyll-search/dest/simple-jekyll-search.min.js"></script>
+    <script async src="/assets/js/search.js"></script>
+  </head>
+  <!-- https://github.com/poole/lanyon -->
+  <body class="theme-base-08 layout-reverse sidebar-overlay">
+    <article class="container">
+      <header>
+        <h1>『新时代 C/C++ 面试题』 GDB 光追</h1>
+      </header>
+      <script src="/assets/js/qr.js"></script>
+<small class="post-date">
+  <i class="fa-solid fa-calendar-day"></i> 01 Aug 2024
+  <i class="fa-solid fa-file-word"></i> 1613 words
+  <i class="fa-solid fa-coffee"></i> 6 minutes
+  <span id="/2024/08/01/gdb-ray-tracing.html" class="leancloud-visitors" data-flag-title="『新时代 C/C++ 面试题』 GDB 光追">
+    <i class="fa-regular fa-eye"></i>
+    <span class="leancloud-visitors-count"></span>
+  </span>
+  <a rel="license" href="//creativecommons.org/licenses/by-sa/4.0/deed.zh">
+    <i class="fa-brands fa-creative-commons"></i> BY-SA 4.0
+  </a>
+  <br>
+  <a href="/tag/develop"> <i class="fa-solid fa-tag"></i> develop </a>
+  <a href="/tag/gdb"> <i class="fa-solid fa-tag"></i> gdb </a>
+  <a href="/tag/computer%20graphics"> <i class="fa-solid fa-tag"></i> computer graphics </a>
+</small>
+<ul>
+<li><a href="#%E8%A7%A3%E9%87%8A">解释</a></li>
+<li><a href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">解决方案</a></li>
+<li><a href="#%E8%AE%BE%E7%BD%AE">设置</a></li>
+<li><a href="#%E7%94%A8%E6%B3%95">用法</a></li>
+<li>
+<a href="#%E6%8E%A5%E5%8F%A3">接口</a><ul>
+<li><a href="#python">python</a></li>
+<li><a href="#shell">shell</a></li>
+</ul>
+</li>
+<li><a href="#%E6%80%BB%E7%BB%93">总结</a></li>
+</ul> <p>前情提要：</p>
+
+<ul>
+  <li><a href="https://zhuanlan.zhihu.com/p/123419161">CMake 光追</a></li>
+  <li><a href="https://zhuanlan.zhihu.com/p/671499177">LaTeX3 Phong 渲染</a></li>
+</ul>
+
+<p><img src="https://github.com/Freed-Wu/gdb-ray-tracing/assets/32936898/bef29d5e-9883-4d90-b089-29c8656f9c23" alt="output"></p>
+
+<p>本文代码开源于 <a href="https://github.com/Freed-Wu/gdb-ray-tracing">gdb-ray-tracing</a> 。</p>
+
+<h2 id="解释">解释</h2>
+
+<p>gdb 内置了一门图灵完备的脚本语言，称为 GDB 或 gdb script 。此语言的初衷是让用户在用 gdb 调试代码时更加灵活，例如：</p>
+
+<p><code class="language-plaintext highlighter-rouge">test.c</code>:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#if 0
+bin="$(basename "$0")" &amp;&amp; bin="${bin%%.*}" &amp;&amp; cc -g "$0" -o"$bin" &amp;&amp; exec cgdb ./"$bin" -- --args "$@"
+#endif
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"i = %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+  <span class="k">return</span> <span class="n">EXIT_SUCCESS</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>安装 <a href="https://github.com/cgdb/cgdb">cgdb</a> 。然后：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">chmod</span> +x test.c
+./test.c
+</code></pre></div></div>
+
+<p>进入调试界面，在 gdb REPL 中输入：</p>
+
+<pre><code class="language-gdb">define hook-stop
+  set $str = "currently, i is %d\n"
+  if i &gt; 3
+    printf $str, i
+  end
+end
+start
+</code></pre>
+
+<p>接下来不停 <code class="language-plaintext highlighter-rouge">next</code> 单步运行，在 最后一次 <code class="language-plaintext highlighter-rouge">for</code> 循环中将会在输出 <code class="language-plaintext highlighter-rouge">i = 4\n</code> 之前先打印 <code class="language-plaintext highlighter-rouge">currently, i is 4\n</code> 。</p>
+
+<h2 id="解决方案">解决方案</h2>
+
+<p>gdb script 提供了 <code class="language-plaintext highlighter-rouge">if</code>, <code class="language-plaintext highlighter-rouge">while</code> 等程序控制指令和 <code class="language-plaintext highlighter-rouge">printf</code>, <code class="language-plaintext highlighter-rouge">print</code> 等输出指令。相比较 cmake 光追，方便之处在于：</p>
+
+<ul>
+  <li>gdb 支持所有 C 语言支持的简单数据类型，比如 float 和 double ，而 cmake 不支持小数，需要用整数模拟定点小数。</li>
+  <li>gdb 有一个 REPL</li>
+</ul>
+
+<p>不便之处在于：</p>
+
+<ul>
+  <li>gdb 报错不显示回溯信息，只显示回溯堆栈最顶层的位置。调试起来异常困难</li>
+  <li>gdb 不支持变量作用域，即所有变量都是全局而非局部的。</li>
+  <li>gdb 函数没有专门的返回指令，靠修改全局变量来返回结果。</li>
+</ul>
+
+<p>笔者的解决方案：</p>
+
+<ul>
+  <li>写单元测试，先确保每个函数正常工作，再一步步拼装成一个完整的代码。函数内部用日志打印输出，和 cmake 光追的代码对比确认是否正确。顺手发现 cmake 光追的 <code class="language-plaintext highlighter-rouge">Float_Print()</code> 函数有 bug 。</li>
+  <li>约定函数 <code class="language-plaintext highlighter-rouge">foo_bar()</code> 内所有的变量都以 <code class="language-plaintext highlighter-rouge">$foo_bar_</code> 开头。同时把递归的代码改为迭代防止全局变量覆盖。</li>
+  <li>约定函数的返回值叫 <code class="language-plaintext highlighter-rouge">$return</code>
+</li>
+</ul>
+
+<p>复现 bug 方法如下：</p>
+
+<div class="language-cmake highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">Vec3</span><span class="p">(</span>test_vec f1 fN1 f1<span class="p">)</span>
+<span class="nf">Vec3_Normalize</span><span class="p">(</span>result_vec test_vec<span class="p">)</span>
+<span class="nf">Vec3_Print</span><span class="p">(</span>result_vec<span class="p">)</span>
+</code></pre></div></div>
+
+<p>结果是 <code class="language-plaintext highlighter-rouge">0.577865, -1.577866, 0.577865</code>, 但正确答案是 <code class="language-plaintext highlighter-rouge">0.577865, -0.577865, 0.577865</code> 。</p>
+
+<h2 id="设置">设置</h2>
+
+<ul>
+  <li>采样： 1 spp</li>
+  <li>材质： 镜面</li>
+</ul>
+
+<p>虽然 gdb 是 C 的调试器但 <code class="language-plaintext highlighter-rouge">$</code> 开头的寄存器变量并没有地址，所以用不了卡马克平方根倒数快速算法，只是普通的牛顿迭代法。</p>
+
+<h2 id="用法">用法</h2>
+
+<p>封装了一个库 <a href="https://github.com/Freed-Wu/gdb-ray-tracing/blob/main/ray-tracing.gdb"><code class="language-plaintext highlighter-rouge">ray-tracing.gdb</code></a> 。在注释里写了入参和出参的类型和描述。参考 <a href="https://github.com/Freed-Wu/gdb-ray-tracing/blob/main/main.gdb">main.gdb</a> ，使用时 <code class="language-plaintext highlighter-rouge">source</code> 这个库即可。</p>
+
+<h2 id="接口">接口</h2>
+
+<h3 id="python">python</h3>
+
+<p>gdb 有一个可选的 python 接口：</p>
+
+<pre><code class="language-gdb">source test.py
+</code></pre>
+
+<p><code class="language-plaintext highlighter-rouge">test.py</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">gdb</span>
+
+<span class="n">gdb</span><span class="p">.</span><span class="nf">source</span><span class="p">(</span>
+    <span class="sh">"""</span><span class="s">define hook-stop
+  set $str = </span><span class="sh">"</span><span class="s">currently, i is %d</span><span class="se">\n</span><span class="sh">"</span><span class="s">
+  if i &gt; 3
+    printf $str, i
+  end
+end
+start</span><span class="sh">"""</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>所以亦可以在 python 中完成光追的运算再只让 gdb 输出。本文的解决方案并不依赖这个接口。</p>
+
+<p>非常有名的 <a href="https://github.com/cyrus-and/gdb-dashboard">gdb-dashboard</a> 利用了此接口，为 gdb 实现了一个漂亮的 UI 。</p>
+
+<p><img src="https://github.com/Freed-Wu/gdb-ray-tracing/assets/32936898/fa7c6aba-0279-4d15-8f9e-b5d0c5a07e3e" alt="gdb-dashboard"></p>
+
+<h3 id="shell">shell</h3>
+
+<p>gdb 有一个 shell 接口。用户可以运行 bash, zsh, windows command shell 指令。类似</p>
+
+<h2 id="总结">总结</h2>
+
+<p>性能<strong>极其极其</strong>低下。本文仅仅是对邱奇——图灵论题的一次验证性实验，请勿在任何生产环境中使用它！</p>
+
+<p>初稿撰写于机场候机大厅及万米高空之上。</p>
+
+<div class="reward">
+  <button id="rewardButton" disable="enable" onclick="toggle()">
+    如果这篇博客帮助到你，可以请我喝一杯奶茶~
+  </button>
+  <table id="rewardQRs">
+    <tr>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" alt="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" alt="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" alt="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" height="300pt"></td>
+    </tr>
+  </table>
+</div>
+<script src="/assets/js/valine.js"></script>
+
+    </article>
+    <input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+    <aside class="sidebar">
+      <div class="sidebar-item">
+        <div class="ih-item">
+          <a title="
+              Wu Zhenyu
+            ">
+            <img class="img" src="https://github.com/Freed-Wu.png" alt="img">
+            <div class="info">
+              <br>
+              <br>
+              A personal blog to record valuable and interesting things.
+            </div>
+          </a>
+        </div>
+        <iframe height="42" width="240" src="https://music.163.com/outchain/player?type=2&id=27646786&height=32"></iframe>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-nav-item" href="/">
+          <i class="fa-solid fa-home fa-fw"></i> Home
+        </a>
+        <a class="sidebar-nav-item" href="/tag">
+          <i class="fa-solid fa-tags fa-fw"></i> Tag
+        </a>
+        <a class="sidebar-nav-item" href="/feed.xml">
+          <i class="fa-solid fa-rss fa-fw"></i> RSS
+        </a>
+        <a class="sidebar-nav-item" href="/Freed-Wu">
+          <i class="fa-solid fa-comments fa-fw"></i> About Me
+        </a>
+        <a class="sidebar-nav-item" href="/jekyll-theme-freed">
+          <i class="fa-solid fa-code fa-fw"></i> About the Website
+        </a>
+        <a class="sidebar-nav-item" href="/2020/01/01/honour">
+          <i class="fa-solid fa-trophy fa-fw"></i> Honour
+        </a>
+      </nav>
+      <div class="sidebar-item">
+        <!-- https://github.com/christian-fei/Simple-Jekyll-Search#preparing-the-plugin -->
+        <input id="search-input" placeholder="Search posts">
+        <div id="results-container"></div>
+      </div>
+    </aside>
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+  </body>
+</html>

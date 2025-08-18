@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>一个超级小的 LaTeX 发行版 | wzy</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="一个超级小的 LaTeX 发行版">
+<meta name="author" content="Wu Zhenyu">
+<meta property="og:locale" content="zh_CN">
+<meta name="description" content="“Every time I read a LaTeX document, I think, wow, this must be correct!” – Prof. Christos Papadimitriou, CS 170 Spring 2015">
+<meta property="og:description" content="“Every time I read a LaTeX document, I think, wow, this must be correct!” – Prof. Christos Papadimitriou, CS 170 Spring 2015">
+<link rel="canonical" href="https://freed-wu.github.io/2025/03/01/minimal-latex-distribution.html">
+<meta property="og:url" content="https://freed-wu.github.io/2025/03/01/minimal-latex-distribution.html">
+<meta property="og:site_name" content="wzy">
+<meta property="og:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2025-03-01T00:00:00+00:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:image" content="https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg">
+<meta property="twitter:title" content="一个超级小的 LaTeX 发行版">
+<meta name="twitter:site" content="@FreedWu">
+<meta name="twitter:creator" content="@Wu Zhenyu">
+<meta property="fb:admins" content="100057378480375">
+<meta property="article:publisher" content="100057378480375">
+<meta property="fb:app_id" content="100057378480375">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Wu Zhenyu","url":"https://Freed-Wu.github.io"},"dateModified":"2025-03-01T00:00:00+00:00","datePublished":"2025-03-01T00:00:00+00:00","description":"“Every time I read a LaTeX document, I think, wow, this must be correct!” – Prof. Christos Papadimitriou, CS 170 Spring 2015","headline":"一个超级小的 LaTeX 发行版","image":"https://pic2.zhimg.com/v2-d3d225ac45efdb35889e0d284f682c1f_1440w.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://freed-wu.github.io/2025/03/01/minimal-latex-distribution.html"},"url":"https://freed-wu.github.io/2025/03/01/minimal-latex-distribution.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="icon" href="https://github.com/Freed-Wu.png">
+    <link rel="apple-touch-icon" href="https://github.com/Freed-Wu.png">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/poole.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/poole/lanyon/public/css/lanyon.min.css">
+    <link rel="stylesheet" href="//jekyllrb.com/css/screen.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/sindresorhus/github-markdown-css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <script async src="https://kit.fontawesome.com/556f02e0e5.js"></script>
+    <script async src="//cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget/autoload.min.js"></script>
+    <!-- https://github.com/christian-fei/Simple-Jekyll-Search -->
+    <script async src="//cdn.jsdelivr.net/npm/simple-jekyll-search/dest/simple-jekyll-search.min.js"></script>
+    <script async src="/assets/js/search.js"></script>
+  </head>
+  <!-- https://github.com/poole/lanyon -->
+  <body class="theme-base-08 layout-reverse sidebar-overlay">
+    <article class="container">
+      <header>
+        <h1>一个超级小的 LaTeX 发行版</h1>
+      </header>
+      <script src="/assets/js/qr.js"></script>
+<small class="post-date">
+  <i class="fa-solid fa-calendar-day"></i> 01 Mar 2025
+  <i class="fa-solid fa-file-word"></i> 7072 words
+  <i class="fa-solid fa-coffee"></i> 24 minutes
+  <span id="/2025/03/01/minimal-latex-distribution.html" class="leancloud-visitors" data-flag-title="一个超级小的 LaTeX 发行版">
+    <i class="fa-regular fa-eye"></i>
+    <span class="leancloud-visitors-count"></span>
+  </span>
+  <a rel="license" href="//creativecommons.org/licenses/by-sa/4.0/deed.zh">
+    <i class="fa-brands fa-creative-commons"></i> BY-SA 4.0
+  </a>
+  <br>
+  <a href="/tag/develop"> <i class="fa-solid fa-tag"></i> develop </a>
+  <a href="/tag/tex"> <i class="fa-solid fa-tag"></i> tex </a>
+</small>
+<ul>
+<li><a href="#%E7%BC%96%E8%AF%91%E5%99%A8">编译器</a></li>
+<li><a href="#%E6%A0%BC%E5%BC%8F%E6%96%87%E4%BB%B6">格式文件</a></li>
+<li><a href="#%E4%BE%9D%E8%B5%96">依赖</a></li>
+<li><a href="#lua">Lua</a></li>
+<li><a href="#%E6%A0%87%E5%87%86">标准</a></li>
+<li><a href="#%E5%8C%85">包</a></li>
+</ul> <blockquote>
+  <p>“Every time I read a LaTeX document, I think, wow, this must be correct!”</p>
+
+  <p>– Prof. Christos Papadimitriou, <a href="https://cs170.org/resources/latex-guide/">CS 170</a> Spring 2015</p>
+</blockquote>
+
+<p>TeX Live, 绝大多数 LaTeX 用户使用的 LaTeX 发行版，在最近的版本 2024 中总体积已经达到了惊人的 11 GB 。对此：</p>
+
+<ul>
+  <li>不少用户使用 <a href="https://www.overleaf.com/">overleaf</a> 之类的在线平台免去本地安装的麻烦。不过针对离线脱机的情况就束手无策了。</li>
+  <li>
+<a href="https://github.com/clerkma" class="user-mention">@clerkma</a> 写了篇<a href="https://zhuanlan.zhihu.com/p/678423622">文章</a>介绍怎么在安装
+TeX Live 时安装最小的内容，再通过 <code class="language-plaintext highlighter-rouge">tlmgr install</code> 安装用户需要的包。最终得到了一个体积 600 M ，不包含任何文档和源代码的 TeX Live 。最后他说：</li>
+</ul>
+
+<blockquote>
+  <p>600M的安装大小，好像还是很大。这是因为 TeX Live 中某些包的依赖关系比较模糊，还有一些优化的空间。</p>
+</blockquote>
+
+<ul>
+  <li>
+<a href="https://github.com/RadioNoiseE" class="user-mention">@RadioNoiseE</a> 写了<a href="https://zhuanlan.zhihu.com/p/13285492139">中文</a>、
+<a href="https://kekkan.org/article/apltex-dist.xml">英文</a>两篇文章介绍了如何开发一个最小的 plainTeX 发行版： aplTeX 。顺带一提这是一个递归缩写：
+aplTeX Provides Lean/Lite TeX</li>
+</ul>
+
+<p>而笔者希望有这样一个 LaTeX 发行版：</p>
+
+<ul>
+  <li>体积足够小，本地安装非常方便，不必诉诸于在线平台。</li>
+  <li>能正确处理包的依赖关系，进一步优化空间。</li>
+  <li>支持 LaTeX ，而不仅仅是 plainTeX</li>
+</ul>
+
+<p>下面介绍针对这一问题的一些技术选型和实验。</p>
+
+<h2 id="编译器">编译器</h2>
+
+<ul>
+  <li>高德纳于 1978, 1982, 1990 年分别发布了 TeX 的三个大版本。此后， TeX 的开发被冻结，
+不再增加任何新功能。只有当小的 bug 修复时，才会有更新：版本号从 3.1 到 3.14 一直到如今的 3.141592653 ，象征着 TeX 像圆一样完美无缺。无独有偶，他的另一个字体设计软件 Metafont 版本号也是趋向于自然指数。传说如果你发现 bug ，高德纳就会寄一张他亲笔签名的支票给你。在国内因为《完全用 Linux 工作，抛弃 windows 》一文而赫赫有名的王垠竟然有两张。 :)</li>
+  <li>TeX 3 停止开发急坏了希望得到更多新功能的开发者们。于是 NTS (新排版系统) 的项目启动了。他们 fork 了 TeX 3 开发了一个名为 eTeX (扩展 TeX) 的新编译器。相较原始的 TeX 3 ， eTeX 有如下改进。可以说后来所有的 TeX 编译器都是兼容 eTeX 的。
+    <ul>
+      <li>寄存器可用数目从 256 增加到了 32768 。</li>
+      <li>支持更多原语，例如读取文件的 \readline 和数学计算的 \numexpr</li>
+    </ul>
+  </li>
+  <li>迄今为止所有的 TeX 输出的文件格式都是 dvi 。这是一种设备无关文件，可以方便的送到打印机打印，或者在电脑上用 xdvi 查看。新的文件格式， ps 和 pdf 等很快占据了
+dvi 的市场。与时俱进的， pdfTeX 诞生了，提供了一个 <code class="language-plaintext highlighter-rouge">--output-format={dvi,pdf}</code>
+的命令行支持直接输出 pdf 。而此前必须用 dvipdf 或 dvipdfmx 的软件进行格式转换。
+pdfTeX 不支持 Unicode 。因为体积小巧，在只需要 ASCII 字符的英语国家仍然很受欢迎。</li>
+  <li>另一个编译器 XeTeX 克服了之前的 TeX 编译器不支持 Unicode 的问题，从而在国内流行起来。它输出 dvi 文件的一个扩展： xdvi 文件。然后调用 dvipdfmx 生成 pdf 文件。</li>
+  <li>pTeX, upTeX, apTeX 等支持 Unicode ，输出 dvi 文件。在日本很受欢迎。</li>
+  <li>LuaTeX 最早是 pdfTeX 的一个 fork ，添加了 Unicode 支持。合并了另一个编译器
+Aleph 的代码从而支持四个方向的文字排版。 Aleph 前身的 Omega 甚至支持八个方向。
+相比较其他编译器只能先从左到有排版再旋转特定角度，这意味对从右到左的阿拉伯文，
+从上到下的文言文有着极好的支持。 LuaTeX 的另一个改进是内置了一个 Lua 解释器，
+允许用户通过编写 Lua 输出 pdf 文件。
+<a href="https://github.com/speedata/publisher/">speedata Publisher</a> 就是这样的一个项目。此外 LuaTeX 将最大可用寄存器增加到了 65536 。</li>
+  <li>LuaJITTeX 是为了解决 LuaTeX 性能问题引入的。区别是将 Lua 解释器从 PUC Lua 5.3
+换成了 LuaJIT 。不过 LaTeX 的代码中因为使用了一些 Lua 5.3 的用法（整除语法 //
+和内置模块 utf8 ）没有办法支持 LuaJITTeX 。</li>
+  <li>Lua(JIT)HBTeX 相比 Lua(JIT)TeX 增加了一个内置模块 hurfbuzz ，提供了对文本塑形引擎 <a href="https://github.com/harfbuzz/harfbuzz">HarfBuzz</a> 的支持。 LaTeX 使用了这个。</li>
+</ul>
+
+<p>TeX Live 提供了以上除了 TeX 3 和 eTeX 外所有的编译器。笔者认为这没必要。就像
+Python 的解释器有 CPython, PyPy, Jython, GraalPython, IronPython, rustpython 等等，但官方的 Python 发行版或者第三方的 AnaConda, miniconda 也只提供了一个 CPython 一样。</p>
+
+<p>笔者选择 LuaHBTeX 。它支持 LaTeX ，而且提供了一个名为 texlua 的 lua 解释器。目前
+LaTeX 的打包工具 <a href="https://github.com/latex3/l3build">l3build</a> 和文档搜索工具
+<a href="https://github.com/TeX-Live/texdoc">texdoc</a> 都运行在 texlua 上。所以 texlua 是必不可少的。</p>
+
+<h2 id="格式文件">格式文件</h2>
+
+<p>TeX 是一门宏语言。所有的宏语言都有一个特点：很容易创造一门新的语言。以 C 语言的宏为例：</p>
+
+<p><code class="language-plaintext highlighter-rouge">习.h</code>:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define 整数 int
+#define 字符 char
+#define 返回 return
+</span></code></pre></div></div>
+
+<p>于是我们创造了一门新的语言，不妨称为习语言：</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">"习.h"</span><span class="cp">
+</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span><span class="err">整数</span> <span class="n">main</span><span class="p">(</span><span class="err">整数</span> <span class="n">argc</span><span class="p">,</span> <span class="err">字符</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+  <span class="n">puts</span><span class="p">(</span><span class="s">"你好，世界！"</span><span class="p">);</span>
+  <span class="err">返回</span> <span class="n">EXIT_SUCCESS</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>以此类推，我们还可以有喜语言、戏语言等等，这些语言都共用相同的编译器，只需要加载不同的 <code class="language-plaintext highlighter-rouge">喜.h</code>, <code class="language-plaintext highlighter-rouge">戏.h</code> 等。 plainTeX, LaTeX, ConTeXt, TeXinfo 等的关系类似。
+它们都使用相同的编译器，但需要加载不同的初始化文件。其中最广受欢迎的 LaTeX 也只是数学家 Leslie Lamport 最初为满足自己需求设计的一种“习语言”而已。</p>
+
+<p>相较 plainTeX 和 TeXinfo ，在笔者看来 LaTeX 最大的优点是在检测到编译器是 eTeX 和
+LuaTeX 时，会充分利用更多的寄存器。例如 plainTeX 的 <code class="language-plaintext highlighter-rouge">\newcount</code> 会从小到大分配寄存器。<code class="language-plaintext highlighter-rouge">\newinsert</code> 会从 256 到小分配寄存器。当两个分配的范围重叠时就会报错没有足够空间。而 LaTeX 先根据是否是 eTeX 和 LuaTeX 将 <code class="language-plaintext highlighter-rouge">\e@alloc@top</code> 赋值为
+255/32767/65535 。再增加了一个条件判断，当 <code class="language-plaintext highlighter-rouge">\newcount</code> 和 <code class="language-plaintext highlighter-rouge">\newinsert</code> 都小于
+255 且重叠时，<code class="language-plaintext highlighter-rouge">\newcount</code> 从 256 到大开始分配寄存器， <code class="language-plaintext highlighter-rouge">\newinsert</code> 从
+<code class="language-plaintext highlighter-rouge">\e@alloc@top</code> 到小开始分配寄存器。只有再次重叠时才会报错。故在笔者看来，在绝大多数 TeX 编译器兼容 eTeX 的如今，继续使用 plainTeX 类似在 64 位电脑上运行 32 位程序，是一种不能充分利用资源的行为。</p>
+
+<p>对三种编译器 pdfTeX, XeTeX, LuaTeX 和三种 TeX 方言 plainTeX, LaTeX, ConTeXt, 我们可以造出九种组合 pdfTeX, pdfLaTeX, pdfConTeXt, 以此类推。这样的组合称为格式。
+一般用编译器决定格式名的前缀，用语言决定格式名的后缀。对 plainTeX ，就用编译器名作为格式名。那么对于 Alpha, Omega 这样名字不带 TeX 的编译器，它们和 LaTeX 等组合的格式会使用专门的名字，比如 Lamed, Lambda 。</p>
+
+<p>C/C++ 支持将包含的头文件预编译成 pch 文件加快编译速度：</p>
+
+<ul>
+  <li><a href="https://mesonbuild.com/Precompiled-headers.html">meson</a></li>
+  <li><a href="https://xmake.io/#/manual/project_target?id=targetset_pcheader">xmake</a></li>
+</ul>
+
+<p>类似的，使用后缀名 ini 的 TeX 初始化文件也可以被预编译为后缀名 fmt 的二进制格式文件：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>luatex <span class="nt">--ini</span> XXX.ini
+luatex <span class="nt">--fmt</span> XXX.fmt main.tex
+</code></pre></div></div>
+
+<p>每次编译 <code class="language-plaintext highlighter-rouge">main.tex</code> 都需要通过命令行传入 <code class="language-plaintext highlighter-rouge">--fmt XXX.fmt</code>，太麻烦了。我们知道所有可执行文件都有一个文件名：</p>
+
+<p><code class="language-plaintext highlighter-rouge">main.c</code>:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;libgen.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">name</span> <span class="o">=</span> <span class="n">basename</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">"luatex"</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">puts</span><span class="p">(</span><span class="s">"now use luatex.fmt"</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">"lualatex"</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">puts</span><span class="p">(</span><span class="s">"now use lualatex.fmt"</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="n">puts</span><span class="p">(</span><span class="s">"not support!"</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">EXIT_FAILURE</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="n">EXIT_SUCCESS</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>我们可以通过检测文件名执行不同的代码逻辑：</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">$</span> <span class="n">cc</span> <span class="n">main</span><span class="p">.</span><span class="n">c</span> <span class="o">-</span><span class="n">o</span> <span class="n">luatex</span>
+<span class="err">$</span> <span class="p">.</span><span class="o">/</span><span class="n">luatex</span>
+<span class="n">now</span> <span class="n">use</span> <span class="n">luatex</span><span class="p">.</span><span class="n">fmt</span>
+<span class="err">$</span> <span class="n">cp</span> <span class="n">luatex</span> <span class="n">lualatex</span>
+<span class="err">$</span> <span class="p">.</span><span class="o">/</span><span class="n">lualatex</span>
+<span class="n">now</span> <span class="n">use</span> <span class="n">lualatex</span><span class="p">.</span><span class="n">fmt</span>
+</code></pre></div></div>
+
+<p>于是，所有 TeX 编译器约定：</p>
+
+<ul>
+  <li>luatex 会默认使用 <code class="language-plaintext highlighter-rouge">luatex.fmt</code>
+</li>
+  <li>lualatex 会默认使用 <code class="language-plaintext highlighter-rouge">lualatex.fmt</code>
+</li>
+  <li>texinfo 会默认使用 <code class="language-plaintext highlighter-rouge">texinfo.fmt</code>
+</li>
+  <li>以此类推</li>
+</ul>
+
+<p>不过 texlua 会直接运行一个 lua 的解释器，不会调用 <code class="language-plaintext highlighter-rouge">texlua.fmt</code> 。</p>
+
+<p>笔者提供了 plainTeX, LaTeX, TeXinfo 与 LuaTeX 组合的格式文件，没有提供 ConTeXt
+是因为这种语言笔者从未用过。</p>
+
+<p>此外， TeX 的编译器有一个特性：当编译遇错的时候会停下来询问怎么办。在静默安装时这会无限等待下去。请添加 <code class="language-plaintext highlighter-rouge">--interaction=nonstopmode</code> 。（别问笔者怎么发现的 QAQ）</p>
+
+<h2 id="依赖">依赖</h2>
+
+<p><a href="https://ctan.org/">CTAN</a> 时一个专门收录 TeX 相关的项目的网站，然而相比 PYPI,
+npmjs.org, luarocks.org, CTAN 的包没有依赖信息。笔者通过将包发布到 luarocks.org
+来利用其依赖信息。注意到和 LuaTeX 相关的 TeX 包中会有大量 Lua 代码，这样做其实挺合理。</p>
+
+<p>另一个例子是 NeoVim 的包管理器
+<a href="https://github.com/nvim-neorocks/rocks.nvim">rocks.nvim</a> 。 NeoVim 是一个新的
+vimscript 解释器，正如 LuaTeX 与 TeX 的关系一样， NeoVim 相比 vim 内置了一个
+LuaJIT 。 rocks.nvim 通过利用 luarocks 来声明各种 Vim 插件的依赖关系。顺带一提，
+rocks.nvim 3.0 将用 rust
+<a href="https://github.com/nvim-neorocks/rocks.nvim/issues/539">重写底层</a>，有望成为最快的 Vim 包管理器。</p>
+
+<p>Luarocks 支持声明构建时依赖和运行时依赖。对格式文件而言，生成格式文件的 TeX 源代码所在的包就是构建时依赖。对于普通的包， <code class="language-plaintext highlighter-rouge">\RequirePackage{}</code> 的 LaTeX 代码和
+<code class="language-plaintext highlighter-rouge">\input</code> 的 TeX 代码所在的包就是运行时依赖。</p>
+
+<h2 id="lua">Lua</h2>
+
+<p>LuaTeX 和 NeoVim 的某些相似的 API 如下：</p>
+
+<ul>
+  <li>在 TeX/vimscript 中调用 lua:
+    <ul>
+      <li>LuaTeX: <code class="language-plaintext highlighter-rouge">\directlua{XXX}</code>
+</li>
+      <li>NeoVim: <code class="language-plaintext highlighter-rouge">lua XXX</code>
+</li>
+    </ul>
+  </li>
+  <li>在 Lua 中调用 TeX/vimscript:
+    <ul>
+      <li>LuaTeX: <code class="language-plaintext highlighter-rouge">tex.print[[XXX]]</code>
+</li>
+      <li>NeoVim: <code class="language-plaintext highlighter-rouge">vim.cmd[[XXX]]</code>
+</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Lua 的引入允许用户更好的看清 TeX 的一些细节。
+<a href="https://www.overleaf.com/learn/latex/Articles/An_Introduction_to_LuaTeX_(Part_2)%3A_Understanding_%5Cdirectlua">An Introduction to LuaTeX (Part 2): Understanding \directlua</a>
+给出了一张图解释 LuaTeX 的词法分析：</p>
+
+<p><img src="https://images.ctfassets.net/nrgyaltdicpt/3DRjCN8AL5r4uGKjWlCc87/9900d8efe53d880eb8804f138eab7019/list_schematic--plain2.svg" alt="token"></p>
+
+<p>每个 token 都会计算一个 token value, 原文给出了 token value 的计算公式。
+但如果利用 LuaTeX 提供的 API ，可以直接看到计算后的结果：</p>
+
+<p><img src="https://github.com/user-attachments/assets/cd63bf68-fbcb-4e79-9d4e-d2798c0a692d" alt="REPL"></p>
+
+<p>这个 REPL 的代码在<a href="https://github.com/wakatime/prompt-style.lua/">这</a>。</p>
+
+<p>更多 API 请查询 <a href="https://texdoc.org/serve/luatex/0">LuaTeX 文档</a> 。确保你拥有一门 TeX 方言的先验知识。笔者推荐 plainTeX ，因为它真的是太简单了，对照
+<a href="https://texdoc.org/serve/impatient-cn/0">TeX 急就帖</a>，高德纳写的 1200 行代码一天就可以读完。</p>
+
+<h2 id="标准">标准</h2>
+
+<p>Lua 的包搜索路径取决于 <code class="language-plaintext highlighter-rouge">package.path</code> 和 <code class="language-plaintext highlighter-rouge">package.cpath</code>：它们是用分号连接的一组路径，用于 Lua 脚本和二进制 Lua 模块。 NeoVim 额外提供了 <code class="language-plaintext highlighter-rouge">vim.o.runtimepath</code> ，
+用逗号连接的一组路径，用于 Lua 脚本和 vimscript 脚本。 LuaTeX 则额外提供了
+<code class="language-plaintext highlighter-rouge">kpse.lookup()</code> 用于搜索 Lua 脚本和 TeX 文件。 <code class="language-plaintext highlighter-rouge">kpse</code> 是 kpathsea (卡尔路径海)
+的一个 Lua 模块，其配置文件 texmf.cnf 中的 LUAINPUTS, TEXINPUTS 是用分号连接的一组路径。只需要再每次安装完后更新 texmf.cnf 即可让新安装的 TeX 包被找到。</p>
+
+<p>此外， Unix 有 <a href="https://specifications.freedesktop.org/basedir-spec/latest/">XDG</a>
+标准，规定字体文件路径在 <code class="language-plaintext highlighter-rouge">${XDG_DATA_HOME:-$HOME/.local/share}/fonts</code> 下。而 TeX
+有 <a href="https://www.tug.org/tds/tds.pdf">TDS</a> 标准规定字体文件按文件类型路径在</p>
+
+<ul>
+  <li>opentype 字体： 当前路径，<code class="language-plaintext highlighter-rouge">$TEXMF/fonts/opentype</code>
+</li>
+  <li>truetype 字体： 当前路径，<code class="language-plaintext highlighter-rouge">$TEXMF/fonts/truetype</code>
+</li>
+  <li>type1 字体： 当前路径，<code class="language-plaintext highlighter-rouge">$TEXMF/fonts/type1</code>
+</li>
+  <li>以此类推</li>
+</ul>
+
+<p>可以在 <code class="language-plaintext highlighter-rouge">texmf.cnf</code> 中添加 XDG 字体路径到 <code class="language-plaintext highlighter-rouge">OPENTYPEFONTS</code> 等变量中兼容 XDG 。</p>
+
+<p>同样的，对于 texmf.cnf 默认的一些路径：</p>
+
+<pre><code class="language-texmf">TEXMFHOME = ~/texmf
+TEXMFVAR = ~/.texlive2023/texmf-var
+TEXMFCONFIG = ~/.texlive2023/texmf-config
+</code></pre>
+
+<p>参考 <a href="https://wiki.archlinux.org/title/XDG_Base_Directory#Partial">ArchLinux wiki</a>
+后指定：</p>
+
+<pre><code class="language-texmf">TEXMFHOME     = $XDG_DATA_HOME/texmf
+TEXMFVAR      = $XDG_CACHE_HOME/texmf
+TEXMFCONFIG   = $XDG_CONFIG_HOME/texmf
+</code></pre>
+
+<h2 id="包">包</h2>
+
+<p>笔者将一些常见的包如 PGF/TikZ, beamer 打包了。</p>
+
+<ul>
+  <li>包管理器代码在<a href="https://github.com/Freed-Wu/texrocks">这</a>
+</li>
+  <li>包在<a href="https://luarocks.org/m/texmf">这</a>
+</li>
+</ul>
+
+<p>将目前所有包安装在本地后，占据空间大概如下：</p>
+
+<ul>
+  <li>编译器： 8.2 MiB</li>
+  <li>Lua 脚本： 13.1 MiB</li>
+  <li>TeX 代码： 30.4 MiB</li>
+  <li>字体文件： 92.0 MiB, TeX 缺省使用 computer modern 字体。此外还打包了一些别的字体。</li>
+  <li>pdf 文档： 162.5 MiB, 文档其实可以删掉，用在线的 <a href="https://texdoc.org/">https://texdoc.org/</a>
+</li>
+</ul>
+
+<p>作为比较，以下是其他文档排版系统的大小（没有包含字体）：</p>
+
+<ul>
+  <li>
+<a href="https://www.gnu.org/software/groff/">groff</a>: 10.1 MiB 。 GNU roff 也是一门宏语言。除了支持输出 pdf 外，还支持输出终端。目前 Unix 的 man 手册是用 roff 编写。
+像 plainTeX, LaTeX, TeXinfo 等一样， roff 也有诸如 man, mm 等多个通过
+<code class="language-plaintext highlighter-rouge">groff -m XX</code> 预加载的宏，但 roff 比 TeX 语法弱，不能通过类似 <code class="language-plaintext highlighter-rouge">\catcode</code> 的原语修改词法解析的流程。</li>
+  <li>
+<a href="https://github.com/typst/typst">typst</a>: 33.1 MiB 。 这是一个相当现代的标记语言，使用命令式编程而非宏语言，带有增量编译、语言服务器协议等相当新的技术，从而改善编译性能和提高开发效率。强烈推荐新的文档使用 Typst 。相比 Typst, 笔者认为
+TeX 更适合作为一种智力测试题而非文档排版系统。 :)</li>
+</ul>
+
+<p>很多东西仍然是缺失的：</p>
+
+<ul>
+  <li>笔者不太熟悉 LuaTeX 的字体加载机制，所以 ctex 打包仍然有问题</li>
+  <li>参考文献常用的工具 bibtex, <a href="https://github.com/plk/biber">biber</a> 是用 pascal,
+perl 编写的，不太合适打包到 Luarocks 。 lua 写的替代品
+<a href="https://github.com/zepinglee/citeproc-lua">citeproc-lua</a>
+索引常用的工具 makeindex 是用 C 编写的。 lua 写的替代品
+<a href="https://gitlab.com/hvoss49/xindex">xindex</a> 还未打包。</li>
+  <li>一些用 Lua 编写的工具如 texdoc, l3build 被打包了，但用 perl 编写的
+<a href="https://github.com/MartinScharrer/texdef/">texdef</a> 就没有。在 texlua 问世前，
+TeX 社区的很多工具是用 perl 编写的。</li>
+  <li>构建系统 <a href="https://ctan.org/pkg/latexmk">latexmk</a>,
+<a href="https://github.com/aclements/latexrun">latexrun</a>,
+<a href="https://github.com/islandoftex/arara">arara</a> 分别使用了 perl, python, java
+编写。目前没有基于 texlua 的可用替代品。</li>
+  <li>打包脚本有很多使用了 <code class="language-plaintext highlighter-rouge">cp</code>, <code class="language-plaintext highlighter-rouge">mv</code>, <code class="language-plaintext highlighter-rouge">rm</code>, <code class="language-plaintext highlighter-rouge">which</code> 等 bash 和 coreutils 的命令。
+没有使用 Lua 跨平台的 API 。所以暂时没法在纯 Win32 上运行。（不纯的指
+Msys2/Cygwin ）</li>
+</ul>
+
+<p>总之，相较 NeoVim 仅靠 Lua 就可以满足近乎所有需求，一个仅靠 LuaTeX 的生态仍然缺失大量工具软件。但一个去除 pdf 文档后仅占据 143.7 MiB 就可以绘制如下流程图的
+LaTeX 发行版，也何尝不会是一个类似 rocks.nvim 的好的开始呢？</p>
+
+<div class="language-tex highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">% 施法前摇</span>
+<span class="k">\documentclass</span><span class="na">[tikz]</span><span class="p">{</span>standalone<span class="p">}</span>
+<span class="k">\usetikzlibrary</span><span class="p">{</span>arrows.meta, quotes, graphs, graphdrawing, shapes.geometric<span class="p">}</span>
+<span class="k">\usegdlibrary</span><span class="p">{</span>layered<span class="p">}</span>
+<span class="k">\usepackage</span><span class="p">{</span>hyperref<span class="p">}</span>
+<span class="k">\usepackage</span><span class="p">{</span>hologo<span class="p">}</span>
+<span class="k">\title</span><span class="p">{</span>graph<span class="p">}</span>
+<span class="nt">\begin{document}</span>
+<span class="nt">\begin{tikzpicture}</span>[rounded corners, &gt;=Stealth, auto]
+  <span class="k">\graph</span><span class="na">[layered layout, nodes={draw, align=center}]</span><span class="p">{</span>
+
+    <span class="c">% 开始施法</span>
+    "<span class="k">\TeX</span>" -&gt; "<span class="k">\hologo</span><span class="p">{</span>eTeX<span class="p">}</span>" -&gt; "<span class="k">\hologo</span><span class="p">{</span>pdfTeX<span class="p">}</span>" -&gt; "<span class="k">\hologo</span><span class="p">{</span>LuaTeX<span class="p">}</span>";
+    "<span class="k">\hologo</span><span class="p">{</span>eTeX<span class="p">}</span>" -&gt; "<span class="k">\hologo</span><span class="p">{</span>XeTeX<span class="p">}</span>"
+
+    <span class="c">% 施法后摇</span>
+  <span class="p">}</span>;
+<span class="nt">\end{tikzpicture}</span>
+<span class="nt">\end{document}</span>
+</code></pre></div></div>
+
+<p><img src="https://github.com/user-attachments/assets/131a8a31-0dd4-49fa-84dd-1531c89da55c" alt="graph"></p>
+
+<div class="reward">
+  <button id="rewardButton" disable="enable" onclick="toggle()">
+    如果这篇博客帮助到你，可以请我喝一杯奶茶~
+  </button>
+  <table id="rewardQRs">
+    <tr>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" alt="https://user-images.githubusercontent.com/32936898/199681341-1c5cfa61-4411-4b67-b268-7cd87c5867bb.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" alt="https://user-images.githubusercontent.com/32936898/199681363-1094a0be-85ca-49cf-a410-19b3d7965120.png" height="300pt"></td>
+      <td class="reward_qr"><img src="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" alt="https://user-images.githubusercontent.com/32936898/199681368-c34c2be7-e0d8-43ea-8c2c-d3e865da6aeb.png" height="300pt"></td>
+    </tr>
+  </table>
+</div>
+<script src="/assets/js/valine.js"></script>
+
+    </article>
+    <input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+    <aside class="sidebar">
+      <div class="sidebar-item">
+        <div class="ih-item">
+          <a title="
+              Wu Zhenyu
+            ">
+            <img class="img" src="https://github.com/Freed-Wu.png" alt="img">
+            <div class="info">
+              <br>
+              <br>
+              A personal blog to record valuable and interesting things.
+            </div>
+          </a>
+        </div>
+        <iframe height="42" width="240" src="https://music.163.com/outchain/player?type=2&id=27646786&height=32"></iframe>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-nav-item" href="/">
+          <i class="fa-solid fa-home fa-fw"></i> Home
+        </a>
+        <a class="sidebar-nav-item" href="/tag">
+          <i class="fa-solid fa-tags fa-fw"></i> Tag
+        </a>
+        <a class="sidebar-nav-item" href="/feed.xml">
+          <i class="fa-solid fa-rss fa-fw"></i> RSS
+        </a>
+        <a class="sidebar-nav-item" href="/Freed-Wu">
+          <i class="fa-solid fa-comments fa-fw"></i> About Me
+        </a>
+        <a class="sidebar-nav-item" href="/jekyll-theme-freed">
+          <i class="fa-solid fa-code fa-fw"></i> About the Website
+        </a>
+        <a class="sidebar-nav-item" href="/2020/01/01/honour">
+          <i class="fa-solid fa-trophy fa-fw"></i> Honour
+        </a>
+      </nav>
+      <div class="sidebar-item">
+        <!-- https://github.com/christian-fei/Simple-Jekyll-Search#preparing-the-plugin -->
+        <input id="search-input" placeholder="Search posts">
+        <div id="results-container"></div>
+      </div>
+    </aside>
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+  </body>
+</html>
